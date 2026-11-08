@@ -1,0 +1,28 @@
+flowchart LR
+    CO["CO<br/>3,263"]
+    Customer["Customer<br/>7,000"]
+    Dealer["Dealer<br/>50"]
+    Lot["Lot<br/>364"]
+    Model["Model<br/>6"]
+    PO["PO<br/>540"]
+    Part["Part<br/>20"]
+    Plant["Plant<br/>6"]
+    Shipment["Shipment<br/>364"]
+    Supplier["Supplier<br/>18"]
+    Vehicle["Vehicle<br/>5,348"]
+    CO -->|ordered_by| Customer
+    CO -->|placed_at| Dealer
+    Lot -->|batch_of| Part
+    Lot -->|used_at| Plant
+    Model -->|needs| Part
+    PO -->|builds| Model
+    PO -->|fulfils| CO
+    PO -->|produced| Vehicle
+    Plant -->|can_build| Model
+    Plant -->|runs| PO
+    Shipment -->|carries| Part
+    Shipment -->|delivered_to| Plant
+    Supplier -->|made| Lot
+    Supplier -->|supplies| Shipment
+    Vehicle -->|at_dealer| Dealer
+    Vehicle -->|owned_by| Customer

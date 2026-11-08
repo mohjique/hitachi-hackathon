@@ -1,0 +1,36 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	coordinator_read_message(coordinator_read_message)
+	coordinator_find_affected(coordinator_find_affected)
+	planner_reschedule_builds(planner_reschedule_builds)
+	dispatcher_notify_and_loan(dispatcher_notify_and_loan)
+	inspector_hold_and_recall(inspector_hold_and_recall)
+	safety_check_plan(safety_check_plan)
+	reject_plan_escalate(reject_plan_escalate)
+	send_to_server(send_to_server)
+	write_audit_summary(write_audit_summary)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> coordinator_read_message;
+	coordinator_find_affected -.-> inspector_hold_and_recall;
+	coordinator_find_affected -.-> planner_reschedule_builds;
+	coordinator_find_affected -.-> safety_check_plan;
+	coordinator_read_message -.-> coordinator_find_affected;
+	coordinator_read_message -.-> safety_check_plan;
+	coordinator_read_message -.-> write_audit_summary;
+	dispatcher_notify_and_loan -.-> inspector_hold_and_recall;
+	dispatcher_notify_and_loan -.-> safety_check_plan;
+	inspector_hold_and_recall --> safety_check_plan;
+	planner_reschedule_builds --> dispatcher_notify_and_loan;
+	reject_plan_escalate --> send_to_server;
+	safety_check_plan -.-> reject_plan_escalate;
+	safety_check_plan -.-> send_to_server;
+	send_to_server --> write_audit_summary;
+	write_audit_summary --> __end__;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc

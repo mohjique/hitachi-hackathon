@@ -1,0 +1,4628 @@
+{
+  "event": {
+    "event_id": "E-15",
+    "received_at": "2027-03-08T11:15:00",
+    "source": "quality bulletin",
+    "text": "QUALITY BULLETIN QB-368: Lot LOT-0191 (CHIP-IVI, supplier SUP-12) installed at P_IN on vehicles built 2027-03-02 to 2027-03-03 has a faulty weld. Place the lot on hold, stop sale of unsold vehicles and contact owners."
+  },
+  "mode": "live",
+  "model": "gemini-3.5-flash-lite",
+  "agents_visited": [
+    "coordinator_read_message",
+    "coordinator_find_affected",
+    "inspector_hold_and_recall",
+    "safety_check_plan",
+    "send_to_server",
+    "write_audit_summary"
+  ],
+  "triage": {
+    "event_id": "E-15",
+    "text": "QUALITY BULLETIN QB-368: Lot LOT-0191 (CHIP-IVI, supplier SUP-12) installed at P_IN on vehicles built 2027-03-02 to 2027-03-03 has a faulty weld. Place the lot on hold, stop sale of unsold vehicles and contact owners.",
+    "model": "gemini-3.5-flash-lite",
+    "incidents": [
+      {
+        "category": "quality_hold",
+        "quote": "QUALITY BULLETIN QB-368: Lot LOT-0191 (CHIP-IVI, supplier SUP-12) installed at P_IN on vehicles built 2027-03-02 to 2027-03-03 has a faulty weld. Place the lot on hold, stop sale of unsold vehicles and contact owners.",
+        "llm_reason": "This is a quality hold because a specific lot of a part is defective with a faulty weld and suspect build dates.",
+        "raw": {
+          "plant": "P_IN",
+          "part": "CHIP-IVI",
+          "supplier": "SUP-12",
+          "shipment_id": null,
+          "lot_id": "LOT-0191",
+          "start_date": "2027-03-02",
+          "end_date": "2027-03-03",
+          "confirmed": true
+        },
+        "plant_id": "P_IN",
+        "part_id": "CHIP-IVI",
+        "supplier_id": "SUP-12",
+        "shipment_id": null,
+        "lot_id": "LOT-0191",
+        "lots": [
+          "LOT-0191"
+        ],
+        "start": "2027-03-02",
+        "end": "2027-03-03",
+        "verdict": "ACT",
+        "verdict_reason": null,
+        "trace": [
+          "all extracted phrases appear in the message",
+          "\"P_IN\" -> exact name match",
+          "\"CHIP-IVI\" -> exact name match",
+          "\"SUP-12\" -> exact name match",
+          "\"2027-03-02\" -> 2027-03-02 (ISO date)",
+          "\"2027-03-03\" -> 2027-03-03 (ISO date)",
+          "lot LOT-0191 found: CHIP-IVI from SUP-12 at P_IN, built 2027-03-02..2027-03-03"
+        ]
+      }
+    ]
+  },
+  "graph": {
+    "1": {
+      "kind": "quality_hold",
+      "path_schema": "Lot \u2500batch_of\u2192 Part \u2190needs\u2500 Model \u2190builds\u2500 PO \u2500produced\u2192 Vehicle \u2500at_dealer\u2192 Dealer / \u2500owned_by\u2192 Customer",
+      "notes": [
+        "Lot:LOT-0191 is Part:CHIP-IVI used at Plant:P_IN for builds 2027-03-02 through 2027-03-03",
+        "models using Part:CHIP-IVI: NOVA, PIONEER, SUMMIT, TERRA, VOYAGER",
+        "4 production orders, 116 vehicles: 40 unsold at 25 dealers, 76 sold to 76 owners"
+      ],
+      "example_path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003174",
+        "Dealer:D26",
+        "Customer:C0310"
+      ],
+      "edges": [
+        [
+          "Lot:LOT-0191",
+          "batch_of",
+          "Part:CHIP-IVI"
+        ],
+        [
+          "Lot:LOT-0191",
+          "used_at",
+          "Plant:P_IN"
+        ],
+        [
+          "Model:NOVA",
+          "needs",
+          "Part:CHIP-IVI"
+        ],
+        [
+          "Model:PIONEER",
+          "needs",
+          "Part:CHIP-IVI"
+        ],
+        [
+          "Model:SUMMIT",
+          "needs",
+          "Part:CHIP-IVI"
+        ],
+        [
+          "Model:TERRA",
+          "needs",
+          "Part:CHIP-IVI"
+        ],
+        [
+          "Model:VOYAGER",
+          "needs",
+          "Part:CHIP-IVI"
+        ],
+        [
+          "PO:PO-0289",
+          "builds",
+          "Model:VOYAGER"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003174"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003175"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003176"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003177"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003178"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003179"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003180"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003181"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003182"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003183"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003184"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003185"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003186"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003187"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003188"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003189"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003190"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003191"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003192"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003193"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003194"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003195"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003196"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003197"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003198"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003199"
+        ],
+        [
+          "PO:PO-0289",
+          "produced",
+          "Vehicle:AUR0003200"
+        ],
+        [
+          "PO:PO-0291",
+          "builds",
+          "Model:NOVA"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003234"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003235"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003236"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003237"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003238"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003239"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003240"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003241"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003242"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003243"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003244"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003245"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003246"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003247"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003248"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003249"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003250"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003251"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003252"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003253"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003254"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003255"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003256"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003257"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003258"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003259"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003260"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003261"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003262"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003263"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003264"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003265"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003266"
+        ],
+        [
+          "PO:PO-0291",
+          "produced",
+          "Vehicle:AUR0003267"
+        ],
+        [
+          "PO:PO-0292",
+          "builds",
+          "Model:VOYAGER"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003268"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003269"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003270"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003271"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003272"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003273"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003274"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003275"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003276"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003277"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003278"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003279"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003280"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003281"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003282"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003283"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003284"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003285"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003286"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003287"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003288"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003289"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003290"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003291"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003292"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003293"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003294"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003295"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003296"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003297"
+        ],
+        [
+          "PO:PO-0292",
+          "produced",
+          "Vehicle:AUR0003298"
+        ],
+        [
+          "PO:PO-0294",
+          "builds",
+          "Model:NOVA"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003335"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003336"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003337"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003338"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003339"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003340"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003341"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003342"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003343"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003344"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003345"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003346"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003347"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003348"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003349"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003350"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003351"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003352"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003353"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003354"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003355"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003356"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003357"
+        ],
+        [
+          "PO:PO-0294",
+          "produced",
+          "Vehicle:AUR0003358"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0289"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0291"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0292"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0294"
+        ],
+        [
+          "Vehicle:AUR0003174",
+          "at_dealer",
+          "Dealer:D26"
+        ],
+        [
+          "Vehicle:AUR0003174",
+          "owned_by",
+          "Customer:C0310"
+        ],
+        [
+          "Vehicle:AUR0003175",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0003176",
+          "at_dealer",
+          "Dealer:D12"
+        ],
+        [
+          "Vehicle:AUR0003177",
+          "at_dealer",
+          "Dealer:D37"
+        ],
+        [
+          "Vehicle:AUR0003177",
+          "owned_by",
+          "Customer:C0104"
+        ],
+        [
+          "Vehicle:AUR0003178",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0003178",
+          "owned_by",
+          "Customer:C1550"
+        ],
+        [
+          "Vehicle:AUR0003179",
+          "at_dealer",
+          "Dealer:D46"
+        ],
+        [
+          "Vehicle:AUR0003179",
+          "owned_by",
+          "Customer:C1439"
+        ],
+        [
+          "Vehicle:AUR0003180",
+          "at_dealer",
+          "Dealer:D10"
+        ],
+        [
+          "Vehicle:AUR0003181",
+          "at_dealer",
+          "Dealer:D39"
+        ],
+        [
+          "Vehicle:AUR0003181",
+          "owned_by",
+          "Customer:C2275"
+        ],
+        [
+          "Vehicle:AUR0003182",
+          "at_dealer",
+          "Dealer:D44"
+        ],
+        [
+          "Vehicle:AUR0003182",
+          "owned_by",
+          "Customer:C1357"
+        ],
+        [
+          "Vehicle:AUR0003183",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0003183",
+          "owned_by",
+          "Customer:C1236"
+        ],
+        [
+          "Vehicle:AUR0003184",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0003185",
+          "at_dealer",
+          "Dealer:D26"
+        ],
+        [
+          "Vehicle:AUR0003185",
+          "owned_by",
+          "Customer:C0093"
+        ],
+        [
+          "Vehicle:AUR0003186",
+          "at_dealer",
+          "Dealer:D27"
+        ],
+        [
+          "Vehicle:AUR0003186",
+          "owned_by",
+          "Customer:C4249"
+        ],
+        [
+          "Vehicle:AUR0003187",
+          "at_dealer",
+          "Dealer:D21"
+        ],
+        [
+          "Vehicle:AUR0003187",
+          "owned_by",
+          "Customer:C0632"
+        ],
+        [
+          "Vehicle:AUR0003188",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0003188",
+          "owned_by",
+          "Customer:C5099"
+        ],
+        [
+          "Vehicle:AUR0003189",
+          "at_dealer",
+          "Dealer:D05"
+        ],
+        [
+          "Vehicle:AUR0003189",
+          "owned_by",
+          "Customer:C1159"
+        ],
+        [
+          "Vehicle:AUR0003190",
+          "at_dealer",
+          "Dealer:D40"
+        ],
+        [
+          "Vehicle:AUR0003190",
+          "owned_by",
+          "Customer:C0102"
+        ],
+        [
+          "Vehicle:AUR0003191",
+          "at_dealer",
+          "Dealer:D21"
+        ],
+        [
+          "Vehicle:AUR0003191",
+          "owned_by",
+          "Customer:C2418"
+        ],
+        [
+          "Vehicle:AUR0003192",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0003192",
+          "owned_by",
+          "Customer:C1366"
+        ],
+        [
+          "Vehicle:AUR0003193",
+          "at_dealer",
+          "Dealer:D06"
+        ],
+        [
+          "Vehicle:AUR0003193",
+          "owned_by",
+          "Customer:C0437"
+        ],
+        [
+          "Vehicle:AUR0003194",
+          "at_dealer",
+          "Dealer:D07"
+        ],
+        [
+          "Vehicle:AUR0003194",
+          "owned_by",
+          "Customer:C2549"
+        ],
+        [
+          "Vehicle:AUR0003195",
+          "at_dealer",
+          "Dealer:D19"
+        ],
+        [
+          "Vehicle:AUR0003195",
+          "owned_by",
+          "Customer:C5021"
+        ],
+        [
+          "Vehicle:AUR0003196",
+          "at_dealer",
+          "Dealer:D16"
+        ],
+        [
+          "Vehicle:AUR0003196",
+          "owned_by",
+          "Customer:C0541"
+        ],
+        [
+          "Vehicle:AUR0003197",
+          "at_dealer",
+          "Dealer:D39"
+        ],
+        [
+          "Vehicle:AUR0003197",
+          "owned_by",
+          "Customer:C2708"
+        ],
+        [
+          "Vehicle:AUR0003198",
+          "at_dealer",
+          "Dealer:D02"
+        ],
+        [
+          "Vehicle:AUR0003198",
+          "owned_by",
+          "Customer:C1731"
+        ],
+        [
+          "Vehicle:AUR0003199",
+          "at_dealer",
+          "Dealer:D10"
+        ],
+        [
+          "Vehicle:AUR0003199",
+          "owned_by",
+          "Customer:C2701"
+        ],
+        [
+          "Vehicle:AUR0003200",
+          "at_dealer",
+          "Dealer:D10"
+        ],
+        [
+          "Vehicle:AUR0003200",
+          "owned_by",
+          "Customer:C1171"
+        ],
+        [
+          "Vehicle:AUR0003234",
+          "at_dealer",
+          "Dealer:D12"
+        ],
+        [
+          "Vehicle:AUR0003234",
+          "owned_by",
+          "Customer:C6727"
+        ],
+        [
+          "Vehicle:AUR0003235",
+          "at_dealer",
+          "Dealer:D06"
+        ],
+        [
+          "Vehicle:AUR0003236",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0003237",
+          "at_dealer",
+          "Dealer:D27"
+        ],
+        [
+          "Vehicle:AUR0003237",
+          "owned_by",
+          "Customer:C1779"
+        ],
+        [
+          "Vehicle:AUR0003238",
+          "at_dealer",
+          "Dealer:D03"
+        ],
+        [
+          "Vehicle:AUR0003239",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0003239",
+          "owned_by",
+          "Customer:C4244"
+        ],
+        [
+          "Vehicle:AUR0003240",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0003241",
+          "at_dealer",
+          "Dealer:D02"
+        ],
+        [
+          "Vehicle:AUR0003241",
+          "owned_by",
+          "Customer:C2281"
+        ],
+        [
+          "Vehicle:AUR0003242",
+          "at_dealer",
+          "Dealer:D02"
+        ],
+        [
+          "Vehicle:AUR0003243",
+          "at_dealer",
+          "Dealer:D13"
+        ],
+        [
+          "Vehicle:AUR0003244",
+          "at_dealer",
+          "Dealer:D32"
+        ],
+        [
+          "Vehicle:AUR0003244",
+          "owned_by",
+          "Customer:C6816"
+        ],
+        [
+          "Vehicle:AUR0003245",
+          "at_dealer",
+          "Dealer:D31"
+        ],
+        [
+          "Vehicle:AUR0003245",
+          "owned_by",
+          "Customer:C4522"
+        ],
+        [
+          "Vehicle:AUR0003246",
+          "at_dealer",
+          "Dealer:D22"
+        ],
+        [
+          "Vehicle:AUR0003246",
+          "owned_by",
+          "Customer:C2115"
+        ],
+        [
+          "Vehicle:AUR0003247",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0003247",
+          "owned_by",
+          "Customer:C6399"
+        ],
+        [
+          "Vehicle:AUR0003248",
+          "at_dealer",
+          "Dealer:D06"
+        ],
+        [
+          "Vehicle:AUR0003248",
+          "owned_by",
+          "Customer:C6890"
+        ],
+        [
+          "Vehicle:AUR0003249",
+          "at_dealer",
+          "Dealer:D14"
+        ],
+        [
+          "Vehicle:AUR0003249",
+          "owned_by",
+          "Customer:C2583"
+        ],
+        [
+          "Vehicle:AUR0003250",
+          "at_dealer",
+          "Dealer:D31"
+        ],
+        [
+          "Vehicle:AUR0003251",
+          "at_dealer",
+          "Dealer:D47"
+        ],
+        [
+          "Vehicle:AUR0003251",
+          "owned_by",
+          "Customer:C6063"
+        ],
+        [
+          "Vehicle:AUR0003252",
+          "at_dealer",
+          "Dealer:D03"
+        ],
+        [
+          "Vehicle:AUR0003252",
+          "owned_by",
+          "Customer:C1109"
+        ],
+        [
+          "Vehicle:AUR0003253",
+          "at_dealer",
+          "Dealer:D02"
+        ],
+        [
+          "Vehicle:AUR0003253",
+          "owned_by",
+          "Customer:C3029"
+        ],
+        [
+          "Vehicle:AUR0003254",
+          "at_dealer",
+          "Dealer:D03"
+        ],
+        [
+          "Vehicle:AUR0003255",
+          "at_dealer",
+          "Dealer:D28"
+        ],
+        [
+          "Vehicle:AUR0003255",
+          "owned_by",
+          "Customer:C5623"
+        ],
+        [
+          "Vehicle:AUR0003256",
+          "at_dealer",
+          "Dealer:D39"
+        ],
+        [
+          "Vehicle:AUR0003257",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0003257",
+          "owned_by",
+          "Customer:C4863"
+        ],
+        [
+          "Vehicle:AUR0003258",
+          "at_dealer",
+          "Dealer:D10"
+        ],
+        [
+          "Vehicle:AUR0003259",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0003259",
+          "owned_by",
+          "Customer:C0260"
+        ],
+        [
+          "Vehicle:AUR0003260",
+          "at_dealer",
+          "Dealer:D07"
+        ],
+        [
+          "Vehicle:AUR0003260",
+          "owned_by",
+          "Customer:C0501"
+        ],
+        [
+          "Vehicle:AUR0003261",
+          "at_dealer",
+          "Dealer:D22"
+        ],
+        [
+          "Vehicle:AUR0003261",
+          "owned_by",
+          "Customer:C4937"
+        ],
+        [
+          "Vehicle:AUR0003262",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0003263",
+          "at_dealer",
+          "Dealer:D06"
+        ],
+        [
+          "Vehicle:AUR0003263",
+          "owned_by",
+          "Customer:C0053"
+        ],
+        [
+          "Vehicle:AUR0003264",
+          "at_dealer",
+          "Dealer:D15"
+        ],
+        [
+          "Vehicle:AUR0003265",
+          "at_dealer",
+          "Dealer:D35"
+        ],
+        [
+          "Vehicle:AUR0003265",
+          "owned_by",
+          "Customer:C2898"
+        ],
+        [
+          "Vehicle:AUR0003266",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0003266",
+          "owned_by",
+          "Customer:C1145"
+        ],
+        [
+          "Vehicle:AUR0003267",
+          "at_dealer",
+          "Dealer:D03"
+        ],
+        [
+          "Vehicle:AUR0003268",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0003268",
+          "owned_by",
+          "Customer:C0743"
+        ],
+        [
+          "Vehicle:AUR0003269",
+          "at_dealer",
+          "Dealer:D24"
+        ],
+        [
+          "Vehicle:AUR0003269",
+          "owned_by",
+          "Customer:C2749"
+        ],
+        [
+          "Vehicle:AUR0003270",
+          "at_dealer",
+          "Dealer:D32"
+        ],
+        [
+          "Vehicle:AUR0003271",
+          "at_dealer",
+          "Dealer:D35"
+        ],
+        [
+          "Vehicle:AUR0003271",
+          "owned_by",
+          "Customer:C5489"
+        ],
+        [
+          "Vehicle:AUR0003272",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0003272",
+          "owned_by",
+          "Customer:C0434"
+        ],
+        [
+          "Vehicle:AUR0003273",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0003274",
+          "at_dealer",
+          "Dealer:D31"
+        ],
+        [
+          "Vehicle:AUR0003275",
+          "at_dealer",
+          "Dealer:D03"
+        ],
+        [
+          "Vehicle:AUR0003275",
+          "owned_by",
+          "Customer:C1649"
+        ],
+        [
+          "Vehicle:AUR0003276",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0003276",
+          "owned_by",
+          "Customer:C3771"
+        ],
+        [
+          "Vehicle:AUR0003277",
+          "at_dealer",
+          "Dealer:D22"
+        ],
+        [
+          "Vehicle:AUR0003278",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0003278",
+          "owned_by",
+          "Customer:C6746"
+        ],
+        [
+          "Vehicle:AUR0003279",
+          "at_dealer",
+          "Dealer:D42"
+        ],
+        [
+          "Vehicle:AUR0003279",
+          "owned_by",
+          "Customer:C1963"
+        ],
+        [
+          "Vehicle:AUR0003280",
+          "at_dealer",
+          "Dealer:D44"
+        ],
+        [
+          "Vehicle:AUR0003281",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0003281",
+          "owned_by",
+          "Customer:C4096"
+        ],
+        [
+          "Vehicle:AUR0003282",
+          "at_dealer",
+          "Dealer:D15"
+        ],
+        [
+          "Vehicle:AUR0003282",
+          "owned_by",
+          "Customer:C7000"
+        ],
+        [
+          "Vehicle:AUR0003283",
+          "at_dealer",
+          "Dealer:D07"
+        ],
+        [
+          "Vehicle:AUR0003284",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0003284",
+          "owned_by",
+          "Customer:C2605"
+        ],
+        [
+          "Vehicle:AUR0003285",
+          "at_dealer",
+          "Dealer:D39"
+        ],
+        [
+          "Vehicle:AUR0003286",
+          "at_dealer",
+          "Dealer:D26"
+        ],
+        [
+          "Vehicle:AUR0003287",
+          "at_dealer",
+          "Dealer:D21"
+        ],
+        [
+          "Vehicle:AUR0003288",
+          "at_dealer",
+          "Dealer:D27"
+        ],
+        [
+          "Vehicle:AUR0003289",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0003289",
+          "owned_by",
+          "Customer:C1596"
+        ],
+        [
+          "Vehicle:AUR0003290",
+          "at_dealer",
+          "Dealer:D26"
+        ],
+        [
+          "Vehicle:AUR0003290",
+          "owned_by",
+          "Customer:C2622"
+        ],
+        [
+          "Vehicle:AUR0003291",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0003291",
+          "owned_by",
+          "Customer:C4033"
+        ],
+        [
+          "Vehicle:AUR0003292",
+          "at_dealer",
+          "Dealer:D35"
+        ],
+        [
+          "Vehicle:AUR0003292",
+          "owned_by",
+          "Customer:C5279"
+        ],
+        [
+          "Vehicle:AUR0003293",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0003294",
+          "at_dealer",
+          "Dealer:D24"
+        ],
+        [
+          "Vehicle:AUR0003295",
+          "at_dealer",
+          "Dealer:D21"
+        ],
+        [
+          "Vehicle:AUR0003295",
+          "owned_by",
+          "Customer:C0100"
+        ],
+        [
+          "Vehicle:AUR0003296",
+          "at_dealer",
+          "Dealer:D26"
+        ],
+        [
+          "Vehicle:AUR0003297",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0003297",
+          "owned_by",
+          "Customer:C3355"
+        ],
+        [
+          "Vehicle:AUR0003298",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0003298",
+          "owned_by",
+          "Customer:C0604"
+        ],
+        [
+          "Vehicle:AUR0003335",
+          "at_dealer",
+          "Dealer:D49"
+        ],
+        [
+          "Vehicle:AUR0003335",
+          "owned_by",
+          "Customer:C5998"
+        ],
+        [
+          "Vehicle:AUR0003336",
+          "at_dealer",
+          "Dealer:D29"
+        ],
+        [
+          "Vehicle:AUR0003336",
+          "owned_by",
+          "Customer:C4447"
+        ],
+        [
+          "Vehicle:AUR0003337",
+          "at_dealer",
+          "Dealer:D35"
+        ],
+        [
+          "Vehicle:AUR0003338",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0003339",
+          "at_dealer",
+          "Dealer:D28"
+        ],
+        [
+          "Vehicle:AUR0003340",
+          "at_dealer",
+          "Dealer:D44"
+        ],
+        [
+          "Vehicle:AUR0003341",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0003342",
+          "at_dealer",
+          "Dealer:D16"
+        ],
+        [
+          "Vehicle:AUR0003342",
+          "owned_by",
+          "Customer:C2823"
+        ],
+        [
+          "Vehicle:AUR0003343",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0003344",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0003344",
+          "owned_by",
+          "Customer:C6418"
+        ],
+        [
+          "Vehicle:AUR0003345",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0003346",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0003346",
+          "owned_by",
+          "Customer:C1844"
+        ],
+        [
+          "Vehicle:AUR0003347",
+          "at_dealer",
+          "Dealer:D50"
+        ],
+        [
+          "Vehicle:AUR0003347",
+          "owned_by",
+          "Customer:C0959"
+        ],
+        [
+          "Vehicle:AUR0003348",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0003348",
+          "owned_by",
+          "Customer:C0163"
+        ],
+        [
+          "Vehicle:AUR0003349",
+          "at_dealer",
+          "Dealer:D15"
+        ],
+        [
+          "Vehicle:AUR0003350",
+          "at_dealer",
+          "Dealer:D26"
+        ],
+        [
+          "Vehicle:AUR0003350",
+          "owned_by",
+          "Customer:C6067"
+        ],
+        [
+          "Vehicle:AUR0003351",
+          "at_dealer",
+          "Dealer:D46"
+        ],
+        [
+          "Vehicle:AUR0003351",
+          "owned_by",
+          "Customer:C5234"
+        ],
+        [
+          "Vehicle:AUR0003352",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0003353",
+          "at_dealer",
+          "Dealer:D38"
+        ],
+        [
+          "Vehicle:AUR0003353",
+          "owned_by",
+          "Customer:C3697"
+        ],
+        [
+          "Vehicle:AUR0003354",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0003354",
+          "owned_by",
+          "Customer:C4595"
+        ],
+        [
+          "Vehicle:AUR0003355",
+          "at_dealer",
+          "Dealer:D04"
+        ],
+        [
+          "Vehicle:AUR0003356",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0003356",
+          "owned_by",
+          "Customer:C5016"
+        ],
+        [
+          "Vehicle:AUR0003357",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0003357",
+          "owned_by",
+          "Customer:C4180"
+        ],
+        [
+          "Vehicle:AUR0003358",
+          "at_dealer",
+          "Dealer:D26"
+        ],
+        [
+          "Vehicle:AUR0003358",
+          "owned_by",
+          "Customer:C1386"
+        ]
+      ]
+    }
+  },
+  "notes": [],
+  "calls": [
+    {
+      "tool": "quality.hold_lot",
+      "args": {
+        "lot_id": "LOT-0191"
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "LOT-0191: defective infotainment chip used at P_IN 2027-03-02..2027-03-03",
+      "path": [
+        "Lot:LOT-0191"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D02",
+        "vins": [
+          "AUR0003242"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003242",
+        "Dealer:D02"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D03",
+        "vins": [
+          "AUR0003238",
+          "AUR0003254",
+          "AUR0003267"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "3 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003238",
+        "Dealer:D03"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D04",
+        "vins": [
+          "AUR0003355"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003355",
+        "Dealer:D04"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D06",
+        "vins": [
+          "AUR0003235"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003235",
+        "Dealer:D06"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D07",
+        "vins": [
+          "AUR0003283"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003283",
+        "Dealer:D07"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D08",
+        "vins": [
+          "AUR0003236",
+          "AUR0003338"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003236",
+        "Dealer:D08"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D10",
+        "vins": [
+          "AUR0003180",
+          "AUR0003258"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003180",
+        "Dealer:D10"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D12",
+        "vins": [
+          "AUR0003176"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003176",
+        "Dealer:D12"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D13",
+        "vins": [
+          "AUR0003243"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003243",
+        "Dealer:D13"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D15",
+        "vins": [
+          "AUR0003264",
+          "AUR0003349"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003264",
+        "Dealer:D15"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D20",
+        "vins": [
+          "AUR0003293",
+          "AUR0003352"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003293",
+        "Dealer:D20"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D21",
+        "vins": [
+          "AUR0003287"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003287",
+        "Dealer:D21"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D22",
+        "vins": [
+          "AUR0003277"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003277",
+        "Dealer:D22"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D23",
+        "vins": [
+          "AUR0003175",
+          "AUR0003184",
+          "AUR0003273"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "3 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003175",
+        "Dealer:D23"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D24",
+        "vins": [
+          "AUR0003294"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003294",
+        "Dealer:D24"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D25",
+        "vins": [
+          "AUR0003240",
+          "AUR0003262"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003240",
+        "Dealer:D25"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D26",
+        "vins": [
+          "AUR0003286",
+          "AUR0003296"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003286",
+        "Dealer:D26"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D27",
+        "vins": [
+          "AUR0003288"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003288",
+        "Dealer:D27"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D28",
+        "vins": [
+          "AUR0003339"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003339",
+        "Dealer:D28"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D31",
+        "vins": [
+          "AUR0003250",
+          "AUR0003274"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003250",
+        "Dealer:D31"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D32",
+        "vins": [
+          "AUR0003270"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003270",
+        "Dealer:D32"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D35",
+        "vins": [
+          "AUR0003337"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003337",
+        "Dealer:D35"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D39",
+        "vins": [
+          "AUR0003256",
+          "AUR0003285"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003256",
+        "Dealer:D39"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D44",
+        "vins": [
+          "AUR0003280",
+          "AUR0003340"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003280",
+        "Dealer:D44"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D45",
+        "vins": [
+          "AUR0003341",
+          "AUR0003343",
+          "AUR0003345"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "3 unsold vehicle(s) built with LOT-0191",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003341",
+        "Dealer:D45"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0053",
+        "message": "Safety notice: your vehicle AUR0003263 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Smoky Mountain Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003263",
+        "Dealer:D06",
+        "Customer:C0053"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0093",
+        "message": "Safety notice: your vehicle AUR0003185 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Coastal Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003185",
+        "Dealer:D26",
+        "Customer:C0093"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0100",
+        "message": "Safety notice: your vehicle AUR0003295 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Piney Woods Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003295",
+        "Dealer:D21",
+        "Customer:C0100"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0102",
+        "message": "Safety notice: your vehicle AUR0003190 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Gulf Breeze Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003190",
+        "Dealer:D40",
+        "Customer:C0102"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0104",
+        "message": "Safety notice: your vehicle AUR0003177 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Volunteer Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003177",
+        "Dealer:D37",
+        "Customer:C0104"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0163",
+        "message": "Safety notice: your vehicle AUR0003348 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Sooner Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003348",
+        "Dealer:D20",
+        "Customer:C0163"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0260",
+        "message": "Safety notice: your vehicle AUR0003259 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003259",
+        "Dealer:D45",
+        "Customer:C0260"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0310",
+        "message": "Safety notice: your vehicle AUR0003174 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Coastal Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003174",
+        "Dealer:D26",
+        "Customer:C0310"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0434",
+        "message": "Safety notice: your vehicle AUR0003272 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Sooner Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003272",
+        "Dealer:D20",
+        "Customer:C0434"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0437",
+        "message": "Safety notice: your vehicle AUR0003193 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Smoky Mountain Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003193",
+        "Dealer:D06",
+        "Customer:C0437"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0501",
+        "message": "Safety notice: your vehicle AUR0003260 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Music City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003260",
+        "Dealer:D07",
+        "Customer:C0501"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0541",
+        "message": "Safety notice: your vehicle AUR0003196 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Pelican Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003196",
+        "Dealer:D16",
+        "Customer:C0541"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0604",
+        "message": "Safety notice: your vehicle AUR0003298 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Sooner Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003298",
+        "Dealer:D20",
+        "Customer:C0604"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0632",
+        "message": "Safety notice: your vehicle AUR0003187 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Piney Woods Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003187",
+        "Dealer:D21",
+        "Customer:C0632"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0743",
+        "message": "Safety notice: your vehicle AUR0003268 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Lakeshore Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003268",
+        "Dealer:D23",
+        "Customer:C0743"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0959",
+        "message": "Safety notice: your vehicle AUR0003347 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Ridge Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003347",
+        "Dealer:D50",
+        "Customer:C0959"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1109",
+        "message": "Safety notice: your vehicle AUR0003252 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Alamo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003252",
+        "Dealer:D03",
+        "Customer:C1109"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1145",
+        "message": "Safety notice: your vehicle AUR0003266 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Sooner Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003266",
+        "Dealer:D20",
+        "Customer:C1145"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1159",
+        "message": "Safety notice: your vehicle AUR0003189 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Bluegrass Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003189",
+        "Dealer:D05",
+        "Customer:C1159"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1171",
+        "message": "Safety notice: your vehicle AUR0003200 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Prairie Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003200",
+        "Dealer:D10",
+        "Customer:C1171"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1236",
+        "message": "Safety notice: your vehicle AUR0003183 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003183",
+        "Dealer:D45",
+        "Customer:C1236"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1357",
+        "message": "Safety notice: your vehicle AUR0003182 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Hill City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003182",
+        "Dealer:D44",
+        "Customer:C1357"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1366",
+        "message": "Safety notice: your vehicle AUR0003192 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Lakeshore Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003192",
+        "Dealer:D23",
+        "Customer:C1366"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1386",
+        "message": "Safety notice: your vehicle AUR0003358 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Coastal Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003358",
+        "Dealer:D26",
+        "Customer:C1386"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1439",
+        "message": "Safety notice: your vehicle AUR0003179 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Windy Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003179",
+        "Dealer:D46",
+        "Customer:C1439"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1550",
+        "message": "Safety notice: your vehicle AUR0003178 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Magnolia Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003178",
+        "Dealer:D08",
+        "Customer:C1550"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1596",
+        "message": "Safety notice: your vehicle AUR0003289 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Tupelo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003289",
+        "Dealer:D25",
+        "Customer:C1596"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1649",
+        "message": "Safety notice: your vehicle AUR0003275 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Alamo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003275",
+        "Dealer:D03",
+        "Customer:C1649"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1731",
+        "message": "Safety notice: your vehicle AUR0003198 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Bayou Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003198",
+        "Dealer:D02",
+        "Customer:C1731"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1779",
+        "message": "Safety notice: your vehicle AUR0003237 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Blue Ridge Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003237",
+        "Dealer:D27",
+        "Customer:C1779"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1844",
+        "message": "Safety notice: your vehicle AUR0003346 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Lakeshore Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003346",
+        "Dealer:D23",
+        "Customer:C1844"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1963",
+        "message": "Safety notice: your vehicle AUR0003279 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Bluff City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003279",
+        "Dealer:D42",
+        "Customer:C1963"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2115",
+        "message": "Safety notice: your vehicle AUR0003246 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Gateway Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003246",
+        "Dealer:D22",
+        "Customer:C2115"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2275",
+        "message": "Safety notice: your vehicle AUR0003181 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Capital City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003181",
+        "Dealer:D39",
+        "Customer:C2275"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2281",
+        "message": "Safety notice: your vehicle AUR0003241 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Bayou Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003241",
+        "Dealer:D02",
+        "Customer:C2281"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2418",
+        "message": "Safety notice: your vehicle AUR0003191 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Piney Woods Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003191",
+        "Dealer:D21",
+        "Customer:C2418"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2549",
+        "message": "Safety notice: your vehicle AUR0003194 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Music City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003194",
+        "Dealer:D07",
+        "Customer:C2549"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2583",
+        "message": "Safety notice: your vehicle AUR0003249 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Riverwalk Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003249",
+        "Dealer:D14",
+        "Customer:C2583"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2605",
+        "message": "Safety notice: your vehicle AUR0003284 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Lakeshore Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003284",
+        "Dealer:D23",
+        "Customer:C2605"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2622",
+        "message": "Safety notice: your vehicle AUR0003290 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Coastal Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003290",
+        "Dealer:D26",
+        "Customer:C2622"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2701",
+        "message": "Safety notice: your vehicle AUR0003199 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Prairie Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003199",
+        "Dealer:D10",
+        "Customer:C2701"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2708",
+        "message": "Safety notice: your vehicle AUR0003197 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Capital City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003197",
+        "Dealer:D39",
+        "Customer:C2708"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2749",
+        "message": "Safety notice: your vehicle AUR0003269 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Rocket City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003269",
+        "Dealer:D24",
+        "Customer:C2749"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2823",
+        "message": "Safety notice: your vehicle AUR0003342 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Pelican Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003342",
+        "Dealer:D16",
+        "Customer:C2823"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2898",
+        "message": "Safety notice: your vehicle AUR0003265 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Queen City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003265",
+        "Dealer:D35",
+        "Customer:C2898"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3029",
+        "message": "Safety notice: your vehicle AUR0003253 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Bayou Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003253",
+        "Dealer:D02",
+        "Customer:C3029"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3355",
+        "message": "Safety notice: your vehicle AUR0003297 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Tupelo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003297",
+        "Dealer:D25",
+        "Customer:C3355"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3697",
+        "message": "Safety notice: your vehicle AUR0003353 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Steel City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003353",
+        "Dealer:D38",
+        "Customer:C3697"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3771",
+        "message": "Safety notice: your vehicle AUR0003276 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Magnolia Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003276",
+        "Dealer:D08",
+        "Customer:C3771"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4033",
+        "message": "Safety notice: your vehicle AUR0003291 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Tupelo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003291",
+        "Dealer:D25",
+        "Customer:C4033"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4096",
+        "message": "Safety notice: your vehicle AUR0003281 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Tupelo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003281",
+        "Dealer:D25",
+        "Customer:C4096"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4180",
+        "message": "Safety notice: your vehicle AUR0003357 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003357",
+        "Dealer:D45",
+        "Customer:C4180"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4244",
+        "message": "Safety notice: your vehicle AUR0003239 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003239",
+        "Dealer:D45",
+        "Customer:C4244"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4249",
+        "message": "Safety notice: your vehicle AUR0003186 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Blue Ridge Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003186",
+        "Dealer:D27",
+        "Customer:C4249"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4447",
+        "message": "Safety notice: your vehicle AUR0003336 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Rio Grande Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003336",
+        "Dealer:D29",
+        "Customer:C4447"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4522",
+        "message": "Safety notice: your vehicle AUR0003245 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Hoosier Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003245",
+        "Dealer:D31",
+        "Customer:C4522"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4595",
+        "message": "Safety notice: your vehicle AUR0003354 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Magnolia Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003354",
+        "Dealer:D08",
+        "Customer:C4595"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4863",
+        "message": "Safety notice: your vehicle AUR0003257 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Magnolia Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003257",
+        "Dealer:D08",
+        "Customer:C4863"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4937",
+        "message": "Safety notice: your vehicle AUR0003261 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Gateway Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003261",
+        "Dealer:D22",
+        "Customer:C4937"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5016",
+        "message": "Safety notice: your vehicle AUR0003356 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Lakeshore Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003356",
+        "Dealer:D23",
+        "Customer:C5016"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5021",
+        "message": "Safety notice: your vehicle AUR0003195 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Ozark Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003195",
+        "Dealer:D19",
+        "Customer:C5021"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5099",
+        "message": "Safety notice: your vehicle AUR0003188 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Lakeshore Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0289",
+        "Vehicle:AUR0003188",
+        "Dealer:D23",
+        "Customer:C5099"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5234",
+        "message": "Safety notice: your vehicle AUR0003351 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Windy Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003351",
+        "Dealer:D46",
+        "Customer:C5234"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5279",
+        "message": "Safety notice: your vehicle AUR0003292 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Queen City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003292",
+        "Dealer:D35",
+        "Customer:C5279"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5489",
+        "message": "Safety notice: your vehicle AUR0003271 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Queen City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003271",
+        "Dealer:D35",
+        "Customer:C5489"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5623",
+        "message": "Safety notice: your vehicle AUR0003255 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Palmetto Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003255",
+        "Dealer:D28",
+        "Customer:C5623"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5998",
+        "message": "Safety notice: your vehicle AUR0003335 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Crescent Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003335",
+        "Dealer:D49",
+        "Customer:C5998"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6063",
+        "message": "Safety notice: your vehicle AUR0003251 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Cardinal Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003251",
+        "Dealer:D47",
+        "Customer:C6063"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6067",
+        "message": "Safety notice: your vehicle AUR0003350 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Coastal Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003350",
+        "Dealer:D26",
+        "Customer:C6067"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6399",
+        "message": "Safety notice: your vehicle AUR0003247 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003247",
+        "Dealer:D45",
+        "Customer:C6399"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6418",
+        "message": "Safety notice: your vehicle AUR0003344 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Magnolia Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0294",
+        "Vehicle:AUR0003344",
+        "Dealer:D08",
+        "Customer:C6418"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6727",
+        "message": "Safety notice: your vehicle AUR0003234 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Delta Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003234",
+        "Dealer:D12",
+        "Customer:C6727"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6746",
+        "message": "Safety notice: your vehicle AUR0003278 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003278",
+        "Dealer:D45",
+        "Customer:C6746"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6816",
+        "message": "Safety notice: your vehicle AUR0003244 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact River City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003244",
+        "Dealer:D32",
+        "Customer:C6816"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6890",
+        "message": "Safety notice: your vehicle AUR0003248 (Nova) may contain a defective infotainment chip (lot LOT-0191). Please contact Smoky Mountain Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0291",
+        "Vehicle:AUR0003248",
+        "Dealer:D06",
+        "Customer:C6890"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C7000",
+        "message": "Safety notice: your vehicle AUR0003282 (Voyager) may contain a defective infotainment chip (lot LOT-0191). Please contact Hill Country Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0191",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0292",
+        "Vehicle:AUR0003282",
+        "Dealer:D15",
+        "Customer:C7000"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    }
+  ],
+  "dry_run_failures": [],
+  "live_failure": null,
+  "loaners": null,
+  "summary": {
+    "coordinator": "Lot LOT-0191 of infotainment chip from Quanta Silicon is defective; it went into vehicles built at Princeton (P_IN) Mar 2\u20133.",
+    "planner": null,
+    "dispatcher": null,
+    "inspector": "Put LOT-0191 on hold, stopped sale of 40 unsold vehicles at 25 dealers and contacted 76 owners of sold vehicles.",
+    "summary": "Lot LOT-0191 of infotainment chip from Quanta Silicon is defective; it went into vehicles built at Princeton (P_IN) Mar 2\u20133. Put LOT-0191 on hold, stopped sale of 40 unsold vehicles at 25 dealers and contacted 76 owners of sold vehicles.",
+    "by": "rules (no LLM)"
+  },
+  "log": [
+    {
+      "node": "coordinator_read_message",
+      "text": "incident 1: ACT quality_hold"
+    },
+    {
+      "node": "coordinator_find_affected",
+      "text": "incident 1: graph path Lot \u2500batch_of\u2192 Part \u2190needs\u2500 Model \u2190builds\u2500 PO \u2500produced\u2192 Vehicle \u2500at_dealer\u2192 Dealer / \u2500owned_by\u2192 Customer"
+    },
+    {
+      "node": "inspector_hold_and_recall",
+      "text": "1 lot hold(s), 25 stop-sale calls, 76 owners contacted"
+    },
+    {
+      "node": "safety_check_plan",
+      "text": "102 calls checked, 0 would fail"
+    },
+    {
+      "node": "send_to_server",
+      "text": "102 calls sent, 0 failed"
+    },
+    {
+      "node": "write_audit_summary",
+      "text": "Lot LOT-0191 of infotainment chip from Quanta Silicon is defective; it went into vehicles built at Princeton (P_IN) Mar 2\u20133. Put LOT-0191 on hold, stopped sale of 40 unsold vehicles at 25 dealers and contacted 76 owners of sold vehicles."
+    }
+  ],
+  "seconds": 0.06
+}

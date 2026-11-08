@@ -12,6 +12,9 @@
 
 </div>
 
+> [!IMPORTANT]
+> **📦 Judges: the submission files are in [`SUBMISSION/`](SUBMISSION/).** It holds the action log, one trace per event, the ontology and full knowledge graph, the graph path diagrams, the agent workflow diagram, the policy checks and a control tower snapshot, with a summary and reason for every event.
+
 Wacky Wheels keeps no parts inventory, so a late shipment, a plant outage or a defective part lot ripples through production schedules, dealers, loaner cars and owners within days. This control tower reads free-text operational messages, works out what each one means, finds **every affected record** in a knowledge graph of the company, and carries out the corrective actions the policy handbook requires. Messages that are unclear go to a human.
 
 ![The control tower: run highlights, the agent briefing for a compound event, the ontology with the traversed path in red, and the event feed](docs/images/control_tower.png)

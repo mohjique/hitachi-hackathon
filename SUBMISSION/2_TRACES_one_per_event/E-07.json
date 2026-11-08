@@ -1,0 +1,74 @@
+{
+  "event": {
+    "event_id": "E-07",
+    "received_at": "2027-03-08T08:59:00",
+    "source": "news wire",
+    "text": "Dealer Pensacola, FL asks where to find the new brochure PDF."
+  },
+  "mode": "live",
+  "model": "gemini-3.5-flash-lite",
+  "agents_visited": [
+    "coordinator_read_message",
+    "write_audit_summary"
+  ],
+  "triage": {
+    "event_id": "E-07",
+    "text": "Dealer Pensacola, FL asks where to find the new brochure PDF.",
+    "model": "gemini-3.5-flash-lite",
+    "incidents": [
+      {
+        "category": "noise",
+        "quote": "Dealer Pensacola, FL asks where to find the new brochure PDF.",
+        "llm_reason": "This message is a routine dealer inquiry about a brochure and is completely unrelated to manufacturing operations.",
+        "raw": {
+          "plant": null,
+          "part": null,
+          "supplier": null,
+          "shipment_id": null,
+          "lot_id": null,
+          "start_date": null,
+          "end_date": null,
+          "confirmed": true
+        },
+        "plant_id": null,
+        "part_id": null,
+        "supplier_id": null,
+        "shipment_id": null,
+        "lot_id": null,
+        "lots": null,
+        "start": null,
+        "end": null,
+        "verdict": "NO_ACTION",
+        "verdict_reason": "not about operations",
+        "trace": []
+      }
+    ]
+  },
+  "graph": {},
+  "notes": [
+    "incident 1: noise, no action (This message is a routine dealer inquiry about a brochure and is completely unrelated to manufacturing operations.)"
+  ],
+  "calls": [],
+  "dry_run_failures": [],
+  "live_failure": null,
+  "loaners": null,
+  "summary": {
+    "coordinator": "The message is not about operations: this message is a routine dealer inquiry about a brochure and is completely unrelated to manufacturing operations. No action taken.",
+    "planner": null,
+    "dispatcher": null,
+    "inspector": null,
+    "summary": "The message is not about operations: this message is a routine dealer inquiry about a brochure and is completely unrelated to manufacturing operations. No action taken.",
+    "by": "rules (no LLM)"
+  },
+  "log": [
+    {
+      "node": "coordinator_read_message",
+      "text": "incident 1: NO_ACTION noise \u2014 not about operations"
+    },
+    {
+      "node": "write_audit_summary",
+      "text": "The message is not about operations: this message is a routine dealer inquiry about a brochure and is completely unrelated to manufacturing operations. No action taken."
+    }
+  ],
+  "seconds": 0.0
+}

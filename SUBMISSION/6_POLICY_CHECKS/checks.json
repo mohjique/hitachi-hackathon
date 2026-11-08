@@ -1,0 +1,193 @@
+[
+  {
+    "event_id": "E-01",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[1-3,10] moved exactly the 14 affected orders",
+      "[3] every move is legal and the earliest feasible slot",
+      "[4] 41 dealers told about exactly their affected orders",
+      "[4] exactly one dealer.notify per affected dealer",
+      "[5] 26 loaners to the right customers by priority",
+      "[6] lots held: none",
+      "[6] 0 unsold affected vehicles stopped from sale",
+      "[6] 0 owners of sold affected vehicles contacted",
+      "[9] 3 kinds of action"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-02",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[8] unconfirmed: escalate only, no write calls"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-03",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[1-3,10] moved exactly the 0 affected orders",
+      "[10] no dealer notices or loaners without affected orders",
+      "[6] lots held: ['LOT-0130']",
+      "[6] 110 unsold affected vehicles stopped from sale",
+      "[6] 150 owners of sold affected vehicles contacted",
+      "[9] 3 kinds of action"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-04",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[1-3,10] moved exactly the 9 affected orders",
+      "[3] every move is legal and the earliest feasible slot",
+      "[4] 32 dealers told about exactly their affected orders",
+      "[4] exactly one dealer.notify per affected dealer",
+      "[5] 18 loaners to the right customers by priority",
+      "[6] lots held: none",
+      "[6] 0 unsold affected vehicles stopped from sale",
+      "[6] 0 owners of sold affected vehicles contacted",
+      "[9] 3 kinds of action"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-05",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[7] noise: no calls"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-06",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[7] noise: no calls"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-07",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[7] noise: no calls"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-08",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[1-3,10] moved exactly the 6 affected orders",
+      "[3] every move is legal and the earliest feasible slot",
+      "[4] 25 dealers told about exactly their affected orders",
+      "[4] exactly one dealer.notify per affected dealer",
+      "[5] 15 loaners to the right customers by priority",
+      "[6] lots held: none",
+      "[6] 0 unsold affected vehicles stopped from sale",
+      "[6] 0 owners of sold affected vehicles contacted",
+      "[9] 3 kinds of action"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-09",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[1-3,10] moved exactly the 6 affected orders",
+      "[3] every move is legal and the earliest feasible slot",
+      "[4] 26 dealers told about exactly their affected orders",
+      "[4] exactly one dealer.notify per affected dealer",
+      "[5] 10 loaners to the right customers by priority",
+      "[6] lots held: none",
+      "[6] 0 unsold affected vehicles stopped from sale",
+      "[6] 0 owners of sold affected vehicles contacted",
+      "[9] 4 kinds of action"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-10",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[1-3,10] moved exactly the 3 affected orders",
+      "[3] every move is legal and the earliest feasible slot",
+      "[4] 18 dealers told about exactly their affected orders",
+      "[4] exactly one dealer.notify per affected dealer",
+      "[5] 7 loaners to the right customers by priority",
+      "[6] lots held: none",
+      "[6] 0 unsold affected vehicles stopped from sale",
+      "[6] 0 owners of sold affected vehicles contacted",
+      "[9] 3 kinds of action"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-11",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[1-3,10] moved exactly the 9 affected orders",
+      "[3] every move is legal and the earliest feasible slot",
+      "[4] 36 dealers told about exactly their affected orders",
+      "[4] exactly one dealer.notify per affected dealer",
+      "[5] 17 loaners to the right customers by priority",
+      "[6] lots held: none",
+      "[6] 0 unsold affected vehicles stopped from sale",
+      "[6] 0 owners of sold affected vehicles contacted",
+      "[9] 4 kinds of action"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-12",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[1-3,10] moved exactly the 3 affected orders",
+      "[3] every move is legal and the earliest feasible slot",
+      "[4] 14 dealers told about exactly their affected orders",
+      "[4] exactly one dealer.notify per affected dealer",
+      "[5] 10 loaners to the right customers by priority",
+      "[6] lots held: none",
+      "[6] 0 unsold affected vehicles stopped from sale",
+      "[6] 0 owners of sold affected vehicles contacted",
+      "[9] 3 kinds of action"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-13",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[8] unconfirmed: escalate only, no write calls"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-14",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[1-3,10] moved exactly the 0 affected orders",
+      "[10] no dealer notices or loaners without affected orders",
+      "[6] lots held: ['LOT-0017']",
+      "[6] 86 unsold affected vehicles stopped from sale",
+      "[6] 94 owners of sold affected vehicles contacted",
+      "[9] 3 kinds of action"
+    ],
+    "problems": []
+  },
+  {
+    "event_id": "E-15",
+    "passed": [
+      "[tools] 0 failed calls",
+      "[1-3,10] moved exactly the 0 affected orders",
+      "[10] no dealer notices or loaners without affected orders",
+      "[6] lots held: ['LOT-0191']",
+      "[6] 40 unsold affected vehicles stopped from sale",
+      "[6] 76 owners of sold affected vehicles contacted",
+      "[9] 3 kinds of action"
+    ],
+    "problems": []
+  }
+]

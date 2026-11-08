@@ -1,0 +1,1568 @@
+{
+  "event": {
+    "event_id": "E-12",
+    "received_at": "2027-03-08T10:24:00",
+    "source": "supplier email",
+    "text": "Subject: Shipment SH-0182 delayed\nFrom: dispatch@orbit.example\n\nOur shipment SH-0182 of CAM-360 (surround-view camera kit) for Wacky Wheels Princeton (P_IN) was due 2027-03-15 and will now arrive 2027-03-18. Reason: port congestion."
+  },
+  "mode": "live",
+  "model": "gemini-3.5-flash-lite",
+  "agents_visited": [
+    "coordinator_read_message",
+    "coordinator_find_affected",
+    "planner_reschedule_builds",
+    "dispatcher_notify_and_loan",
+    "safety_check_plan",
+    "send_to_server",
+    "write_audit_summary"
+  ],
+  "triage": {
+    "event_id": "E-12",
+    "text": "Subject: Shipment SH-0182 delayed\nFrom: dispatch@orbit.example\n\nOur shipment SH-0182 of CAM-360 (surround-view camera kit) for Wacky Wheels Princeton (P_IN) was due 2027-03-15 and will now arrive 2027-03-18. Reason: port congestion.",
+    "model": "gemini-3.5-flash-lite",
+    "incidents": [
+      {
+        "category": "supplier_delay",
+        "quote": "Our shipment SH-0182 of CAM-360 (surround-view camera kit) for Wacky Wheels Princeton (P_IN) was due 2027-03-15 and will now arrive 2027-03-18.",
+        "llm_reason": "The shipment of a part is arriving later than the originally planned date.",
+        "raw": {
+          "plant": "Wacky Wheels Princeton (P_IN)",
+          "part": "CAM-360 (surround-view camera kit)",
+          "supplier": "orbit",
+          "shipment_id": "SH-0182",
+          "lot_id": null,
+          "start_date": "2027-03-15",
+          "end_date": "2027-03-18",
+          "confirmed": true
+        },
+        "plant_id": "P_IN",
+        "part_id": "CAM-360",
+        "supplier_id": "SUP-11",
+        "shipment_id": "SH-0182",
+        "lot_id": null,
+        "lots": null,
+        "start": "2027-03-15",
+        "end": "2027-03-18",
+        "verdict": "ACT",
+        "verdict_reason": null,
+        "trace": [
+          "all extracted phrases appear in the message",
+          "\"Wacky Wheels Princeton (P_IN)\" contains known name \"wacky wheels princeton\"",
+          "\"CAM-360 (surround-view camera kit)\" contains known name \"surround view camera kit\"",
+          "\"orbit\" -> exact name match",
+          "\"2027-03-15\" -> 2027-03-15 (ISO date)",
+          "\"2027-03-18\" -> 2027-03-18 (ISO date)",
+          "shipment SH-0182 found: CAM-360 to P_IN, due 2027-03-15",
+          "builds needing CAM-360 at P_IN blocked 2027-03-15 up to (not incl.) 2027-03-18"
+        ]
+      }
+    ]
+  },
+  "graph": {
+    "1": {
+      "kind": "supplier_delay",
+      "path_schema": "Shipment \u2500carries\u2192 Part \u2190needs\u2500 Model \u2190builds\u2500 PO \u2500fulfils\u2192 CO \u2500placed_at\u2192 Dealer / \u2500ordered_by\u2192 Customer",
+      "notes": [
+        "Shipment:SH-0182 carries Part:CAM-360 to Plant:P_IN; blocked from 2027-03-15 up to (not incl.) 2027-03-18",
+        "models needing Part:CAM-360: SUMMIT, VOYAGER",
+        "3 production orders affected at Plant:P_IN"
+      ],
+      "example_path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0316",
+        "CO:CO-01756",
+        "Dealer:D07",
+        "Customer:C4130"
+      ],
+      "edges": [
+        [
+          "CO:CO-01756",
+          "ordered_by",
+          "Customer:C4130"
+        ],
+        [
+          "CO:CO-01756",
+          "placed_at",
+          "Dealer:D07"
+        ],
+        [
+          "CO:CO-01757",
+          "ordered_by",
+          "Customer:C2471"
+        ],
+        [
+          "CO:CO-01757",
+          "placed_at",
+          "Dealer:D06"
+        ],
+        [
+          "CO:CO-01758",
+          "ordered_by",
+          "Customer:C5153"
+        ],
+        [
+          "CO:CO-01758",
+          "placed_at",
+          "Dealer:D06"
+        ],
+        [
+          "CO:CO-01759",
+          "ordered_by",
+          "Customer:C5947"
+        ],
+        [
+          "CO:CO-01759",
+          "placed_at",
+          "Dealer:D02"
+        ],
+        [
+          "CO:CO-01760",
+          "ordered_by",
+          "Customer:C1775"
+        ],
+        [
+          "CO:CO-01760",
+          "placed_at",
+          "Dealer:D45"
+        ],
+        [
+          "CO:CO-01761",
+          "ordered_by",
+          "Customer:C4656"
+        ],
+        [
+          "CO:CO-01761",
+          "placed_at",
+          "Dealer:D08"
+        ],
+        [
+          "CO:CO-01762",
+          "ordered_by",
+          "Customer:C4508"
+        ],
+        [
+          "CO:CO-01762",
+          "placed_at",
+          "Dealer:D14"
+        ],
+        [
+          "CO:CO-01780",
+          "ordered_by",
+          "Customer:C6028"
+        ],
+        [
+          "CO:CO-01780",
+          "placed_at",
+          "Dealer:D08"
+        ],
+        [
+          "CO:CO-01781",
+          "ordered_by",
+          "Customer:C3207"
+        ],
+        [
+          "CO:CO-01781",
+          "placed_at",
+          "Dealer:D06"
+        ],
+        [
+          "CO:CO-01782",
+          "ordered_by",
+          "Customer:C6031"
+        ],
+        [
+          "CO:CO-01782",
+          "placed_at",
+          "Dealer:D25"
+        ],
+        [
+          "CO:CO-01783",
+          "ordered_by",
+          "Customer:C5201"
+        ],
+        [
+          "CO:CO-01783",
+          "placed_at",
+          "Dealer:D21"
+        ],
+        [
+          "CO:CO-01784",
+          "ordered_by",
+          "Customer:C4240"
+        ],
+        [
+          "CO:CO-01784",
+          "placed_at",
+          "Dealer:D31"
+        ],
+        [
+          "CO:CO-01785",
+          "ordered_by",
+          "Customer:C2786"
+        ],
+        [
+          "CO:CO-01785",
+          "placed_at",
+          "Dealer:D44"
+        ],
+        [
+          "CO:CO-01786",
+          "ordered_by",
+          "Customer:C1134"
+        ],
+        [
+          "CO:CO-01786",
+          "placed_at",
+          "Dealer:D20"
+        ],
+        [
+          "CO:CO-01787",
+          "ordered_by",
+          "Customer:C0746"
+        ],
+        [
+          "CO:CO-01787",
+          "placed_at",
+          "Dealer:D44"
+        ],
+        [
+          "CO:CO-01788",
+          "ordered_by",
+          "Customer:C6865"
+        ],
+        [
+          "CO:CO-01788",
+          "placed_at",
+          "Dealer:D45"
+        ],
+        [
+          "CO:CO-01789",
+          "ordered_by",
+          "Customer:C0380"
+        ],
+        [
+          "CO:CO-01789",
+          "placed_at",
+          "Dealer:D25"
+        ],
+        [
+          "CO:CO-01806",
+          "ordered_by",
+          "Customer:C1895"
+        ],
+        [
+          "CO:CO-01806",
+          "placed_at",
+          "Dealer:D30"
+        ],
+        [
+          "CO:CO-01807",
+          "ordered_by",
+          "Customer:C4874"
+        ],
+        [
+          "CO:CO-01807",
+          "placed_at",
+          "Dealer:D31"
+        ],
+        [
+          "CO:CO-01808",
+          "ordered_by",
+          "Customer:C1818"
+        ],
+        [
+          "CO:CO-01808",
+          "placed_at",
+          "Dealer:D21"
+        ],
+        [
+          "CO:CO-01809",
+          "ordered_by",
+          "Customer:C1845"
+        ],
+        [
+          "CO:CO-01809",
+          "placed_at",
+          "Dealer:D44"
+        ],
+        [
+          "CO:CO-01810",
+          "ordered_by",
+          "Customer:C4200"
+        ],
+        [
+          "CO:CO-01810",
+          "placed_at",
+          "Dealer:D45"
+        ],
+        [
+          "CO:CO-01811",
+          "ordered_by",
+          "Customer:C2141"
+        ],
+        [
+          "CO:CO-01811",
+          "placed_at",
+          "Dealer:D02"
+        ],
+        [
+          "CO:CO-01812",
+          "ordered_by",
+          "Customer:C2879"
+        ],
+        [
+          "CO:CO-01812",
+          "placed_at",
+          "Dealer:D01"
+        ],
+        [
+          "CO:CO-01813",
+          "ordered_by",
+          "Customer:C6778"
+        ],
+        [
+          "CO:CO-01813",
+          "placed_at",
+          "Dealer:D42"
+        ],
+        [
+          "CO:CO-01814",
+          "ordered_by",
+          "Customer:C1115"
+        ],
+        [
+          "CO:CO-01814",
+          "placed_at",
+          "Dealer:D44"
+        ],
+        [
+          "Model:SUMMIT",
+          "needs",
+          "Part:CAM-360"
+        ],
+        [
+          "Model:VOYAGER",
+          "needs",
+          "Part:CAM-360"
+        ],
+        [
+          "PO:PO-0316",
+          "builds",
+          "Model:VOYAGER"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01756"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01757"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01758"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01759"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01760"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01761"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01762"
+        ],
+        [
+          "PO:PO-0319",
+          "builds",
+          "Model:VOYAGER"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01780"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01781"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01782"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01783"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01784"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01785"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01786"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01787"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01788"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01789"
+        ],
+        [
+          "PO:PO-0322",
+          "builds",
+          "Model:VOYAGER"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01806"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01807"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01808"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01809"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01810"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01811"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01812"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01813"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01814"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0316"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0319"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0322"
+        ],
+        [
+          "Shipment:SH-0182",
+          "carries",
+          "Part:CAM-360"
+        ],
+        [
+          "Shipment:SH-0182",
+          "delivered_to",
+          "Plant:P_IN"
+        ]
+      ]
+    }
+  },
+  "notes": [],
+  "calls": [
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0316",
+        "new_date": "2027-03-18"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        1
+      ],
+      "why": "CAM-360 shipment late, now arriving Mar 18. Earliest P_IN day on/after 2027-03-18 with a free slot is 2027-03-18.",
+      "path": [
+        "Plant:P_IN",
+        "PO:PO-0316"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0316",
+          "plant_id": "P_IN",
+          "date": "2027-03-18"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0319",
+        "new_date": "2027-03-18"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        1
+      ],
+      "why": "CAM-360 shipment late, now arriving Mar 18. Earliest P_IN day on/after 2027-03-18 with a free slot is 2027-03-18.",
+      "path": [
+        "Plant:P_IN",
+        "PO:PO-0319"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0319",
+          "plant_id": "P_IN",
+          "date": "2027-03-18"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0322",
+        "new_date": "2027-03-19"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        1
+      ],
+      "why": "CAM-360 shipment late, now arriving Mar 18. Earliest P_IN day on/after 2027-03-18 with a free slot is 2027-03-19.",
+      "path": [
+        "Plant:P_IN",
+        "PO:PO-0322"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0322",
+          "plant_id": "P_IN",
+          "date": "2027-03-19"
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D01",
+        "customer_order_ids": [
+          "CO-01812"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-01812 (CAM-360 shipment late, now arriving Mar 18; now building Mar 19) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D01",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01812",
+        "Dealer:D01",
+        "Customer:C2879"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D02",
+        "customer_order_ids": [
+          "CO-01759",
+          "CO-01811"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-01759 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) CO-01811 (CAM-360 shipment late, now arriving Mar 18; now building Mar 19) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "2 affected customer order(s) at D02",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0316",
+        "CO:CO-01759",
+        "Dealer:D02",
+        "Customer:C5947"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D06",
+        "customer_order_ids": [
+          "CO-01757",
+          "CO-01758",
+          "CO-01781"
+        ],
+        "message": "Delay notice: 3 of your customer order(s) are affected. CO-01757 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) CO-01758 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) CO-01781 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "3 affected customer order(s) at D06",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0316",
+        "CO:CO-01757",
+        "Dealer:D06",
+        "Customer:C2471"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D07",
+        "customer_order_ids": [
+          "CO-01756"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-01756 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D07",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0316",
+        "CO:CO-01756",
+        "Dealer:D07",
+        "Customer:C4130"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D08",
+        "customer_order_ids": [
+          "CO-01761",
+          "CO-01780"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-01761 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) CO-01780 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "2 affected customer order(s) at D08",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0316",
+        "CO:CO-01761",
+        "Dealer:D08",
+        "Customer:C4656"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D14",
+        "customer_order_ids": [
+          "CO-01762"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-01762 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D14",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0316",
+        "CO:CO-01762",
+        "Dealer:D14",
+        "Customer:C4508"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D20",
+        "customer_order_ids": [
+          "CO-01786"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-01786 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D20",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01786",
+        "Dealer:D20",
+        "Customer:C1134"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D21",
+        "customer_order_ids": [
+          "CO-01783",
+          "CO-01808"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-01783 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) CO-01808 (CAM-360 shipment late, now arriving Mar 18; now building Mar 19) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "2 affected customer order(s) at D21",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01783",
+        "Dealer:D21",
+        "Customer:C5201"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D25",
+        "customer_order_ids": [
+          "CO-01782",
+          "CO-01789"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-01782 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) CO-01789 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "2 affected customer order(s) at D25",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01782",
+        "Dealer:D25",
+        "Customer:C6031"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D30",
+        "customer_order_ids": [
+          "CO-01806"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-01806 (CAM-360 shipment late, now arriving Mar 18; now building Mar 19) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D30",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01806",
+        "Dealer:D30",
+        "Customer:C1895"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D31",
+        "customer_order_ids": [
+          "CO-01784",
+          "CO-01807"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-01784 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) CO-01807 (CAM-360 shipment late, now arriving Mar 18; now building Mar 19) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "2 affected customer order(s) at D31",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01784",
+        "Dealer:D31",
+        "Customer:C4240"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D42",
+        "customer_order_ids": [
+          "CO-01813"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-01813 (CAM-360 shipment late, now arriving Mar 18; now building Mar 19) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D42",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01813",
+        "Dealer:D42",
+        "Customer:C6778"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D44",
+        "customer_order_ids": [
+          "CO-01785",
+          "CO-01787",
+          "CO-01809",
+          "CO-01814"
+        ],
+        "message": "Delay notice: 4 of your customer order(s) are affected. CO-01785 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) CO-01787 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) CO-01809 (CAM-360 shipment late, now arriving Mar 18; now building Mar 19) CO-01814 (CAM-360 shipment late, now arriving Mar 18; now building Mar 19) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "4 affected customer order(s) at D44",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01785",
+        "Dealer:D44",
+        "Customer:C2786"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D45",
+        "customer_order_ids": [
+          "CO-01760",
+          "CO-01788",
+          "CO-01810"
+        ],
+        "message": "Delay notice: 3 of your customer order(s) are affected. CO-01760 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) CO-01788 (CAM-360 shipment late, now arriving Mar 18; now building Mar 18) CO-01810 (CAM-360 shipment late, now arriving Mar 18; now building Mar 19) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "3 affected customer order(s) at D45",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0316",
+        "CO:CO-01760",
+        "Dealer:D45",
+        "Customer:C1775"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D08"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "check pool before assigning (planner expects 3)",
+      "path": [
+        "Dealer:D08"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D08",
+        "available": 3
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D08",
+          "available": 3
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01761"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Platinum customer C4656, promised 2027-03-18; D08 pool now 2",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0316",
+        "CO:CO-01761",
+        "Dealer:D08",
+        "Customer:C4656"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D08"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D21"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "check pool before assigning (planner expects 3)",
+      "path": [
+        "Dealer:D21"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D21",
+        "available": 3
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D21",
+          "available": 3
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01783"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Platinum customer C5201, promised 2027-03-20; D21 pool now 2",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01783",
+        "Dealer:D21",
+        "Customer:C5201"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D21"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D01"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "check pool before assigning (planner expects 3)",
+      "path": [
+        "Dealer:D01"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D01",
+        "available": 3
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D01",
+          "available": 3
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01812"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Platinum customer C2879, promised 2027-03-20; D01 pool now 2",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01812",
+        "Dealer:D01",
+        "Customer:C2879"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D01"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D44"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D44"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D44",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D44",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01785"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Platinum customer C2786, promised 2027-03-21; D44 pool now 1",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01785",
+        "Dealer:D44",
+        "Customer:C2786"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D44"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D20"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "check pool before assigning (planner expects 1)",
+      "path": [
+        "Dealer:D20"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D20",
+        "available": 1
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D20",
+          "available": 1
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01786"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Platinum customer C1134, promised 2027-03-21; D20 pool now 0",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01786",
+        "Dealer:D20",
+        "Customer:C1134"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D20"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D45"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D45"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D45",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D45",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01810"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Platinum customer C4200, promised 2027-03-22; D45 pool now 1",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01810",
+        "Dealer:D45",
+        "Customer:C4200"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D45"
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01780"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Gold customer C6028, promised 2027-03-19; D08 pool now 1",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01780",
+        "Dealer:D08",
+        "Customer:C6028"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D08"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D06"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "check pool before assigning (planner expects 3)",
+      "path": [
+        "Dealer:D06"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D06",
+        "available": 3
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D06",
+          "available": 3
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01781"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Gold customer C3207, promised 2027-03-20; D06 pool now 2",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01781",
+        "Dealer:D06",
+        "Customer:C3207"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D06"
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01808"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Gold customer C1818, promised 2027-03-21; D21 pool now 1",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01808",
+        "Dealer:D21",
+        "Customer:C1818"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D21"
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01814"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Gold customer C1115, promised 2027-03-22; D44 pool now 0",
+      "path": [
+        "Shipment:SH-0182",
+        "Part:CAM-360",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01814",
+        "Dealer:D44",
+        "Customer:C1115"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D44"
+        }
+      }
+    }
+  ],
+  "dry_run_failures": [],
+  "live_failure": null,
+  "loaners": {
+    "loaned": [
+      "CO-01761",
+      "CO-01783",
+      "CO-01812",
+      "CO-01785",
+      "CO-01786",
+      "CO-01810",
+      "CO-01780",
+      "CO-01781",
+      "CO-01808",
+      "CO-01814"
+    ],
+    "pool_empty": []
+  },
+  "summary": {
+    "coordinator": "Shipment SH-0182 of surround-view camera kit from Orbit Optics to Princeton (P_IN) is late: due Mar 15, now arriving Mar 18.",
+    "planner": "Rescheduled 3 production orders at Princeton (P_IN) for Mar 18\u201319.",
+    "dispatcher": "Notified 14 dealers about their 26 affected customer orders. Assigned loaners to 10 of 10 eligible Platinum/Gold customers.",
+    "inspector": null,
+    "summary": "Shipment SH-0182 of surround-view camera kit from Orbit Optics to Princeton (P_IN) is late: due Mar 15, now arriving Mar 18. Rescheduled 3 production orders at Princeton (P_IN) for Mar 18\u201319. Notified 14 dealers about their 26 affected customer orders. Assigned loaners to 10 of 10 eligible Platinum/Gold customers.",
+    "by": "rules (no LLM)"
+  },
+  "log": [
+    {
+      "node": "coordinator_read_message",
+      "text": "incident 1: ACT supplier_delay"
+    },
+    {
+      "node": "coordinator_find_affected",
+      "text": "incident 1: graph path Shipment \u2500carries\u2192 Part \u2190needs\u2500 Model \u2190builds\u2500 PO \u2500fulfils\u2192 CO \u2500placed_at\u2192 Dealer / \u2500ordered_by\u2192 Customer"
+    },
+    {
+      "node": "planner_reschedule_builds",
+      "text": "3 orders placed (0 transferred), 0 could not be placed"
+    },
+    {
+      "node": "dispatcher_notify_and_loan",
+      "text": "14 dealer notices, 10 loaners assigned, 0 eligible without a loaner (pool empty)"
+    },
+    {
+      "node": "safety_check_plan",
+      "text": "34 calls checked, 0 would fail"
+    },
+    {
+      "node": "send_to_server",
+      "text": "34 calls sent, 0 failed"
+    },
+    {
+      "node": "write_audit_summary",
+      "text": "Shipment SH-0182 of surround-view camera kit from Orbit Optics to Princeton (P_IN) is late: due Mar 15, now arriving Mar 18. Rescheduled 3 production orders at Princeton (P_IN) for Mar 18\u201319. Notified 14 dealers about their 26 affected customer orders. Assigned loaners to 10 of 10 eligible Platinum/Gold customers."
+    }
+  ],
+  "seconds": 0.05
+}

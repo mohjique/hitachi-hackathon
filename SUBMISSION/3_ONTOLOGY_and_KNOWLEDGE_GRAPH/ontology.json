@@ -1,0 +1,113 @@
+{
+  "node_types": {
+    "Plant": 6,
+    "Model": 6,
+    "Part": 20,
+    "Supplier": 18,
+    "Dealer": 50,
+    "Customer": 7000,
+    "Shipment": 364,
+    "Lot": 364,
+    "PO": 540,
+    "CO": 3263,
+    "Vehicle": 5348
+  },
+  "edge_types": [
+    {
+      "from": "CO",
+      "rel": "ordered_by",
+      "to": "Customer",
+      "count": 3263
+    },
+    {
+      "from": "CO",
+      "rel": "placed_at",
+      "to": "Dealer",
+      "count": 3263
+    },
+    {
+      "from": "Lot",
+      "rel": "batch_of",
+      "to": "Part",
+      "count": 364
+    },
+    {
+      "from": "Lot",
+      "rel": "used_at",
+      "to": "Plant",
+      "count": 364
+    },
+    {
+      "from": "Model",
+      "rel": "needs",
+      "to": "Part",
+      "count": 47
+    },
+    {
+      "from": "PO",
+      "rel": "builds",
+      "to": "Model",
+      "count": 540
+    },
+    {
+      "from": "PO",
+      "rel": "fulfils",
+      "to": "CO",
+      "count": 3263
+    },
+    {
+      "from": "PO",
+      "rel": "produced",
+      "to": "Vehicle",
+      "count": 5348
+    },
+    {
+      "from": "Plant",
+      "rel": "can_build",
+      "to": "Model",
+      "count": 18
+    },
+    {
+      "from": "Plant",
+      "rel": "runs",
+      "to": "PO",
+      "count": 540
+    },
+    {
+      "from": "Shipment",
+      "rel": "carries",
+      "to": "Part",
+      "count": 364
+    },
+    {
+      "from": "Shipment",
+      "rel": "delivered_to",
+      "to": "Plant",
+      "count": 364
+    },
+    {
+      "from": "Supplier",
+      "rel": "made",
+      "to": "Lot",
+      "count": 364
+    },
+    {
+      "from": "Supplier",
+      "rel": "supplies",
+      "to": "Shipment",
+      "count": 364
+    },
+    {
+      "from": "Vehicle",
+      "rel": "at_dealer",
+      "to": "Dealer",
+      "count": 5348
+    },
+    {
+      "from": "Vehicle",
+      "rel": "owned_by",
+      "to": "Customer",
+      "count": 2927
+    }
+  ]
+}

@@ -1,0 +1,5082 @@
+{
+  "event": {
+    "event_id": "E-01",
+    "received_at": "2027-03-08T07:17:00",
+    "source": "daily digest",
+    "text": "Morning digest, two items. (1) San Antonio update: a software outage on the line. We're dark from next Friday through Monday Mar 22; the line restarts the following working day. (2) Quick heads up from Quanta: the infotainment chip run for Princeton can't make it next Monday. Carrier says next Friday now (severe weather on the route)."
+  },
+  "mode": "live",
+  "model": "gemini-3.5-flash-lite",
+  "agents_visited": [
+    "coordinator_read_message",
+    "coordinator_find_affected",
+    "planner_reschedule_builds",
+    "dispatcher_notify_and_loan",
+    "safety_check_plan",
+    "send_to_server",
+    "write_audit_summary"
+  ],
+  "triage": {
+    "event_id": "E-01",
+    "text": "Morning digest, two items. (1) San Antonio update: a software outage on the line. We're dark from next Friday through Monday Mar 22; the line restarts the following working day. (2) Quick heads up from Quanta: the infotainment chip run for Princeton can't make it next Monday. Carrier says next Friday now (severe weather on the route).",
+    "model": "gemini-3.5-flash-lite",
+    "incidents": [
+      {
+        "category": "plant_outage",
+        "quote": "We're dark from next Friday through Monday Mar 22; the line restarts the following working day.",
+        "llm_reason": "The plant is down for a specific range of days.",
+        "raw": {
+          "plant": "San Antonio",
+          "part": null,
+          "supplier": null,
+          "shipment_id": null,
+          "lot_id": null,
+          "start_date": "next Friday",
+          "end_date": "Monday Mar 22",
+          "confirmed": true
+        },
+        "plant_id": "P_TX",
+        "part_id": null,
+        "supplier_id": null,
+        "shipment_id": null,
+        "lot_id": null,
+        "lots": null,
+        "start": "2027-03-19",
+        "end": "2027-03-22",
+        "verdict": "ACT",
+        "verdict_reason": null,
+        "trace": [
+          "all extracted phrases appear in the message",
+          "\"San Antonio\" -> exact name match",
+          "\"next Friday\" -> 2027-03-19 ('next' = that day in next week)",
+          "\"Monday Mar 22\" -> 2027-03-22 (month and day)",
+          "P_TX down 2027-03-19 through 2027-03-22 (inclusive)"
+        ]
+      },
+      {
+        "category": "supplier_delay",
+        "quote": "Quick heads up from Quanta: the infotainment chip run for Princeton can't make it next Monday. Carrier says next Friday now (severe weather on the route).",
+        "llm_reason": "A part shipment from a supplier is arriving later than originally planned.",
+        "raw": {
+          "plant": "Princeton",
+          "part": "infotainment chip",
+          "supplier": "Quanta",
+          "shipment_id": null,
+          "lot_id": null,
+          "start_date": "next Monday",
+          "end_date": "next Friday",
+          "confirmed": true
+        },
+        "plant_id": "P_IN",
+        "part_id": "CHIP-IVI",
+        "supplier_id": "SUP-12",
+        "shipment_id": "SH-0190",
+        "lot_id": null,
+        "lots": null,
+        "start": "2027-03-15",
+        "end": "2027-03-19",
+        "verdict": "ACT",
+        "verdict_reason": null,
+        "trace": [
+          "all extracted phrases appear in the message",
+          "\"Princeton\" -> exact name match",
+          "\"infotainment chip\" -> exact name match",
+          "\"Quanta\" -> exact name match",
+          "\"next Monday\" -> 2027-03-15 ('next' = that day in next week)",
+          "\"next Friday\" -> 2027-03-19 ('next' = that day in next week)",
+          "matched shipment SH-0190 (part + plant + original date)",
+          "builds needing CHIP-IVI at P_IN blocked 2027-03-15 up to (not incl.) 2027-03-19"
+        ]
+      }
+    ]
+  },
+  "graph": {
+    "1": {
+      "kind": "plant_outage",
+      "path_schema": "Plant \u2500runs\u2192 PO \u2500fulfils\u2192 CO \u2500placed_at\u2192 Dealer / \u2500ordered_by\u2192 Customer",
+      "notes": [
+        "Plant:P_TX down 2027-03-19 through 2027-03-22 (inclusive)",
+        "6 production orders affected at Plant:P_TX"
+      ],
+      "example_path": [
+        "Plant:P_TX",
+        "PO:PO-0058",
+        "CO:CO-00247",
+        "Dealer:D18",
+        "Customer:C6387"
+      ],
+      "edges": [
+        [
+          "CO:CO-00247",
+          "ordered_by",
+          "Customer:C6387"
+        ],
+        [
+          "CO:CO-00247",
+          "placed_at",
+          "Dealer:D18"
+        ],
+        [
+          "CO:CO-00248",
+          "ordered_by",
+          "Customer:C3046"
+        ],
+        [
+          "CO:CO-00248",
+          "placed_at",
+          "Dealer:D27"
+        ],
+        [
+          "CO:CO-00249",
+          "ordered_by",
+          "Customer:C4168"
+        ],
+        [
+          "CO:CO-00249",
+          "placed_at",
+          "Dealer:D29"
+        ],
+        [
+          "CO:CO-00250",
+          "ordered_by",
+          "Customer:C6933"
+        ],
+        [
+          "CO:CO-00250",
+          "placed_at",
+          "Dealer:D46"
+        ],
+        [
+          "CO:CO-00251",
+          "ordered_by",
+          "Customer:C4321"
+        ],
+        [
+          "CO:CO-00251",
+          "placed_at",
+          "Dealer:D27"
+        ],
+        [
+          "CO:CO-00252",
+          "ordered_by",
+          "Customer:C4725"
+        ],
+        [
+          "CO:CO-00252",
+          "placed_at",
+          "Dealer:D31"
+        ],
+        [
+          "CO:CO-00253",
+          "ordered_by",
+          "Customer:C6115"
+        ],
+        [
+          "CO:CO-00253",
+          "placed_at",
+          "Dealer:D26"
+        ],
+        [
+          "CO:CO-00254",
+          "ordered_by",
+          "Customer:C0718"
+        ],
+        [
+          "CO:CO-00254",
+          "placed_at",
+          "Dealer:D34"
+        ],
+        [
+          "CO:CO-00255",
+          "ordered_by",
+          "Customer:C1397"
+        ],
+        [
+          "CO:CO-00255",
+          "placed_at",
+          "Dealer:D25"
+        ],
+        [
+          "CO:CO-00256",
+          "ordered_by",
+          "Customer:C4990"
+        ],
+        [
+          "CO:CO-00256",
+          "placed_at",
+          "Dealer:D02"
+        ],
+        [
+          "CO:CO-00257",
+          "ordered_by",
+          "Customer:C0667"
+        ],
+        [
+          "CO:CO-00257",
+          "placed_at",
+          "Dealer:D27"
+        ],
+        [
+          "CO:CO-00258",
+          "ordered_by",
+          "Customer:C2383"
+        ],
+        [
+          "CO:CO-00258",
+          "placed_at",
+          "Dealer:D39"
+        ],
+        [
+          "CO:CO-00259",
+          "ordered_by",
+          "Customer:C2031"
+        ],
+        [
+          "CO:CO-00259",
+          "placed_at",
+          "Dealer:D23"
+        ],
+        [
+          "CO:CO-00260",
+          "ordered_by",
+          "Customer:C3246"
+        ],
+        [
+          "CO:CO-00260",
+          "placed_at",
+          "Dealer:D04"
+        ],
+        [
+          "CO:CO-00261",
+          "ordered_by",
+          "Customer:C0894"
+        ],
+        [
+          "CO:CO-00261",
+          "placed_at",
+          "Dealer:D20"
+        ],
+        [
+          "CO:CO-00262",
+          "ordered_by",
+          "Customer:C2982"
+        ],
+        [
+          "CO:CO-00262",
+          "placed_at",
+          "Dealer:D09"
+        ],
+        [
+          "CO:CO-00263",
+          "ordered_by",
+          "Customer:C5147"
+        ],
+        [
+          "CO:CO-00263",
+          "placed_at",
+          "Dealer:D26"
+        ],
+        [
+          "CO:CO-00264",
+          "ordered_by",
+          "Customer:C5390"
+        ],
+        [
+          "CO:CO-00264",
+          "placed_at",
+          "Dealer:D02"
+        ],
+        [
+          "CO:CO-00265",
+          "ordered_by",
+          "Customer:C2049"
+        ],
+        [
+          "CO:CO-00265",
+          "placed_at",
+          "Dealer:D34"
+        ],
+        [
+          "CO:CO-00266",
+          "ordered_by",
+          "Customer:C2244"
+        ],
+        [
+          "CO:CO-00266",
+          "placed_at",
+          "Dealer:D26"
+        ],
+        [
+          "CO:CO-00267",
+          "ordered_by",
+          "Customer:C5017"
+        ],
+        [
+          "CO:CO-00267",
+          "placed_at",
+          "Dealer:D34"
+        ],
+        [
+          "CO:CO-00268",
+          "ordered_by",
+          "Customer:C6661"
+        ],
+        [
+          "CO:CO-00268",
+          "placed_at",
+          "Dealer:D25"
+        ],
+        [
+          "CO:CO-00269",
+          "ordered_by",
+          "Customer:C1835"
+        ],
+        [
+          "CO:CO-00269",
+          "placed_at",
+          "Dealer:D23"
+        ],
+        [
+          "CO:CO-00270",
+          "ordered_by",
+          "Customer:C4047"
+        ],
+        [
+          "CO:CO-00270",
+          "placed_at",
+          "Dealer:D15"
+        ],
+        [
+          "CO:CO-00271",
+          "ordered_by",
+          "Customer:C3478"
+        ],
+        [
+          "CO:CO-00271",
+          "placed_at",
+          "Dealer:D20"
+        ],
+        [
+          "CO:CO-00272",
+          "ordered_by",
+          "Customer:C6529"
+        ],
+        [
+          "CO:CO-00272",
+          "placed_at",
+          "Dealer:D31"
+        ],
+        [
+          "CO:CO-00273",
+          "ordered_by",
+          "Customer:C3845"
+        ],
+        [
+          "CO:CO-00273",
+          "placed_at",
+          "Dealer:D46"
+        ],
+        [
+          "CO:CO-00274",
+          "ordered_by",
+          "Customer:C1035"
+        ],
+        [
+          "CO:CO-00274",
+          "placed_at",
+          "Dealer:D08"
+        ],
+        [
+          "CO:CO-00275",
+          "ordered_by",
+          "Customer:C2396"
+        ],
+        [
+          "CO:CO-00275",
+          "placed_at",
+          "Dealer:D16"
+        ],
+        [
+          "CO:CO-00276",
+          "ordered_by",
+          "Customer:C6045"
+        ],
+        [
+          "CO:CO-00276",
+          "placed_at",
+          "Dealer:D45"
+        ],
+        [
+          "CO:CO-00277",
+          "ordered_by",
+          "Customer:C0751"
+        ],
+        [
+          "CO:CO-00277",
+          "placed_at",
+          "Dealer:D31"
+        ],
+        [
+          "CO:CO-00278",
+          "ordered_by",
+          "Customer:C6970"
+        ],
+        [
+          "CO:CO-00278",
+          "placed_at",
+          "Dealer:D31"
+        ],
+        [
+          "CO:CO-00279",
+          "ordered_by",
+          "Customer:C0941"
+        ],
+        [
+          "CO:CO-00279",
+          "placed_at",
+          "Dealer:D02"
+        ],
+        [
+          "CO:CO-00280",
+          "ordered_by",
+          "Customer:C0825"
+        ],
+        [
+          "CO:CO-00280",
+          "placed_at",
+          "Dealer:D35"
+        ],
+        [
+          "CO:CO-00281",
+          "ordered_by",
+          "Customer:C2267"
+        ],
+        [
+          "CO:CO-00281",
+          "placed_at",
+          "Dealer:D27"
+        ],
+        [
+          "CO:CO-00282",
+          "ordered_by",
+          "Customer:C3878"
+        ],
+        [
+          "CO:CO-00282",
+          "placed_at",
+          "Dealer:D04"
+        ],
+        [
+          "CO:CO-00283",
+          "ordered_by",
+          "Customer:C2815"
+        ],
+        [
+          "CO:CO-00283",
+          "placed_at",
+          "Dealer:D26"
+        ],
+        [
+          "CO:CO-00284",
+          "ordered_by",
+          "Customer:C0980"
+        ],
+        [
+          "CO:CO-00284",
+          "placed_at",
+          "Dealer:D45"
+        ],
+        [
+          "CO:CO-00285",
+          "ordered_by",
+          "Customer:C5562"
+        ],
+        [
+          "CO:CO-00285",
+          "placed_at",
+          "Dealer:D11"
+        ],
+        [
+          "CO:CO-00286",
+          "ordered_by",
+          "Customer:C0330"
+        ],
+        [
+          "CO:CO-00286",
+          "placed_at",
+          "Dealer:D19"
+        ],
+        [
+          "CO:CO-00287",
+          "ordered_by",
+          "Customer:C3142"
+        ],
+        [
+          "CO:CO-00287",
+          "placed_at",
+          "Dealer:D31"
+        ],
+        [
+          "CO:CO-00288",
+          "ordered_by",
+          "Customer:C5226"
+        ],
+        [
+          "CO:CO-00288",
+          "placed_at",
+          "Dealer:D33"
+        ],
+        [
+          "CO:CO-00289",
+          "ordered_by",
+          "Customer:C2883"
+        ],
+        [
+          "CO:CO-00289",
+          "placed_at",
+          "Dealer:D13"
+        ],
+        [
+          "CO:CO-00290",
+          "ordered_by",
+          "Customer:C6761"
+        ],
+        [
+          "CO:CO-00290",
+          "placed_at",
+          "Dealer:D50"
+        ],
+        [
+          "CO:CO-00291",
+          "ordered_by",
+          "Customer:C2768"
+        ],
+        [
+          "CO:CO-00291",
+          "placed_at",
+          "Dealer:D08"
+        ],
+        [
+          "CO:CO-00292",
+          "ordered_by",
+          "Customer:C2399"
+        ],
+        [
+          "CO:CO-00292",
+          "placed_at",
+          "Dealer:D25"
+        ],
+        [
+          "CO:CO-00293",
+          "ordered_by",
+          "Customer:C5329"
+        ],
+        [
+          "CO:CO-00293",
+          "placed_at",
+          "Dealer:D47"
+        ],
+        [
+          "CO:CO-00294",
+          "ordered_by",
+          "Customer:C2953"
+        ],
+        [
+          "CO:CO-00294",
+          "placed_at",
+          "Dealer:D26"
+        ],
+        [
+          "CO:CO-00295",
+          "ordered_by",
+          "Customer:C4352"
+        ],
+        [
+          "CO:CO-00295",
+          "placed_at",
+          "Dealer:D26"
+        ],
+        [
+          "CO:CO-00296",
+          "ordered_by",
+          "Customer:C2312"
+        ],
+        [
+          "CO:CO-00296",
+          "placed_at",
+          "Dealer:D36"
+        ],
+        [
+          "CO:CO-00297",
+          "ordered_by",
+          "Customer:C6428"
+        ],
+        [
+          "CO:CO-00297",
+          "placed_at",
+          "Dealer:D34"
+        ],
+        [
+          "CO:CO-00298",
+          "ordered_by",
+          "Customer:C4855"
+        ],
+        [
+          "CO:CO-00298",
+          "placed_at",
+          "Dealer:D20"
+        ],
+        [
+          "CO:CO-00299",
+          "ordered_by",
+          "Customer:C4292"
+        ],
+        [
+          "CO:CO-00299",
+          "placed_at",
+          "Dealer:D06"
+        ],
+        [
+          "CO:CO-00300",
+          "ordered_by",
+          "Customer:C1054"
+        ],
+        [
+          "CO:CO-00300",
+          "placed_at",
+          "Dealer:D31"
+        ],
+        [
+          "CO:CO-00301",
+          "ordered_by",
+          "Customer:C4978"
+        ],
+        [
+          "CO:CO-00301",
+          "placed_at",
+          "Dealer:D06"
+        ],
+        [
+          "PO:PO-0058",
+          "fulfils",
+          "CO:CO-00247"
+        ],
+        [
+          "PO:PO-0058",
+          "fulfils",
+          "CO:CO-00248"
+        ],
+        [
+          "PO:PO-0058",
+          "fulfils",
+          "CO:CO-00249"
+        ],
+        [
+          "PO:PO-0058",
+          "fulfils",
+          "CO:CO-00250"
+        ],
+        [
+          "PO:PO-0058",
+          "fulfils",
+          "CO:CO-00251"
+        ],
+        [
+          "PO:PO-0058",
+          "fulfils",
+          "CO:CO-00252"
+        ],
+        [
+          "PO:PO-0058",
+          "fulfils",
+          "CO:CO-00253"
+        ],
+        [
+          "PO:PO-0058",
+          "fulfils",
+          "CO:CO-00254"
+        ],
+        [
+          "PO:PO-0058",
+          "fulfils",
+          "CO:CO-00255"
+        ],
+        [
+          "PO:PO-0058",
+          "fulfils",
+          "CO:CO-00256"
+        ],
+        [
+          "PO:PO-0059",
+          "fulfils",
+          "CO:CO-00257"
+        ],
+        [
+          "PO:PO-0059",
+          "fulfils",
+          "CO:CO-00258"
+        ],
+        [
+          "PO:PO-0059",
+          "fulfils",
+          "CO:CO-00259"
+        ],
+        [
+          "PO:PO-0059",
+          "fulfils",
+          "CO:CO-00260"
+        ],
+        [
+          "PO:PO-0059",
+          "fulfils",
+          "CO:CO-00261"
+        ],
+        [
+          "PO:PO-0059",
+          "fulfils",
+          "CO:CO-00262"
+        ],
+        [
+          "PO:PO-0059",
+          "fulfils",
+          "CO:CO-00263"
+        ],
+        [
+          "PO:PO-0059",
+          "fulfils",
+          "CO:CO-00264"
+        ],
+        [
+          "PO:PO-0060",
+          "fulfils",
+          "CO:CO-00265"
+        ],
+        [
+          "PO:PO-0060",
+          "fulfils",
+          "CO:CO-00266"
+        ],
+        [
+          "PO:PO-0060",
+          "fulfils",
+          "CO:CO-00267"
+        ],
+        [
+          "PO:PO-0060",
+          "fulfils",
+          "CO:CO-00268"
+        ],
+        [
+          "PO:PO-0060",
+          "fulfils",
+          "CO:CO-00269"
+        ],
+        [
+          "PO:PO-0060",
+          "fulfils",
+          "CO:CO-00270"
+        ],
+        [
+          "PO:PO-0060",
+          "fulfils",
+          "CO:CO-00271"
+        ],
+        [
+          "PO:PO-0060",
+          "fulfils",
+          "CO:CO-00272"
+        ],
+        [
+          "PO:PO-0061",
+          "fulfils",
+          "CO:CO-00273"
+        ],
+        [
+          "PO:PO-0061",
+          "fulfils",
+          "CO:CO-00274"
+        ],
+        [
+          "PO:PO-0061",
+          "fulfils",
+          "CO:CO-00275"
+        ],
+        [
+          "PO:PO-0061",
+          "fulfils",
+          "CO:CO-00276"
+        ],
+        [
+          "PO:PO-0061",
+          "fulfils",
+          "CO:CO-00277"
+        ],
+        [
+          "PO:PO-0061",
+          "fulfils",
+          "CO:CO-00278"
+        ],
+        [
+          "PO:PO-0061",
+          "fulfils",
+          "CO:CO-00279"
+        ],
+        [
+          "PO:PO-0061",
+          "fulfils",
+          "CO:CO-00280"
+        ],
+        [
+          "PO:PO-0061",
+          "fulfils",
+          "CO:CO-00281"
+        ],
+        [
+          "PO:PO-0061",
+          "fulfils",
+          "CO:CO-00282"
+        ],
+        [
+          "PO:PO-0061",
+          "fulfils",
+          "CO:CO-00283"
+        ],
+        [
+          "PO:PO-0062",
+          "fulfils",
+          "CO:CO-00284"
+        ],
+        [
+          "PO:PO-0062",
+          "fulfils",
+          "CO:CO-00285"
+        ],
+        [
+          "PO:PO-0062",
+          "fulfils",
+          "CO:CO-00286"
+        ],
+        [
+          "PO:PO-0062",
+          "fulfils",
+          "CO:CO-00287"
+        ],
+        [
+          "PO:PO-0062",
+          "fulfils",
+          "CO:CO-00288"
+        ],
+        [
+          "PO:PO-0062",
+          "fulfils",
+          "CO:CO-00289"
+        ],
+        [
+          "PO:PO-0062",
+          "fulfils",
+          "CO:CO-00290"
+        ],
+        [
+          "PO:PO-0062",
+          "fulfils",
+          "CO:CO-00291"
+        ],
+        [
+          "PO:PO-0062",
+          "fulfils",
+          "CO:CO-00292"
+        ],
+        [
+          "PO:PO-0063",
+          "fulfils",
+          "CO:CO-00293"
+        ],
+        [
+          "PO:PO-0063",
+          "fulfils",
+          "CO:CO-00294"
+        ],
+        [
+          "PO:PO-0063",
+          "fulfils",
+          "CO:CO-00295"
+        ],
+        [
+          "PO:PO-0063",
+          "fulfils",
+          "CO:CO-00296"
+        ],
+        [
+          "PO:PO-0063",
+          "fulfils",
+          "CO:CO-00297"
+        ],
+        [
+          "PO:PO-0063",
+          "fulfils",
+          "CO:CO-00298"
+        ],
+        [
+          "PO:PO-0063",
+          "fulfils",
+          "CO:CO-00299"
+        ],
+        [
+          "PO:PO-0063",
+          "fulfils",
+          "CO:CO-00300"
+        ],
+        [
+          "PO:PO-0063",
+          "fulfils",
+          "CO:CO-00301"
+        ],
+        [
+          "Plant:P_TX",
+          "runs",
+          "PO:PO-0058"
+        ],
+        [
+          "Plant:P_TX",
+          "runs",
+          "PO:PO-0059"
+        ],
+        [
+          "Plant:P_TX",
+          "runs",
+          "PO:PO-0060"
+        ],
+        [
+          "Plant:P_TX",
+          "runs",
+          "PO:PO-0061"
+        ],
+        [
+          "Plant:P_TX",
+          "runs",
+          "PO:PO-0062"
+        ],
+        [
+          "Plant:P_TX",
+          "runs",
+          "PO:PO-0063"
+        ]
+      ]
+    },
+    "2": {
+      "kind": "supplier_delay",
+      "path_schema": "Shipment \u2500carries\u2192 Part \u2190needs\u2500 Model \u2190builds\u2500 PO \u2500fulfils\u2192 CO \u2500placed_at\u2192 Dealer / \u2500ordered_by\u2192 Customer",
+      "notes": [
+        "Shipment:SH-0190 carries Part:CHIP-IVI to Plant:P_IN; blocked from 2027-03-15 up to (not incl.) 2027-03-19",
+        "models needing Part:CHIP-IVI: NOVA, PIONEER, SUMMIT, TERRA, VOYAGER",
+        "8 production orders affected at Plant:P_IN"
+      ],
+      "example_path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0316",
+        "CO:CO-01756",
+        "Dealer:D07",
+        "Customer:C4130"
+      ],
+      "edges": [
+        [
+          "CO:CO-01756",
+          "ordered_by",
+          "Customer:C4130"
+        ],
+        [
+          "CO:CO-01756",
+          "placed_at",
+          "Dealer:D07"
+        ],
+        [
+          "CO:CO-01757",
+          "ordered_by",
+          "Customer:C2471"
+        ],
+        [
+          "CO:CO-01757",
+          "placed_at",
+          "Dealer:D06"
+        ],
+        [
+          "CO:CO-01758",
+          "ordered_by",
+          "Customer:C5153"
+        ],
+        [
+          "CO:CO-01758",
+          "placed_at",
+          "Dealer:D06"
+        ],
+        [
+          "CO:CO-01759",
+          "ordered_by",
+          "Customer:C5947"
+        ],
+        [
+          "CO:CO-01759",
+          "placed_at",
+          "Dealer:D02"
+        ],
+        [
+          "CO:CO-01760",
+          "ordered_by",
+          "Customer:C1775"
+        ],
+        [
+          "CO:CO-01760",
+          "placed_at",
+          "Dealer:D45"
+        ],
+        [
+          "CO:CO-01761",
+          "ordered_by",
+          "Customer:C4656"
+        ],
+        [
+          "CO:CO-01761",
+          "placed_at",
+          "Dealer:D08"
+        ],
+        [
+          "CO:CO-01762",
+          "ordered_by",
+          "Customer:C4508"
+        ],
+        [
+          "CO:CO-01762",
+          "placed_at",
+          "Dealer:D14"
+        ],
+        [
+          "CO:CO-01772",
+          "ordered_by",
+          "Customer:C1695"
+        ],
+        [
+          "CO:CO-01772",
+          "placed_at",
+          "Dealer:D42"
+        ],
+        [
+          "CO:CO-01773",
+          "ordered_by",
+          "Customer:C4976"
+        ],
+        [
+          "CO:CO-01773",
+          "placed_at",
+          "Dealer:D08"
+        ],
+        [
+          "CO:CO-01774",
+          "ordered_by",
+          "Customer:C0197"
+        ],
+        [
+          "CO:CO-01774",
+          "placed_at",
+          "Dealer:D17"
+        ],
+        [
+          "CO:CO-01775",
+          "ordered_by",
+          "Customer:C0352"
+        ],
+        [
+          "CO:CO-01775",
+          "placed_at",
+          "Dealer:D06"
+        ],
+        [
+          "CO:CO-01776",
+          "ordered_by",
+          "Customer:C5261"
+        ],
+        [
+          "CO:CO-01776",
+          "placed_at",
+          "Dealer:D33"
+        ],
+        [
+          "CO:CO-01777",
+          "ordered_by",
+          "Customer:C1281"
+        ],
+        [
+          "CO:CO-01777",
+          "placed_at",
+          "Dealer:D22"
+        ],
+        [
+          "CO:CO-01778",
+          "ordered_by",
+          "Customer:C2501"
+        ],
+        [
+          "CO:CO-01778",
+          "placed_at",
+          "Dealer:D26"
+        ],
+        [
+          "CO:CO-01779",
+          "ordered_by",
+          "Customer:C3066"
+        ],
+        [
+          "CO:CO-01779",
+          "placed_at",
+          "Dealer:D24"
+        ],
+        [
+          "CO:CO-01780",
+          "ordered_by",
+          "Customer:C6028"
+        ],
+        [
+          "CO:CO-01780",
+          "placed_at",
+          "Dealer:D08"
+        ],
+        [
+          "CO:CO-01781",
+          "ordered_by",
+          "Customer:C3207"
+        ],
+        [
+          "CO:CO-01781",
+          "placed_at",
+          "Dealer:D06"
+        ],
+        [
+          "CO:CO-01782",
+          "ordered_by",
+          "Customer:C6031"
+        ],
+        [
+          "CO:CO-01782",
+          "placed_at",
+          "Dealer:D25"
+        ],
+        [
+          "CO:CO-01783",
+          "ordered_by",
+          "Customer:C5201"
+        ],
+        [
+          "CO:CO-01783",
+          "placed_at",
+          "Dealer:D21"
+        ],
+        [
+          "CO:CO-01784",
+          "ordered_by",
+          "Customer:C4240"
+        ],
+        [
+          "CO:CO-01784",
+          "placed_at",
+          "Dealer:D31"
+        ],
+        [
+          "CO:CO-01785",
+          "ordered_by",
+          "Customer:C2786"
+        ],
+        [
+          "CO:CO-01785",
+          "placed_at",
+          "Dealer:D44"
+        ],
+        [
+          "CO:CO-01786",
+          "ordered_by",
+          "Customer:C1134"
+        ],
+        [
+          "CO:CO-01786",
+          "placed_at",
+          "Dealer:D20"
+        ],
+        [
+          "CO:CO-01787",
+          "ordered_by",
+          "Customer:C0746"
+        ],
+        [
+          "CO:CO-01787",
+          "placed_at",
+          "Dealer:D44"
+        ],
+        [
+          "CO:CO-01788",
+          "ordered_by",
+          "Customer:C6865"
+        ],
+        [
+          "CO:CO-01788",
+          "placed_at",
+          "Dealer:D45"
+        ],
+        [
+          "CO:CO-01789",
+          "ordered_by",
+          "Customer:C0380"
+        ],
+        [
+          "CO:CO-01789",
+          "placed_at",
+          "Dealer:D25"
+        ],
+        [
+          "CO:CO-01798",
+          "ordered_by",
+          "Customer:C2246"
+        ],
+        [
+          "CO:CO-01798",
+          "placed_at",
+          "Dealer:D46"
+        ],
+        [
+          "CO:CO-01799",
+          "ordered_by",
+          "Customer:C6615"
+        ],
+        [
+          "CO:CO-01799",
+          "placed_at",
+          "Dealer:D22"
+        ],
+        [
+          "CO:CO-01800",
+          "ordered_by",
+          "Customer:C4641"
+        ],
+        [
+          "CO:CO-01800",
+          "placed_at",
+          "Dealer:D42"
+        ],
+        [
+          "CO:CO-01801",
+          "ordered_by",
+          "Customer:C0477"
+        ],
+        [
+          "CO:CO-01801",
+          "placed_at",
+          "Dealer:D08"
+        ],
+        [
+          "CO:CO-01802",
+          "ordered_by",
+          "Customer:C3439"
+        ],
+        [
+          "CO:CO-01802",
+          "placed_at",
+          "Dealer:D32"
+        ],
+        [
+          "CO:CO-01803",
+          "ordered_by",
+          "Customer:C2282"
+        ],
+        [
+          "CO:CO-01803",
+          "placed_at",
+          "Dealer:D02"
+        ],
+        [
+          "CO:CO-01804",
+          "ordered_by",
+          "Customer:C6789"
+        ],
+        [
+          "CO:CO-01804",
+          "placed_at",
+          "Dealer:D45"
+        ],
+        [
+          "CO:CO-01805",
+          "ordered_by",
+          "Customer:C0280"
+        ],
+        [
+          "CO:CO-01805",
+          "placed_at",
+          "Dealer:D41"
+        ],
+        [
+          "CO:CO-01806",
+          "ordered_by",
+          "Customer:C1895"
+        ],
+        [
+          "CO:CO-01806",
+          "placed_at",
+          "Dealer:D30"
+        ],
+        [
+          "CO:CO-01807",
+          "ordered_by",
+          "Customer:C4874"
+        ],
+        [
+          "CO:CO-01807",
+          "placed_at",
+          "Dealer:D31"
+        ],
+        [
+          "CO:CO-01808",
+          "ordered_by",
+          "Customer:C1818"
+        ],
+        [
+          "CO:CO-01808",
+          "placed_at",
+          "Dealer:D21"
+        ],
+        [
+          "CO:CO-01809",
+          "ordered_by",
+          "Customer:C1845"
+        ],
+        [
+          "CO:CO-01809",
+          "placed_at",
+          "Dealer:D44"
+        ],
+        [
+          "CO:CO-01810",
+          "ordered_by",
+          "Customer:C4200"
+        ],
+        [
+          "CO:CO-01810",
+          "placed_at",
+          "Dealer:D45"
+        ],
+        [
+          "CO:CO-01811",
+          "ordered_by",
+          "Customer:C2141"
+        ],
+        [
+          "CO:CO-01811",
+          "placed_at",
+          "Dealer:D02"
+        ],
+        [
+          "CO:CO-01812",
+          "ordered_by",
+          "Customer:C2879"
+        ],
+        [
+          "CO:CO-01812",
+          "placed_at",
+          "Dealer:D01"
+        ],
+        [
+          "CO:CO-01813",
+          "ordered_by",
+          "Customer:C6778"
+        ],
+        [
+          "CO:CO-01813",
+          "placed_at",
+          "Dealer:D42"
+        ],
+        [
+          "CO:CO-01814",
+          "ordered_by",
+          "Customer:C1115"
+        ],
+        [
+          "CO:CO-01814",
+          "placed_at",
+          "Dealer:D44"
+        ],
+        [
+          "CO:CO-01825",
+          "ordered_by",
+          "Customer:C3055"
+        ],
+        [
+          "CO:CO-01825",
+          "placed_at",
+          "Dealer:D41"
+        ],
+        [
+          "CO:CO-01826",
+          "ordered_by",
+          "Customer:C4788"
+        ],
+        [
+          "CO:CO-01826",
+          "placed_at",
+          "Dealer:D26"
+        ],
+        [
+          "CO:CO-01827",
+          "ordered_by",
+          "Customer:C0465"
+        ],
+        [
+          "CO:CO-01827",
+          "placed_at",
+          "Dealer:D45"
+        ],
+        [
+          "CO:CO-01828",
+          "ordered_by",
+          "Customer:C1151"
+        ],
+        [
+          "CO:CO-01828",
+          "placed_at",
+          "Dealer:D24"
+        ],
+        [
+          "CO:CO-01829",
+          "ordered_by",
+          "Customer:C4473"
+        ],
+        [
+          "CO:CO-01829",
+          "placed_at",
+          "Dealer:D38"
+        ],
+        [
+          "CO:CO-01830",
+          "ordered_by",
+          "Customer:C1479"
+        ],
+        [
+          "CO:CO-01830",
+          "placed_at",
+          "Dealer:D46"
+        ],
+        [
+          "CO:CO-01831",
+          "ordered_by",
+          "Customer:C3555"
+        ],
+        [
+          "CO:CO-01831",
+          "placed_at",
+          "Dealer:D27"
+        ],
+        [
+          "CO:CO-01832",
+          "ordered_by",
+          "Customer:C3278"
+        ],
+        [
+          "CO:CO-01832",
+          "placed_at",
+          "Dealer:D02"
+        ],
+        [
+          "CO:CO-01833",
+          "ordered_by",
+          "Customer:C6155"
+        ],
+        [
+          "CO:CO-01833",
+          "placed_at",
+          "Dealer:D08"
+        ],
+        [
+          "CO:CO-01834",
+          "ordered_by",
+          "Customer:C6350"
+        ],
+        [
+          "CO:CO-01834",
+          "placed_at",
+          "Dealer:D23"
+        ],
+        [
+          "CO:CO-01835",
+          "ordered_by",
+          "Customer:C0712"
+        ],
+        [
+          "CO:CO-01835",
+          "placed_at",
+          "Dealer:D07"
+        ],
+        [
+          "CO:CO-01836",
+          "ordered_by",
+          "Customer:C4489"
+        ],
+        [
+          "CO:CO-01836",
+          "placed_at",
+          "Dealer:D45"
+        ],
+        [
+          "CO:CO-01837",
+          "ordered_by",
+          "Customer:C3794"
+        ],
+        [
+          "CO:CO-01837",
+          "placed_at",
+          "Dealer:D15"
+        ],
+        [
+          "CO:CO-01838",
+          "ordered_by",
+          "Customer:C6824"
+        ],
+        [
+          "CO:CO-01838",
+          "placed_at",
+          "Dealer:D25"
+        ],
+        [
+          "CO:CO-01839",
+          "ordered_by",
+          "Customer:C1959"
+        ],
+        [
+          "CO:CO-01839",
+          "placed_at",
+          "Dealer:D38"
+        ],
+        [
+          "CO:CO-01840",
+          "ordered_by",
+          "Customer:C3219"
+        ],
+        [
+          "CO:CO-01840",
+          "placed_at",
+          "Dealer:D45"
+        ],
+        [
+          "CO:CO-01841",
+          "ordered_by",
+          "Customer:C6319"
+        ],
+        [
+          "CO:CO-01841",
+          "placed_at",
+          "Dealer:D38"
+        ],
+        [
+          "CO:CO-01850",
+          "ordered_by",
+          "Customer:C4552"
+        ],
+        [
+          "CO:CO-01850",
+          "placed_at",
+          "Dealer:D31"
+        ],
+        [
+          "CO:CO-01851",
+          "ordered_by",
+          "Customer:C5298"
+        ],
+        [
+          "CO:CO-01851",
+          "placed_at",
+          "Dealer:D43"
+        ],
+        [
+          "CO:CO-01852",
+          "ordered_by",
+          "Customer:C5558"
+        ],
+        [
+          "CO:CO-01852",
+          "placed_at",
+          "Dealer:D08"
+        ],
+        [
+          "CO:CO-01853",
+          "ordered_by",
+          "Customer:C5036"
+        ],
+        [
+          "CO:CO-01853",
+          "placed_at",
+          "Dealer:D23"
+        ],
+        [
+          "CO:CO-01854",
+          "ordered_by",
+          "Customer:C2674"
+        ],
+        [
+          "CO:CO-01854",
+          "placed_at",
+          "Dealer:D04"
+        ],
+        [
+          "CO:CO-01855",
+          "ordered_by",
+          "Customer:C6654"
+        ],
+        [
+          "CO:CO-01855",
+          "placed_at",
+          "Dealer:D46"
+        ],
+        [
+          "CO:CO-01856",
+          "ordered_by",
+          "Customer:C5787"
+        ],
+        [
+          "CO:CO-01856",
+          "placed_at",
+          "Dealer:D35"
+        ],
+        [
+          "CO:CO-01857",
+          "ordered_by",
+          "Customer:C2781"
+        ],
+        [
+          "CO:CO-01857",
+          "placed_at",
+          "Dealer:D08"
+        ],
+        [
+          "Model:NOVA",
+          "needs",
+          "Part:CHIP-IVI"
+        ],
+        [
+          "Model:PIONEER",
+          "needs",
+          "Part:CHIP-IVI"
+        ],
+        [
+          "Model:SUMMIT",
+          "needs",
+          "Part:CHIP-IVI"
+        ],
+        [
+          "Model:TERRA",
+          "needs",
+          "Part:CHIP-IVI"
+        ],
+        [
+          "Model:VOYAGER",
+          "needs",
+          "Part:CHIP-IVI"
+        ],
+        [
+          "PO:PO-0316",
+          "builds",
+          "Model:VOYAGER"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01756"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01757"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01758"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01759"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01760"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01761"
+        ],
+        [
+          "PO:PO-0316",
+          "fulfils",
+          "CO:CO-01762"
+        ],
+        [
+          "PO:PO-0318",
+          "builds",
+          "Model:NOVA"
+        ],
+        [
+          "PO:PO-0318",
+          "fulfils",
+          "CO:CO-01772"
+        ],
+        [
+          "PO:PO-0318",
+          "fulfils",
+          "CO:CO-01773"
+        ],
+        [
+          "PO:PO-0318",
+          "fulfils",
+          "CO:CO-01774"
+        ],
+        [
+          "PO:PO-0318",
+          "fulfils",
+          "CO:CO-01775"
+        ],
+        [
+          "PO:PO-0318",
+          "fulfils",
+          "CO:CO-01776"
+        ],
+        [
+          "PO:PO-0318",
+          "fulfils",
+          "CO:CO-01777"
+        ],
+        [
+          "PO:PO-0318",
+          "fulfils",
+          "CO:CO-01778"
+        ],
+        [
+          "PO:PO-0318",
+          "fulfils",
+          "CO:CO-01779"
+        ],
+        [
+          "PO:PO-0319",
+          "builds",
+          "Model:VOYAGER"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01780"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01781"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01782"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01783"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01784"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01785"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01786"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01787"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01788"
+        ],
+        [
+          "PO:PO-0319",
+          "fulfils",
+          "CO:CO-01789"
+        ],
+        [
+          "PO:PO-0321",
+          "builds",
+          "Model:NOVA"
+        ],
+        [
+          "PO:PO-0321",
+          "fulfils",
+          "CO:CO-01798"
+        ],
+        [
+          "PO:PO-0321",
+          "fulfils",
+          "CO:CO-01799"
+        ],
+        [
+          "PO:PO-0321",
+          "fulfils",
+          "CO:CO-01800"
+        ],
+        [
+          "PO:PO-0321",
+          "fulfils",
+          "CO:CO-01801"
+        ],
+        [
+          "PO:PO-0321",
+          "fulfils",
+          "CO:CO-01802"
+        ],
+        [
+          "PO:PO-0321",
+          "fulfils",
+          "CO:CO-01803"
+        ],
+        [
+          "PO:PO-0321",
+          "fulfils",
+          "CO:CO-01804"
+        ],
+        [
+          "PO:PO-0321",
+          "fulfils",
+          "CO:CO-01805"
+        ],
+        [
+          "PO:PO-0322",
+          "builds",
+          "Model:VOYAGER"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01806"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01807"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01808"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01809"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01810"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01811"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01812"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01813"
+        ],
+        [
+          "PO:PO-0322",
+          "fulfils",
+          "CO:CO-01814"
+        ],
+        [
+          "PO:PO-0324",
+          "builds",
+          "Model:NOVA"
+        ],
+        [
+          "PO:PO-0324",
+          "fulfils",
+          "CO:CO-01825"
+        ],
+        [
+          "PO:PO-0324",
+          "fulfils",
+          "CO:CO-01826"
+        ],
+        [
+          "PO:PO-0324",
+          "fulfils",
+          "CO:CO-01827"
+        ],
+        [
+          "PO:PO-0324",
+          "fulfils",
+          "CO:CO-01828"
+        ],
+        [
+          "PO:PO-0324",
+          "fulfils",
+          "CO:CO-01829"
+        ],
+        [
+          "PO:PO-0324",
+          "fulfils",
+          "CO:CO-01830"
+        ],
+        [
+          "PO:PO-0324",
+          "fulfils",
+          "CO:CO-01831"
+        ],
+        [
+          "PO:PO-0324",
+          "fulfils",
+          "CO:CO-01832"
+        ],
+        [
+          "PO:PO-0324",
+          "fulfils",
+          "CO:CO-01833"
+        ],
+        [
+          "PO:PO-0325",
+          "builds",
+          "Model:VOYAGER"
+        ],
+        [
+          "PO:PO-0325",
+          "fulfils",
+          "CO:CO-01834"
+        ],
+        [
+          "PO:PO-0325",
+          "fulfils",
+          "CO:CO-01835"
+        ],
+        [
+          "PO:PO-0325",
+          "fulfils",
+          "CO:CO-01836"
+        ],
+        [
+          "PO:PO-0325",
+          "fulfils",
+          "CO:CO-01837"
+        ],
+        [
+          "PO:PO-0325",
+          "fulfils",
+          "CO:CO-01838"
+        ],
+        [
+          "PO:PO-0325",
+          "fulfils",
+          "CO:CO-01839"
+        ],
+        [
+          "PO:PO-0325",
+          "fulfils",
+          "CO:CO-01840"
+        ],
+        [
+          "PO:PO-0325",
+          "fulfils",
+          "CO:CO-01841"
+        ],
+        [
+          "PO:PO-0327",
+          "builds",
+          "Model:NOVA"
+        ],
+        [
+          "PO:PO-0327",
+          "fulfils",
+          "CO:CO-01850"
+        ],
+        [
+          "PO:PO-0327",
+          "fulfils",
+          "CO:CO-01851"
+        ],
+        [
+          "PO:PO-0327",
+          "fulfils",
+          "CO:CO-01852"
+        ],
+        [
+          "PO:PO-0327",
+          "fulfils",
+          "CO:CO-01853"
+        ],
+        [
+          "PO:PO-0327",
+          "fulfils",
+          "CO:CO-01854"
+        ],
+        [
+          "PO:PO-0327",
+          "fulfils",
+          "CO:CO-01855"
+        ],
+        [
+          "PO:PO-0327",
+          "fulfils",
+          "CO:CO-01856"
+        ],
+        [
+          "PO:PO-0327",
+          "fulfils",
+          "CO:CO-01857"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0316"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0318"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0319"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0321"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0322"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0324"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0325"
+        ],
+        [
+          "Plant:P_IN",
+          "runs",
+          "PO:PO-0327"
+        ],
+        [
+          "Shipment:SH-0190",
+          "carries",
+          "Part:CHIP-IVI"
+        ],
+        [
+          "Shipment:SH-0190",
+          "delivered_to",
+          "Plant:P_IN"
+        ]
+      ]
+    }
+  },
+  "notes": [],
+  "calls": [
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0316",
+        "new_date": "2027-03-19"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        2
+      ],
+      "why": "CHIP-IVI shipment late, now arriving Mar 19. Earliest P_IN day on/after 2027-03-19 with a free slot is 2027-03-19.",
+      "path": [
+        "Plant:P_IN",
+        "PO:PO-0316"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0316",
+          "plant_id": "P_IN",
+          "date": "2027-03-19"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0318",
+        "new_date": "2027-03-19"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        2
+      ],
+      "why": "CHIP-IVI shipment late, now arriving Mar 19. Earliest P_IN day on/after 2027-03-19 with a free slot is 2027-03-19.",
+      "path": [
+        "Plant:P_IN",
+        "PO:PO-0318"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0318",
+          "plant_id": "P_IN",
+          "date": "2027-03-19"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0319",
+        "new_date": "2027-03-22"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        2
+      ],
+      "why": "CHIP-IVI shipment late, now arriving Mar 19. Earliest P_IN day on/after 2027-03-19 with a free slot is 2027-03-22.",
+      "path": [
+        "Plant:P_IN",
+        "PO:PO-0319"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0319",
+          "plant_id": "P_IN",
+          "date": "2027-03-22"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0321",
+        "new_date": "2027-03-22"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        2
+      ],
+      "why": "CHIP-IVI shipment late, now arriving Mar 19. Earliest P_IN day on/after 2027-03-19 with a free slot is 2027-03-22.",
+      "path": [
+        "Plant:P_IN",
+        "PO:PO-0321"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0321",
+          "plant_id": "P_IN",
+          "date": "2027-03-22"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0322",
+        "new_date": "2027-03-23"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        2
+      ],
+      "why": "CHIP-IVI shipment late, now arriving Mar 19. Earliest P_IN day on/after 2027-03-19 with a free slot is 2027-03-23.",
+      "path": [
+        "Plant:P_IN",
+        "PO:PO-0322"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0322",
+          "plant_id": "P_IN",
+          "date": "2027-03-23"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0324",
+        "new_date": "2027-03-23"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        2
+      ],
+      "why": "CHIP-IVI shipment late, now arriving Mar 19. Earliest P_IN day on/after 2027-03-19 with a free slot is 2027-03-23.",
+      "path": [
+        "Plant:P_IN",
+        "PO:PO-0324"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0324",
+          "plant_id": "P_IN",
+          "date": "2027-03-23"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0325",
+        "new_date": "2027-03-24"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        2
+      ],
+      "why": "CHIP-IVI shipment late, now arriving Mar 19. Earliest P_IN day on/after 2027-03-19 with a free slot is 2027-03-24.",
+      "path": [
+        "Plant:P_IN",
+        "PO:PO-0325"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0325",
+          "plant_id": "P_IN",
+          "date": "2027-03-24"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0327",
+        "new_date": "2027-03-24"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        2
+      ],
+      "why": "CHIP-IVI shipment late, now arriving Mar 19. Earliest P_IN day on/after 2027-03-19 with a free slot is 2027-03-24.",
+      "path": [
+        "Plant:P_IN",
+        "PO:PO-0327"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0327",
+          "plant_id": "P_IN",
+          "date": "2027-03-24"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0058",
+        "new_date": "2027-03-23"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        1
+      ],
+      "why": "P_TX outage Mar 19\u2013Mar 22. Earliest P_TX day on/after 2027-03-23 with a free slot is 2027-03-23.",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0058"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0058",
+          "plant_id": "P_TX",
+          "date": "2027-03-23"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0059",
+        "new_date": "2027-03-23"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        1
+      ],
+      "why": "P_TX outage Mar 19\u2013Mar 22. Earliest P_TX day on/after 2027-03-23 with a free slot is 2027-03-23.",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0059"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0059",
+          "plant_id": "P_TX",
+          "date": "2027-03-23"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0060",
+        "new_date": "2027-03-24"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        1
+      ],
+      "why": "P_TX outage Mar 19\u2013Mar 22. Earliest P_TX day on/after 2027-03-23 with a free slot is 2027-03-24.",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0060"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0060",
+          "plant_id": "P_TX",
+          "date": "2027-03-24"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0061",
+        "new_date": "2027-03-24"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        1
+      ],
+      "why": "P_TX outage Mar 19\u2013Mar 22. Earliest P_TX day on/after 2027-03-23 with a free slot is 2027-03-24.",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0061"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0061",
+          "plant_id": "P_TX",
+          "date": "2027-03-24"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0062",
+        "new_date": "2027-03-25"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        1
+      ],
+      "why": "P_TX outage Mar 19\u2013Mar 22. Earliest P_TX day on/after 2027-03-23 with a free slot is 2027-03-25.",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0062"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0062",
+          "plant_id": "P_TX",
+          "date": "2027-03-25"
+        }
+      }
+    },
+    {
+      "tool": "mes.reschedule",
+      "args": {
+        "production_order_id": "PO-0063",
+        "new_date": "2027-03-25"
+      },
+      "agent": "supply_chain_planner",
+      "incidents": [
+        1
+      ],
+      "why": "P_TX outage Mar 19\u2013Mar 22. Earliest P_TX day on/after 2027-03-23 with a free slot is 2027-03-25.",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0063"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "production_order_id": "PO-0063",
+          "plant_id": "P_TX",
+          "date": "2027-03-25"
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D01",
+        "customer_order_ids": [
+          "CO-01812"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-01812 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "1 affected customer order(s) at D01",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01812",
+        "Dealer:D01",
+        "Customer:C2879"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D02",
+        "customer_order_ids": [
+          "CO-00256",
+          "CO-00264",
+          "CO-00279",
+          "CO-01759",
+          "CO-01803",
+          "CO-01811",
+          "CO-01832"
+        ],
+        "message": "Delay notice: 7 of your customer order(s) are affected. CO-00256 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00264 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00279 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-01759 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) CO-01803 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01811 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) CO-01832 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "7 affected customer order(s) at D02",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0058",
+        "CO:CO-00256",
+        "Dealer:D02",
+        "Customer:C4990"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D04",
+        "customer_order_ids": [
+          "CO-00260",
+          "CO-00282",
+          "CO-01854"
+        ],
+        "message": "Delay notice: 3 of your customer order(s) are affected. CO-00260 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00282 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-01854 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "3 affected customer order(s) at D04",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0059",
+        "CO:CO-00260",
+        "Dealer:D04",
+        "Customer:C3246"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D06",
+        "customer_order_ids": [
+          "CO-00299",
+          "CO-00301",
+          "CO-01757",
+          "CO-01758",
+          "CO-01775",
+          "CO-01781"
+        ],
+        "message": "Delay notice: 6 of your customer order(s) are affected. CO-00299 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) CO-00301 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) CO-01757 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) CO-01758 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) CO-01775 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) CO-01781 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "6 affected customer order(s) at D06",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0063",
+        "CO:CO-00299",
+        "Dealer:D06",
+        "Customer:C4292"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D07",
+        "customer_order_ids": [
+          "CO-01756",
+          "CO-01835"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-01756 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) CO-01835 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "2 affected customer order(s) at D07",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0316",
+        "CO:CO-01756",
+        "Dealer:D07",
+        "Customer:C4130"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D08",
+        "customer_order_ids": [
+          "CO-00274",
+          "CO-00291",
+          "CO-01761",
+          "CO-01773",
+          "CO-01780",
+          "CO-01801",
+          "CO-01833",
+          "CO-01852",
+          "CO-01857"
+        ],
+        "message": "Delay notice: 9 of your customer order(s) are affected. CO-00274 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-00291 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) CO-01761 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) CO-01773 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) CO-01780 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01801 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01833 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) CO-01852 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) CO-01857 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "9 affected customer order(s) at D08",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0061",
+        "CO:CO-00274",
+        "Dealer:D08",
+        "Customer:C1035"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D09",
+        "customer_order_ids": [
+          "CO-00262"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-00262 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D09",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0059",
+        "CO:CO-00262",
+        "Dealer:D09",
+        "Customer:C2982"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D11",
+        "customer_order_ids": [
+          "CO-00285"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-00285 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D11",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0062",
+        "CO:CO-00285",
+        "Dealer:D11",
+        "Customer:C5562"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D13",
+        "customer_order_ids": [
+          "CO-00289"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-00289 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D13",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0062",
+        "CO:CO-00289",
+        "Dealer:D13",
+        "Customer:C2883"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D14",
+        "customer_order_ids": [
+          "CO-01762"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-01762 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "1 affected customer order(s) at D14",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0316",
+        "CO:CO-01762",
+        "Dealer:D14",
+        "Customer:C4508"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D15",
+        "customer_order_ids": [
+          "CO-00270",
+          "CO-01837"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-00270 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-01837 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "2 affected customer order(s) at D15",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0060",
+        "CO:CO-00270",
+        "Dealer:D15",
+        "Customer:C4047"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D16",
+        "customer_order_ids": [
+          "CO-00275"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-00275 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D16",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0061",
+        "CO:CO-00275",
+        "Dealer:D16",
+        "Customer:C2396"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D17",
+        "customer_order_ids": [
+          "CO-01774"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-01774 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "1 affected customer order(s) at D17",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0318",
+        "CO:CO-01774",
+        "Dealer:D17",
+        "Customer:C0197"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D18",
+        "customer_order_ids": [
+          "CO-00247"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-00247 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D18",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0058",
+        "CO:CO-00247",
+        "Dealer:D18",
+        "Customer:C6387"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D19",
+        "customer_order_ids": [
+          "CO-00286"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-00286 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D19",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0062",
+        "CO:CO-00286",
+        "Dealer:D19",
+        "Customer:C0330"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D20",
+        "customer_order_ids": [
+          "CO-00261",
+          "CO-00271",
+          "CO-00298",
+          "CO-01786"
+        ],
+        "message": "Delay notice: 4 of your customer order(s) are affected. CO-00261 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00271 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-00298 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) CO-01786 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "4 affected customer order(s) at D20",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0059",
+        "CO:CO-00261",
+        "Dealer:D20",
+        "Customer:C0894"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D21",
+        "customer_order_ids": [
+          "CO-01783",
+          "CO-01808"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-01783 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01808 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "2 affected customer order(s) at D21",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01783",
+        "Dealer:D21",
+        "Customer:C5201"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D22",
+        "customer_order_ids": [
+          "CO-01777",
+          "CO-01799"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-01777 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) CO-01799 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "2 affected customer order(s) at D22",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0318",
+        "CO:CO-01777",
+        "Dealer:D22",
+        "Customer:C1281"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D23",
+        "customer_order_ids": [
+          "CO-00259",
+          "CO-00269",
+          "CO-01834",
+          "CO-01853"
+        ],
+        "message": "Delay notice: 4 of your customer order(s) are affected. CO-00259 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00269 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-01834 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) CO-01853 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "4 affected customer order(s) at D23",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0059",
+        "CO:CO-00259",
+        "Dealer:D23",
+        "Customer:C2031"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D24",
+        "customer_order_ids": [
+          "CO-01779",
+          "CO-01828"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-01779 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) CO-01828 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "2 affected customer order(s) at D24",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0318",
+        "CO:CO-01779",
+        "Dealer:D24",
+        "Customer:C3066"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D25",
+        "customer_order_ids": [
+          "CO-00255",
+          "CO-00268",
+          "CO-00292",
+          "CO-01782",
+          "CO-01789",
+          "CO-01838"
+        ],
+        "message": "Delay notice: 6 of your customer order(s) are affected. CO-00255 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00268 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-00292 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) CO-01782 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01789 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01838 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "6 affected customer order(s) at D25",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0058",
+        "CO:CO-00255",
+        "Dealer:D25",
+        "Customer:C1397"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D26",
+        "customer_order_ids": [
+          "CO-00253",
+          "CO-00263",
+          "CO-00266",
+          "CO-00283",
+          "CO-00294",
+          "CO-00295",
+          "CO-01778",
+          "CO-01826"
+        ],
+        "message": "Delay notice: 8 of your customer order(s) are affected. CO-00253 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00263 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00266 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-00283 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-00294 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) CO-00295 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) CO-01778 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) CO-01826 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "8 affected customer order(s) at D26",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0058",
+        "CO:CO-00253",
+        "Dealer:D26",
+        "Customer:C6115"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D27",
+        "customer_order_ids": [
+          "CO-00248",
+          "CO-00251",
+          "CO-00257",
+          "CO-00281",
+          "CO-01831"
+        ],
+        "message": "Delay notice: 5 of your customer order(s) are affected. CO-00248 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00251 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00257 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00281 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-01831 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "5 affected customer order(s) at D27",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0058",
+        "CO:CO-00248",
+        "Dealer:D27",
+        "Customer:C3046"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D29",
+        "customer_order_ids": [
+          "CO-00249"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-00249 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D29",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0058",
+        "CO:CO-00249",
+        "Dealer:D29",
+        "Customer:C4168"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D30",
+        "customer_order_ids": [
+          "CO-01806"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-01806 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "1 affected customer order(s) at D30",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01806",
+        "Dealer:D30",
+        "Customer:C1895"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D31",
+        "customer_order_ids": [
+          "CO-00252",
+          "CO-00272",
+          "CO-00277",
+          "CO-00278",
+          "CO-00287",
+          "CO-00300",
+          "CO-01784",
+          "CO-01807",
+          "CO-01850"
+        ],
+        "message": "Delay notice: 9 of your customer order(s) are affected. CO-00252 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00272 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-00277 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-00278 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-00287 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) CO-00300 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) CO-01784 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01807 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) CO-01850 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "9 affected customer order(s) at D31",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0058",
+        "CO:CO-00252",
+        "Dealer:D31",
+        "Customer:C4725"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D32",
+        "customer_order_ids": [
+          "CO-01802"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-01802 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "1 affected customer order(s) at D32",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0321",
+        "CO:CO-01802",
+        "Dealer:D32",
+        "Customer:C3439"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D33",
+        "customer_order_ids": [
+          "CO-00288",
+          "CO-01776"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-00288 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) CO-01776 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "2 affected customer order(s) at D33",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0062",
+        "CO:CO-00288",
+        "Dealer:D33",
+        "Customer:C5226"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D34",
+        "customer_order_ids": [
+          "CO-00254",
+          "CO-00265",
+          "CO-00267",
+          "CO-00297"
+        ],
+        "message": "Delay notice: 4 of your customer order(s) are affected. CO-00254 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00265 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-00267 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-00297 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "4 affected customer order(s) at D34",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0058",
+        "CO:CO-00254",
+        "Dealer:D34",
+        "Customer:C0718"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D35",
+        "customer_order_ids": [
+          "CO-00280",
+          "CO-01856"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-00280 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-01856 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "2 affected customer order(s) at D35",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0061",
+        "CO:CO-00280",
+        "Dealer:D35",
+        "Customer:C0825"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D36",
+        "customer_order_ids": [
+          "CO-00296"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-00296 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D36",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0063",
+        "CO:CO-00296",
+        "Dealer:D36",
+        "Customer:C2312"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D38",
+        "customer_order_ids": [
+          "CO-01829",
+          "CO-01839",
+          "CO-01841"
+        ],
+        "message": "Delay notice: 3 of your customer order(s) are affected. CO-01829 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) CO-01839 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) CO-01841 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "3 affected customer order(s) at D38",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0324",
+        "CO:CO-01829",
+        "Dealer:D38",
+        "Customer:C4473"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D39",
+        "customer_order_ids": [
+          "CO-00258"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-00258 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D39",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0059",
+        "CO:CO-00258",
+        "Dealer:D39",
+        "Customer:C2383"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D41",
+        "customer_order_ids": [
+          "CO-01805",
+          "CO-01825"
+        ],
+        "message": "Delay notice: 2 of your customer order(s) are affected. CO-01805 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01825 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "2 affected customer order(s) at D41",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0321",
+        "CO:CO-01805",
+        "Dealer:D41",
+        "Customer:C0280"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D42",
+        "customer_order_ids": [
+          "CO-01772",
+          "CO-01800",
+          "CO-01813"
+        ],
+        "message": "Delay notice: 3 of your customer order(s) are affected. CO-01772 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) CO-01800 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01813 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "3 affected customer order(s) at D42",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0318",
+        "CO:CO-01772",
+        "Dealer:D42",
+        "Customer:C1695"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D43",
+        "customer_order_ids": [
+          "CO-01851"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-01851 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "1 affected customer order(s) at D43",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0327",
+        "CO:CO-01851",
+        "Dealer:D43",
+        "Customer:C5298"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D44",
+        "customer_order_ids": [
+          "CO-01785",
+          "CO-01787",
+          "CO-01809",
+          "CO-01814"
+        ],
+        "message": "Delay notice: 4 of your customer order(s) are affected. CO-01785 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01787 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01809 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) CO-01814 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "4 affected customer order(s) at D44",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01785",
+        "Dealer:D44",
+        "Customer:C2786"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D45",
+        "customer_order_ids": [
+          "CO-00276",
+          "CO-00284",
+          "CO-01760",
+          "CO-01788",
+          "CO-01804",
+          "CO-01810",
+          "CO-01827",
+          "CO-01836",
+          "CO-01840"
+        ],
+        "message": "Delay notice: 9 of your customer order(s) are affected. CO-00276 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-00284 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) CO-01760 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 19) CO-01788 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01804 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01810 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) CO-01827 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) CO-01836 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) CO-01840 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "9 affected customer order(s) at D45",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0061",
+        "CO:CO-00276",
+        "Dealer:D45",
+        "Customer:C6045"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D46",
+        "customer_order_ids": [
+          "CO-00250",
+          "CO-00273",
+          "CO-01798",
+          "CO-01830",
+          "CO-01855"
+        ],
+        "message": "Delay notice: 5 of your customer order(s) are affected. CO-00250 (P_TX outage Mar 19\u2013Mar 22; now building Mar 23) CO-00273 (P_TX outage Mar 19\u2013Mar 22; now building Mar 24) CO-01798 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 22) CO-01830 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 23) CO-01855 (CHIP-IVI shipment late, now arriving Mar 19; now building Mar 24) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1,
+        2
+      ],
+      "why": "5 affected customer order(s) at D46",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0058",
+        "CO:CO-00250",
+        "Dealer:D46",
+        "Customer:C6933"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D47",
+        "customer_order_ids": [
+          "CO-00293"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-00293 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D47",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0063",
+        "CO:CO-00293",
+        "Dealer:D47",
+        "Customer:C5329"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.notify",
+      "args": {
+        "dealer_id": "D50",
+        "customer_order_ids": [
+          "CO-00290"
+        ],
+        "message": "Delay notice: 1 of your customer order(s) are affected. CO-00290 (P_TX outage Mar 19\u2013Mar 22; now building Mar 25) Platinum and Gold customers are being offered a loaner where available."
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "1 affected customer order(s) at D50",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0062",
+        "CO:CO-00290",
+        "Dealer:D50",
+        "Customer:C6761"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D08"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 3)",
+      "path": [
+        "Dealer:D08"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D08",
+        "available": 3
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D08",
+          "available": 3
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01761"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Platinum customer C4656, promised 2027-03-18; D08 pool now 2",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0316",
+        "CO:CO-01761",
+        "Dealer:D08",
+        "Customer:C4656"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D08"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D21"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 3)",
+      "path": [
+        "Dealer:D21"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D21",
+        "available": 3
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D21",
+          "available": 3
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01783"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Platinum customer C5201, promised 2027-03-20; D21 pool now 2",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01783",
+        "Dealer:D21",
+        "Customer:C5201"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D21"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D01"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 3)",
+      "path": [
+        "Dealer:D01"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D01",
+        "available": 3
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D01",
+          "available": 3
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01812"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Platinum customer C2879, promised 2027-03-20; D01 pool now 2",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01812",
+        "Dealer:D01",
+        "Customer:C2879"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D01"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D43"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D43"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D43",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D43",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01851"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Platinum customer C5298, promised 2027-03-20; D43 pool now 1",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0327",
+        "CO:CO-01851",
+        "Dealer:D43",
+        "Customer:C5298"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D43"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D44"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D44"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D44",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D44",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01785"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Platinum customer C2786, promised 2027-03-21; D44 pool now 1",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01785",
+        "Dealer:D44",
+        "Customer:C2786"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D44"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D20"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 1)",
+      "path": [
+        "Dealer:D20"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D20",
+        "available": 1
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D20",
+          "available": 1
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01786"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Platinum customer C1134, promised 2027-03-21; D20 pool now 0",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01786",
+        "Dealer:D20",
+        "Customer:C1134"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D20"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D22"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 1)",
+      "path": [
+        "Dealer:D22"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D22",
+        "available": 1
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D22",
+          "available": 1
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01799"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Platinum customer C6615, promised 2027-03-21; D22 pool now 0",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0321",
+        "CO:CO-01799",
+        "Dealer:D22",
+        "Customer:C6615"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D22"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D45"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D45"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D45",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D45",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01810"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Platinum customer C4200, promised 2027-03-22; D45 pool now 1",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01810",
+        "Dealer:D45",
+        "Customer:C4200"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D45"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D17"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 1)",
+      "path": [
+        "Dealer:D17"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D17",
+        "available": 1
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D17",
+          "available": 1
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01774"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Gold customer C0197, promised 2027-03-18; D17 pool now 0",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0318",
+        "CO:CO-01774",
+        "Dealer:D17",
+        "Customer:C0197"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D17"
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01780"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Gold customer C6028, promised 2027-03-19; D08 pool now 1",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01780",
+        "Dealer:D08",
+        "Customer:C6028"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D08"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D42"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D42"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D42",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D42",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01772"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Gold customer C1695, promised 2027-03-20; D42 pool now 1",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0318",
+        "CO:CO-01772",
+        "Dealer:D42",
+        "Customer:C1695"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D42"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D06"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 3)",
+      "path": [
+        "Dealer:D06"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D06",
+        "available": 3
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D06",
+          "available": 3
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01781"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Gold customer C3207, promised 2027-03-20; D06 pool now 2",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0319",
+        "CO:CO-01781",
+        "Dealer:D06",
+        "Customer:C3207"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D06"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D46"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D46"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D46",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D46",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01798"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Gold customer C2246, promised 2027-03-20; D46 pool now 1",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0321",
+        "CO:CO-01798",
+        "Dealer:D46",
+        "Customer:C2246"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D46"
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01833"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Gold customer C6155, promised 2027-03-20; D08 pool now 0",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0324",
+        "CO:CO-01833",
+        "Dealer:D08",
+        "Customer:C6155"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D08"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D32"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D32"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D32",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D32",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01802"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Gold customer C3439, promised 2027-03-21; D32 pool now 1",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0321",
+        "CO:CO-01802",
+        "Dealer:D32",
+        "Customer:C3439"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D32"
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01808"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Gold customer C1818, promised 2027-03-21; D21 pool now 1",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01808",
+        "Dealer:D21",
+        "Customer:C1818"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D21"
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01830"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Gold customer C1479, promised 2027-03-21; D46 pool now 0",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0324",
+        "CO:CO-01830",
+        "Dealer:D46",
+        "Customer:C1479"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D46"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D29"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "check pool before assigning (planner expects 1)",
+      "path": [
+        "Dealer:D29"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D29",
+        "available": 1
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D29",
+          "available": 1
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00249"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Gold customer C4168, promised 2027-03-22; D29 pool now 0",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0058",
+        "CO:CO-00249",
+        "Dealer:D29",
+        "Customer:C4168"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D29"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D26"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D26"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D26",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D26",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00263"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Gold customer C5147, promised 2027-03-22; D26 pool now 1",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0059",
+        "CO:CO-00263",
+        "Dealer:D26",
+        "Customer:C5147"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D26"
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01814"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Gold customer C1115, promised 2027-03-22; D44 pool now 0",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:VOYAGER",
+        "PO:PO-0322",
+        "CO:CO-01814",
+        "Dealer:D44",
+        "Customer:C1115"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D44"
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01827"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Gold customer C0465, promised 2027-03-22; D45 pool now 0",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0324",
+        "CO:CO-01827",
+        "Dealer:D45",
+        "Customer:C0465"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D45"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D23"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D23"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D23",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D23",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-01853"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        2
+      ],
+      "why": "Gold customer C5036, promised 2027-03-22; D23 pool now 1",
+      "path": [
+        "Shipment:SH-0190",
+        "Part:CHIP-IVI",
+        "Model:NOVA",
+        "PO:PO-0327",
+        "CO:CO-01853",
+        "Dealer:D23",
+        "Customer:C5036"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D23"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D18"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D18"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D18",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D18",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00247"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Gold customer C6387, promised 2027-03-24; D18 pool now 1",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0058",
+        "CO:CO-00247",
+        "Dealer:D18",
+        "Customer:C6387"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D18"
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00283"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Gold customer C2815, promised 2027-03-25; D26 pool now 0",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0061",
+        "CO:CO-00283",
+        "Dealer:D26",
+        "Customer:C2815"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D26"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D31"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D31"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D31",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D31",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00278"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Gold customer C6970, promised 2027-03-26; D31 pool now 1",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0061",
+        "CO:CO-00278",
+        "Dealer:D31",
+        "Customer:C6970"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D31"
+        }
+      }
+    },
+    {
+      "tool": "crm.loaner_availability",
+      "args": {
+        "dealer_id": "D36"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "check pool before assigning (planner expects 2)",
+      "path": [
+        "Dealer:D36"
+      ],
+      "dry_run_result": {
+        "dealer_id": "D36",
+        "available": 2
+      },
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "dealer_id": "D36",
+          "available": 2
+        }
+      }
+    },
+    {
+      "tool": "crm.assign_loaner",
+      "args": {
+        "customer_order_id": "CO-00296"
+      },
+      "agent": "customer_care_dispatcher",
+      "incidents": [
+        1
+      ],
+      "why": "Gold customer C2312, promised 2027-03-27; D36 pool now 1",
+      "path": [
+        "Plant:P_TX",
+        "PO:PO-0063",
+        "CO:CO-00296",
+        "Dealer:D36",
+        "Customer:C2312"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true,
+          "dealer_id": "D36"
+        }
+      }
+    }
+  ],
+  "dry_run_failures": [],
+  "live_failure": null,
+  "loaners": {
+    "loaned": [
+      "CO-01761",
+      "CO-01783",
+      "CO-01812",
+      "CO-01851",
+      "CO-01785",
+      "CO-01786",
+      "CO-01799",
+      "CO-01810",
+      "CO-01774",
+      "CO-01780",
+      "CO-01772",
+      "CO-01781",
+      "CO-01798",
+      "CO-01833",
+      "CO-01802",
+      "CO-01808",
+      "CO-01830",
+      "CO-00249",
+      "CO-00263",
+      "CO-01814",
+      "CO-01827",
+      "CO-01853",
+      "CO-00247",
+      "CO-00283",
+      "CO-00278",
+      "CO-00296"
+    ],
+    "pool_empty": [
+      "CO-01855",
+      "CO-01836",
+      "CO-00261",
+      "CO-00284"
+    ]
+  },
+  "summary": {
+    "coordinator": "San Antonio (P_TX) is down Mar 19\u201322. Shipment SH-0190 of infotainment chip from Quanta Silicon to Princeton (P_IN) is late: due Mar 15, now arriving Mar 19.",
+    "planner": "Rescheduled 8 production orders at Princeton (P_IN) for Mar 19\u201324; 6 at San Antonio (P_TX) for Mar 23\u201325.",
+    "dispatcher": "Notified 41 dealers about their 122 affected customer orders. Assigned loaners to 26 of 30 eligible Platinum/Gold customers; 4 missed out because their dealer's pool was empty.",
+    "inspector": null,
+    "summary": "San Antonio (P_TX) is down Mar 19\u201322. Shipment SH-0190 of infotainment chip from Quanta Silicon to Princeton (P_IN) is late: due Mar 15, now arriving Mar 19. Rescheduled 8 production orders at Princeton (P_IN) for Mar 19\u201324; 6 at San Antonio (P_TX) for Mar 23\u201325. Notified 41 dealers about their 122 affected customer orders. Assigned loaners to 26 of 30 eligible Platinum/Gold customers; 4 missed out because their dealer's pool was empty.",
+    "by": "rules (no LLM)"
+  },
+  "log": [
+    {
+      "node": "coordinator_read_message",
+      "text": "incident 1: ACT plant_outage"
+    },
+    {
+      "node": "coordinator_read_message",
+      "text": "incident 2: ACT supplier_delay"
+    },
+    {
+      "node": "coordinator_find_affected",
+      "text": "incident 1: graph path Plant \u2500runs\u2192 PO \u2500fulfils\u2192 CO \u2500placed_at\u2192 Dealer / \u2500ordered_by\u2192 Customer"
+    },
+    {
+      "node": "coordinator_find_affected",
+      "text": "incident 2: graph path Shipment \u2500carries\u2192 Part \u2190needs\u2500 Model \u2190builds\u2500 PO \u2500fulfils\u2192 CO \u2500placed_at\u2192 Dealer / \u2500ordered_by\u2192 Customer"
+    },
+    {
+      "node": "planner_reschedule_builds",
+      "text": "14 orders placed (0 transferred), 0 could not be placed"
+    },
+    {
+      "node": "dispatcher_notify_and_loan",
+      "text": "41 dealer notices, 26 loaners assigned, 4 eligible without a loaner (pool empty)"
+    },
+    {
+      "node": "safety_check_plan",
+      "text": "100 calls checked, 0 would fail"
+    },
+    {
+      "node": "send_to_server",
+      "text": "100 calls sent, 0 failed"
+    },
+    {
+      "node": "write_audit_summary",
+      "text": "San Antonio (P_TX) is down Mar 19\u201322. Shipment SH-0190 of infotainment chip from Quanta Silicon to Princeton (P_IN) is late: due Mar 15, now arriving Mar 19. Rescheduled 8 production orders at Princeton (P_IN) for Mar 19\u201324; 6 at San Antonio (P_TX) for Mar 23\u201325. Notified 41 dealers about their 122 affected customer orders. Assigned loaners to 26 of 30 eligible Platinum/Gold customers; 4 missed out because their dealer's pool was empty."
+    }
+  ],
+  "seconds": 0.09
+}

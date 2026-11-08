@@ -1,0 +1,102 @@
+{
+  "event": {
+    "event_id": "E-13",
+    "received_at": "2027-03-08T10:41:00",
+    "source": "ops chat",
+    "text": "Someone on the floor mentioned a possible shortage of something electronic sometime soon. Not confirmed by anyone."
+  },
+  "mode": "live",
+  "model": "gemini-3.5-flash-lite",
+  "agents_visited": [
+    "coordinator_read_message",
+    "safety_check_plan",
+    "send_to_server",
+    "write_audit_summary"
+  ],
+  "triage": {
+    "event_id": "E-13",
+    "text": "Someone on the floor mentioned a possible shortage of something electronic sometime soon. Not confirmed by anyone.",
+    "model": "gemini-3.5-flash-lite",
+    "incidents": [
+      {
+        "category": "unconfirmed",
+        "quote": "Someone on the floor mentioned a possible shortage of something electronic sometime soon. Not confirmed by anyone.",
+        "llm_reason": "The message discusses a vague potential shortage that is explicitly stated as not confirmed.",
+        "raw": {
+          "plant": null,
+          "part": null,
+          "supplier": null,
+          "shipment_id": null,
+          "lot_id": null,
+          "start_date": null,
+          "end_date": null,
+          "confirmed": false
+        },
+        "plant_id": null,
+        "part_id": null,
+        "supplier_id": null,
+        "shipment_id": null,
+        "lot_id": null,
+        "lots": null,
+        "start": null,
+        "end": null,
+        "verdict": "ESCALATE",
+        "verdict_reason": "report is unconfirmed or vague",
+        "trace": []
+      }
+    ]
+  },
+  "graph": {},
+  "notes": [],
+  "calls": [
+    {
+      "tool": "escalate",
+      "args": {
+        "reason": "E-13: report is unconfirmed or vague"
+      },
+      "agent": "coordinator",
+      "incidents": [
+        1
+      ],
+      "why": "report is unconfirmed or vague",
+      "path": [],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    }
+  ],
+  "dry_run_failures": [],
+  "live_failure": null,
+  "loaners": null,
+  "summary": {
+    "coordinator": "Not actionable: report is unconfirmed or vague. Escalated to a human.",
+    "planner": null,
+    "dispatcher": null,
+    "inspector": null,
+    "summary": "Not actionable: report is unconfirmed or vague. Escalated to a human.",
+    "by": "rules (no LLM)"
+  },
+  "log": [
+    {
+      "node": "coordinator_read_message",
+      "text": "incident 1: ESCALATE unconfirmed \u2014 report is unconfirmed or vague"
+    },
+    {
+      "node": "safety_check_plan",
+      "text": "1 calls checked, 0 would fail"
+    },
+    {
+      "node": "send_to_server",
+      "text": "1 calls sent, 0 failed"
+    },
+    {
+      "node": "write_audit_summary",
+      "text": "Not actionable: report is unconfirmed or vague. Escalated to a human."
+    }
+  ],
+  "seconds": 0.01
+}

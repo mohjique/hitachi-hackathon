@@ -1,0 +1,6221 @@
+{
+  "event": {
+    "event_id": "E-14",
+    "received_at": "2027-03-08T10:58:00",
+    "source": "ops chat",
+    "text": "Quality alert: Atlas says the heavy-duty wiring harness sent to the Texas plant had a moisture contamination. Anything built Monday Feb 22 through Wednesday Feb 24 is suspect."
+  },
+  "mode": "live",
+  "model": "gemini-3.5-flash-lite",
+  "agents_visited": [
+    "coordinator_read_message",
+    "coordinator_find_affected",
+    "inspector_hold_and_recall",
+    "safety_check_plan",
+    "send_to_server",
+    "write_audit_summary"
+  ],
+  "triage": {
+    "event_id": "E-14",
+    "text": "Quality alert: Atlas says the heavy-duty wiring harness sent to the Texas plant had a moisture contamination. Anything built Monday Feb 22 through Wednesday Feb 24 is suspect.",
+    "model": "gemini-3.5-flash-lite",
+    "incidents": [
+      {
+        "category": "quality_hold",
+        "quote": "Quality alert: Atlas says the heavy-duty wiring harness sent to the Texas plant had a moisture contamination. Anything built Monday Feb 22 through Wednesday Feb 24 is suspect.",
+        "llm_reason": "A batch of parts is defective due to moisture contamination and vehicles built in a date window are suspect.",
+        "raw": {
+          "plant": "the Texas plant",
+          "part": "the heavy-duty wiring harness",
+          "supplier": "Atlas",
+          "shipment_id": null,
+          "lot_id": null,
+          "start_date": "Monday Feb 22",
+          "end_date": "Wednesday Feb 24",
+          "confirmed": true
+        },
+        "plant_id": "P_TX",
+        "part_id": "HARN-B",
+        "supplier_id": "SUP-07",
+        "shipment_id": null,
+        "lot_id": null,
+        "lots": [
+          "LOT-0017"
+        ],
+        "start": "2027-02-22",
+        "end": "2027-02-24",
+        "verdict": "ACT",
+        "verdict_reason": null,
+        "trace": [
+          "all extracted phrases appear in the message",
+          "\"the Texas plant\" -> exact name match",
+          "\"the heavy-duty wiring harness\" -> exact name match",
+          "\"Atlas\" -> exact name match",
+          "\"Monday Feb 22\" -> 2027-02-22 (month and day)",
+          "\"Wednesday Feb 24\" -> 2027-02-24 (month and day)",
+          "matched lot LOT-0017 (exact window: 2027-02-22..2027-02-24)"
+        ]
+      }
+    ]
+  },
+  "graph": {
+    "1": {
+      "kind": "quality_hold",
+      "path_schema": "Lot \u2500batch_of\u2192 Part \u2190needs\u2500 Model \u2190builds\u2500 PO \u2500produced\u2192 Vehicle \u2500at_dealer\u2192 Dealer / \u2500owned_by\u2192 Customer",
+      "notes": [
+        "Lot:LOT-0017 is Part:HARN-B used at Plant:P_TX for builds 2027-02-22 through 2027-02-24",
+        "models using Part:HARN-B: RANGER, SUMMIT",
+        "6 production orders, 180 vehicles: 86 unsold at 36 dealers, 94 sold to 94 owners"
+      ],
+      "example_path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000001",
+        "Dealer:D23",
+        "Customer:C1218"
+      ],
+      "edges": [
+        [
+          "Lot:LOT-0017",
+          "batch_of",
+          "Part:HARN-B"
+        ],
+        [
+          "Lot:LOT-0017",
+          "used_at",
+          "Plant:P_TX"
+        ],
+        [
+          "Model:RANGER",
+          "needs",
+          "Part:HARN-B"
+        ],
+        [
+          "Model:SUMMIT",
+          "needs",
+          "Part:HARN-B"
+        ],
+        [
+          "PO:PO-0001",
+          "builds",
+          "Model:RANGER"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000001"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000002"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000003"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000004"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000005"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000006"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000007"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000008"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000009"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000010"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000011"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000012"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000013"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000014"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000015"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000016"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000017"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000018"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000019"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000020"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000021"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000022"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000023"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000024"
+        ],
+        [
+          "PO:PO-0001",
+          "produced",
+          "Vehicle:AUR0000025"
+        ],
+        [
+          "PO:PO-0002",
+          "builds",
+          "Model:SUMMIT"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000026"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000027"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000028"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000029"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000030"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000031"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000032"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000033"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000034"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000035"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000036"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000037"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000038"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000039"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000040"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000041"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000042"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000043"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000044"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000045"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000046"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000047"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000048"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000049"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000050"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000051"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000052"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000053"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000054"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000055"
+        ],
+        [
+          "PO:PO-0002",
+          "produced",
+          "Vehicle:AUR0000056"
+        ],
+        [
+          "PO:PO-0004",
+          "builds",
+          "Model:RANGER"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000082"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000083"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000084"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000085"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000086"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000087"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000088"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000089"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000090"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000091"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000092"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000093"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000094"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000095"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000096"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000097"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000098"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000099"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000100"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000101"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000102"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000103"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000104"
+        ],
+        [
+          "PO:PO-0004",
+          "produced",
+          "Vehicle:AUR0000105"
+        ],
+        [
+          "PO:PO-0005",
+          "builds",
+          "Model:SUMMIT"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000106"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000107"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000108"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000109"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000110"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000111"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000112"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000113"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000114"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000115"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000116"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000117"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000118"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000119"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000120"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000121"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000122"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000123"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000124"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000125"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000126"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000127"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000128"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000129"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000130"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000131"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000132"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000133"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000134"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000135"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000136"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000137"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000138"
+        ],
+        [
+          "PO:PO-0005",
+          "produced",
+          "Vehicle:AUR0000139"
+        ],
+        [
+          "PO:PO-0007",
+          "builds",
+          "Model:RANGER"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000169"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000170"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000171"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000172"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000173"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000174"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000175"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000176"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000177"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000178"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000179"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000180"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000181"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000182"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000183"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000184"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000185"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000186"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000187"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000188"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000189"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000190"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000191"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000192"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000193"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000194"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000195"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000196"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000197"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000198"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000199"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000200"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000201"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000202"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000203"
+        ],
+        [
+          "PO:PO-0007",
+          "produced",
+          "Vehicle:AUR0000204"
+        ],
+        [
+          "PO:PO-0008",
+          "builds",
+          "Model:SUMMIT"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000205"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000206"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000207"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000208"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000209"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000210"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000211"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000212"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000213"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000214"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000215"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000216"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000217"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000218"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000219"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000220"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000221"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000222"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000223"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000224"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000225"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000226"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000227"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000228"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000229"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000230"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000231"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000232"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000233"
+        ],
+        [
+          "PO:PO-0008",
+          "produced",
+          "Vehicle:AUR0000234"
+        ],
+        [
+          "Plant:P_TX",
+          "runs",
+          "PO:PO-0001"
+        ],
+        [
+          "Plant:P_TX",
+          "runs",
+          "PO:PO-0002"
+        ],
+        [
+          "Plant:P_TX",
+          "runs",
+          "PO:PO-0004"
+        ],
+        [
+          "Plant:P_TX",
+          "runs",
+          "PO:PO-0005"
+        ],
+        [
+          "Plant:P_TX",
+          "runs",
+          "PO:PO-0007"
+        ],
+        [
+          "Plant:P_TX",
+          "runs",
+          "PO:PO-0008"
+        ],
+        [
+          "Vehicle:AUR0000001",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0000001",
+          "owned_by",
+          "Customer:C1218"
+        ],
+        [
+          "Vehicle:AUR0000002",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000003",
+          "at_dealer",
+          "Dealer:D27"
+        ],
+        [
+          "Vehicle:AUR0000004",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0000004",
+          "owned_by",
+          "Customer:C5019"
+        ],
+        [
+          "Vehicle:AUR0000005",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000005",
+          "owned_by",
+          "Customer:C0832"
+        ],
+        [
+          "Vehicle:AUR0000006",
+          "at_dealer",
+          "Dealer:D34"
+        ],
+        [
+          "Vehicle:AUR0000007",
+          "at_dealer",
+          "Dealer:D46"
+        ],
+        [
+          "Vehicle:AUR0000008",
+          "at_dealer",
+          "Dealer:D03"
+        ],
+        [
+          "Vehicle:AUR0000009",
+          "at_dealer",
+          "Dealer:D27"
+        ],
+        [
+          "Vehicle:AUR0000009",
+          "owned_by",
+          "Customer:C6447"
+        ],
+        [
+          "Vehicle:AUR0000010",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0000011",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000012",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000012",
+          "owned_by",
+          "Customer:C2789"
+        ],
+        [
+          "Vehicle:AUR0000013",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0000014",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0000014",
+          "owned_by",
+          "Customer:C5388"
+        ],
+        [
+          "Vehicle:AUR0000015",
+          "at_dealer",
+          "Dealer:D37"
+        ],
+        [
+          "Vehicle:AUR0000016",
+          "at_dealer",
+          "Dealer:D31"
+        ],
+        [
+          "Vehicle:AUR0000016",
+          "owned_by",
+          "Customer:C3949"
+        ],
+        [
+          "Vehicle:AUR0000017",
+          "at_dealer",
+          "Dealer:D26"
+        ],
+        [
+          "Vehicle:AUR0000018",
+          "at_dealer",
+          "Dealer:D44"
+        ],
+        [
+          "Vehicle:AUR0000018",
+          "owned_by",
+          "Customer:C1751"
+        ],
+        [
+          "Vehicle:AUR0000019",
+          "at_dealer",
+          "Dealer:D34"
+        ],
+        [
+          "Vehicle:AUR0000020",
+          "at_dealer",
+          "Dealer:D07"
+        ],
+        [
+          "Vehicle:AUR0000021",
+          "at_dealer",
+          "Dealer:D49"
+        ],
+        [
+          "Vehicle:AUR0000021",
+          "owned_by",
+          "Customer:C0789"
+        ],
+        [
+          "Vehicle:AUR0000022",
+          "at_dealer",
+          "Dealer:D28"
+        ],
+        [
+          "Vehicle:AUR0000023",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000024",
+          "at_dealer",
+          "Dealer:D06"
+        ],
+        [
+          "Vehicle:AUR0000025",
+          "at_dealer",
+          "Dealer:D39"
+        ],
+        [
+          "Vehicle:AUR0000026",
+          "at_dealer",
+          "Dealer:D48"
+        ],
+        [
+          "Vehicle:AUR0000026",
+          "owned_by",
+          "Customer:C3821"
+        ],
+        [
+          "Vehicle:AUR0000027",
+          "at_dealer",
+          "Dealer:D06"
+        ],
+        [
+          "Vehicle:AUR0000028",
+          "at_dealer",
+          "Dealer:D03"
+        ],
+        [
+          "Vehicle:AUR0000029",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0000029",
+          "owned_by",
+          "Customer:C6563"
+        ],
+        [
+          "Vehicle:AUR0000030",
+          "at_dealer",
+          "Dealer:D34"
+        ],
+        [
+          "Vehicle:AUR0000031",
+          "at_dealer",
+          "Dealer:D31"
+        ],
+        [
+          "Vehicle:AUR0000032",
+          "at_dealer",
+          "Dealer:D15"
+        ],
+        [
+          "Vehicle:AUR0000032",
+          "owned_by",
+          "Customer:C0130"
+        ],
+        [
+          "Vehicle:AUR0000033",
+          "at_dealer",
+          "Dealer:D16"
+        ],
+        [
+          "Vehicle:AUR0000033",
+          "owned_by",
+          "Customer:C5353"
+        ],
+        [
+          "Vehicle:AUR0000034",
+          "at_dealer",
+          "Dealer:D29"
+        ],
+        [
+          "Vehicle:AUR0000035",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000036",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0000036",
+          "owned_by",
+          "Customer:C1735"
+        ],
+        [
+          "Vehicle:AUR0000037",
+          "at_dealer",
+          "Dealer:D12"
+        ],
+        [
+          "Vehicle:AUR0000037",
+          "owned_by",
+          "Customer:C0630"
+        ],
+        [
+          "Vehicle:AUR0000038",
+          "at_dealer",
+          "Dealer:D22"
+        ],
+        [
+          "Vehicle:AUR0000038",
+          "owned_by",
+          "Customer:C3527"
+        ],
+        [
+          "Vehicle:AUR0000039",
+          "at_dealer",
+          "Dealer:D34"
+        ],
+        [
+          "Vehicle:AUR0000039",
+          "owned_by",
+          "Customer:C4064"
+        ],
+        [
+          "Vehicle:AUR0000040",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0000040",
+          "owned_by",
+          "Customer:C3896"
+        ],
+        [
+          "Vehicle:AUR0000041",
+          "at_dealer",
+          "Dealer:D37"
+        ],
+        [
+          "Vehicle:AUR0000041",
+          "owned_by",
+          "Customer:C6676"
+        ],
+        [
+          "Vehicle:AUR0000042",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0000043",
+          "at_dealer",
+          "Dealer:D44"
+        ],
+        [
+          "Vehicle:AUR0000043",
+          "owned_by",
+          "Customer:C4614"
+        ],
+        [
+          "Vehicle:AUR0000044",
+          "at_dealer",
+          "Dealer:D47"
+        ],
+        [
+          "Vehicle:AUR0000045",
+          "at_dealer",
+          "Dealer:D38"
+        ],
+        [
+          "Vehicle:AUR0000045",
+          "owned_by",
+          "Customer:C5603"
+        ],
+        [
+          "Vehicle:AUR0000046",
+          "at_dealer",
+          "Dealer:D12"
+        ],
+        [
+          "Vehicle:AUR0000047",
+          "at_dealer",
+          "Dealer:D13"
+        ],
+        [
+          "Vehicle:AUR0000048",
+          "at_dealer",
+          "Dealer:D31"
+        ],
+        [
+          "Vehicle:AUR0000048",
+          "owned_by",
+          "Customer:C1660"
+        ],
+        [
+          "Vehicle:AUR0000049",
+          "at_dealer",
+          "Dealer:D01"
+        ],
+        [
+          "Vehicle:AUR0000049",
+          "owned_by",
+          "Customer:C6624"
+        ],
+        [
+          "Vehicle:AUR0000050",
+          "at_dealer",
+          "Dealer:D22"
+        ],
+        [
+          "Vehicle:AUR0000050",
+          "owned_by",
+          "Customer:C4029"
+        ],
+        [
+          "Vehicle:AUR0000051",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0000052",
+          "at_dealer",
+          "Dealer:D06"
+        ],
+        [
+          "Vehicle:AUR0000053",
+          "at_dealer",
+          "Dealer:D36"
+        ],
+        [
+          "Vehicle:AUR0000054",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000054",
+          "owned_by",
+          "Customer:C6168"
+        ],
+        [
+          "Vehicle:AUR0000055",
+          "at_dealer",
+          "Dealer:D21"
+        ],
+        [
+          "Vehicle:AUR0000055",
+          "owned_by",
+          "Customer:C1244"
+        ],
+        [
+          "Vehicle:AUR0000056",
+          "at_dealer",
+          "Dealer:D26"
+        ],
+        [
+          "Vehicle:AUR0000056",
+          "owned_by",
+          "Customer:C4711"
+        ],
+        [
+          "Vehicle:AUR0000082",
+          "at_dealer",
+          "Dealer:D06"
+        ],
+        [
+          "Vehicle:AUR0000083",
+          "at_dealer",
+          "Dealer:D02"
+        ],
+        [
+          "Vehicle:AUR0000084",
+          "at_dealer",
+          "Dealer:D50"
+        ],
+        [
+          "Vehicle:AUR0000084",
+          "owned_by",
+          "Customer:C4439"
+        ],
+        [
+          "Vehicle:AUR0000085",
+          "at_dealer",
+          "Dealer:D04"
+        ],
+        [
+          "Vehicle:AUR0000086",
+          "at_dealer",
+          "Dealer:D15"
+        ],
+        [
+          "Vehicle:AUR0000086",
+          "owned_by",
+          "Customer:C1800"
+        ],
+        [
+          "Vehicle:AUR0000087",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0000087",
+          "owned_by",
+          "Customer:C5654"
+        ],
+        [
+          "Vehicle:AUR0000088",
+          "at_dealer",
+          "Dealer:D21"
+        ],
+        [
+          "Vehicle:AUR0000089",
+          "at_dealer",
+          "Dealer:D21"
+        ],
+        [
+          "Vehicle:AUR0000090",
+          "at_dealer",
+          "Dealer:D03"
+        ],
+        [
+          "Vehicle:AUR0000091",
+          "at_dealer",
+          "Dealer:D32"
+        ],
+        [
+          "Vehicle:AUR0000091",
+          "owned_by",
+          "Customer:C5677"
+        ],
+        [
+          "Vehicle:AUR0000092",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000092",
+          "owned_by",
+          "Customer:C6288"
+        ],
+        [
+          "Vehicle:AUR0000093",
+          "at_dealer",
+          "Dealer:D46"
+        ],
+        [
+          "Vehicle:AUR0000094",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000094",
+          "owned_by",
+          "Customer:C3913"
+        ],
+        [
+          "Vehicle:AUR0000095",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0000095",
+          "owned_by",
+          "Customer:C1233"
+        ],
+        [
+          "Vehicle:AUR0000096",
+          "at_dealer",
+          "Dealer:D26"
+        ],
+        [
+          "Vehicle:AUR0000097",
+          "at_dealer",
+          "Dealer:D07"
+        ],
+        [
+          "Vehicle:AUR0000098",
+          "at_dealer",
+          "Dealer:D21"
+        ],
+        [
+          "Vehicle:AUR0000098",
+          "owned_by",
+          "Customer:C3196"
+        ],
+        [
+          "Vehicle:AUR0000099",
+          "at_dealer",
+          "Dealer:D27"
+        ],
+        [
+          "Vehicle:AUR0000099",
+          "owned_by",
+          "Customer:C0641"
+        ],
+        [
+          "Vehicle:AUR0000100",
+          "at_dealer",
+          "Dealer:D32"
+        ],
+        [
+          "Vehicle:AUR0000101",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000101",
+          "owned_by",
+          "Customer:C4961"
+        ],
+        [
+          "Vehicle:AUR0000102",
+          "at_dealer",
+          "Dealer:D07"
+        ],
+        [
+          "Vehicle:AUR0000102",
+          "owned_by",
+          "Customer:C1516"
+        ],
+        [
+          "Vehicle:AUR0000103",
+          "at_dealer",
+          "Dealer:D32"
+        ],
+        [
+          "Vehicle:AUR0000104",
+          "at_dealer",
+          "Dealer:D21"
+        ],
+        [
+          "Vehicle:AUR0000104",
+          "owned_by",
+          "Customer:C5443"
+        ],
+        [
+          "Vehicle:AUR0000105",
+          "at_dealer",
+          "Dealer:D19"
+        ],
+        [
+          "Vehicle:AUR0000106",
+          "at_dealer",
+          "Dealer:D27"
+        ],
+        [
+          "Vehicle:AUR0000106",
+          "owned_by",
+          "Customer:C4203"
+        ],
+        [
+          "Vehicle:AUR0000107",
+          "at_dealer",
+          "Dealer:D17"
+        ],
+        [
+          "Vehicle:AUR0000108",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000108",
+          "owned_by",
+          "Customer:C1876"
+        ],
+        [
+          "Vehicle:AUR0000109",
+          "at_dealer",
+          "Dealer:D44"
+        ],
+        [
+          "Vehicle:AUR0000110",
+          "at_dealer",
+          "Dealer:D44"
+        ],
+        [
+          "Vehicle:AUR0000111",
+          "at_dealer",
+          "Dealer:D33"
+        ],
+        [
+          "Vehicle:AUR0000112",
+          "at_dealer",
+          "Dealer:D33"
+        ],
+        [
+          "Vehicle:AUR0000112",
+          "owned_by",
+          "Customer:C3197"
+        ],
+        [
+          "Vehicle:AUR0000113",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000113",
+          "owned_by",
+          "Customer:C1508"
+        ],
+        [
+          "Vehicle:AUR0000114",
+          "at_dealer",
+          "Dealer:D30"
+        ],
+        [
+          "Vehicle:AUR0000114",
+          "owned_by",
+          "Customer:C0419"
+        ],
+        [
+          "Vehicle:AUR0000115",
+          "at_dealer",
+          "Dealer:D26"
+        ],
+        [
+          "Vehicle:AUR0000115",
+          "owned_by",
+          "Customer:C2499"
+        ],
+        [
+          "Vehicle:AUR0000116",
+          "at_dealer",
+          "Dealer:D33"
+        ],
+        [
+          "Vehicle:AUR0000116",
+          "owned_by",
+          "Customer:C0459"
+        ],
+        [
+          "Vehicle:AUR0000117",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0000118",
+          "at_dealer",
+          "Dealer:D38"
+        ],
+        [
+          "Vehicle:AUR0000118",
+          "owned_by",
+          "Customer:C5701"
+        ],
+        [
+          "Vehicle:AUR0000119",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0000119",
+          "owned_by",
+          "Customer:C2655"
+        ],
+        [
+          "Vehicle:AUR0000120",
+          "at_dealer",
+          "Dealer:D14"
+        ],
+        [
+          "Vehicle:AUR0000121",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000122",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0000122",
+          "owned_by",
+          "Customer:C3200"
+        ],
+        [
+          "Vehicle:AUR0000123",
+          "at_dealer",
+          "Dealer:D39"
+        ],
+        [
+          "Vehicle:AUR0000124",
+          "at_dealer",
+          "Dealer:D03"
+        ],
+        [
+          "Vehicle:AUR0000124",
+          "owned_by",
+          "Customer:C6446"
+        ],
+        [
+          "Vehicle:AUR0000125",
+          "at_dealer",
+          "Dealer:D07"
+        ],
+        [
+          "Vehicle:AUR0000125",
+          "owned_by",
+          "Customer:C4248"
+        ],
+        [
+          "Vehicle:AUR0000126",
+          "at_dealer",
+          "Dealer:D43"
+        ],
+        [
+          "Vehicle:AUR0000127",
+          "at_dealer",
+          "Dealer:D21"
+        ],
+        [
+          "Vehicle:AUR0000127",
+          "owned_by",
+          "Customer:C1373"
+        ],
+        [
+          "Vehicle:AUR0000128",
+          "at_dealer",
+          "Dealer:D27"
+        ],
+        [
+          "Vehicle:AUR0000128",
+          "owned_by",
+          "Customer:C0665"
+        ],
+        [
+          "Vehicle:AUR0000129",
+          "at_dealer",
+          "Dealer:D06"
+        ],
+        [
+          "Vehicle:AUR0000129",
+          "owned_by",
+          "Customer:C5356"
+        ],
+        [
+          "Vehicle:AUR0000130",
+          "at_dealer",
+          "Dealer:D26"
+        ],
+        [
+          "Vehicle:AUR0000130",
+          "owned_by",
+          "Customer:C1367"
+        ],
+        [
+          "Vehicle:AUR0000131",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0000132",
+          "at_dealer",
+          "Dealer:D31"
+        ],
+        [
+          "Vehicle:AUR0000133",
+          "at_dealer",
+          "Dealer:D03"
+        ],
+        [
+          "Vehicle:AUR0000133",
+          "owned_by",
+          "Customer:C1610"
+        ],
+        [
+          "Vehicle:AUR0000134",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000135",
+          "at_dealer",
+          "Dealer:D19"
+        ],
+        [
+          "Vehicle:AUR0000135",
+          "owned_by",
+          "Customer:C2480"
+        ],
+        [
+          "Vehicle:AUR0000136",
+          "at_dealer",
+          "Dealer:D16"
+        ],
+        [
+          "Vehicle:AUR0000137",
+          "at_dealer",
+          "Dealer:D43"
+        ],
+        [
+          "Vehicle:AUR0000138",
+          "at_dealer",
+          "Dealer:D15"
+        ],
+        [
+          "Vehicle:AUR0000138",
+          "owned_by",
+          "Customer:C1808"
+        ],
+        [
+          "Vehicle:AUR0000139",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0000139",
+          "owned_by",
+          "Customer:C4598"
+        ],
+        [
+          "Vehicle:AUR0000169",
+          "at_dealer",
+          "Dealer:D32"
+        ],
+        [
+          "Vehicle:AUR0000170",
+          "at_dealer",
+          "Dealer:D21"
+        ],
+        [
+          "Vehicle:AUR0000170",
+          "owned_by",
+          "Customer:C6561"
+        ],
+        [
+          "Vehicle:AUR0000171",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0000172",
+          "at_dealer",
+          "Dealer:D36"
+        ],
+        [
+          "Vehicle:AUR0000173",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0000174",
+          "at_dealer",
+          "Dealer:D38"
+        ],
+        [
+          "Vehicle:AUR0000175",
+          "at_dealer",
+          "Dealer:D38"
+        ],
+        [
+          "Vehicle:AUR0000175",
+          "owned_by",
+          "Customer:C3634"
+        ],
+        [
+          "Vehicle:AUR0000176",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0000176",
+          "owned_by",
+          "Customer:C6448"
+        ],
+        [
+          "Vehicle:AUR0000177",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0000177",
+          "owned_by",
+          "Customer:C0664"
+        ],
+        [
+          "Vehicle:AUR0000178",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000179",
+          "at_dealer",
+          "Dealer:D33"
+        ],
+        [
+          "Vehicle:AUR0000179",
+          "owned_by",
+          "Customer:C1006"
+        ],
+        [
+          "Vehicle:AUR0000180",
+          "at_dealer",
+          "Dealer:D27"
+        ],
+        [
+          "Vehicle:AUR0000180",
+          "owned_by",
+          "Customer:C6796"
+        ],
+        [
+          "Vehicle:AUR0000181",
+          "at_dealer",
+          "Dealer:D29"
+        ],
+        [
+          "Vehicle:AUR0000181",
+          "owned_by",
+          "Customer:C5751"
+        ],
+        [
+          "Vehicle:AUR0000182",
+          "at_dealer",
+          "Dealer:D04"
+        ],
+        [
+          "Vehicle:AUR0000182",
+          "owned_by",
+          "Customer:C4261"
+        ],
+        [
+          "Vehicle:AUR0000183",
+          "at_dealer",
+          "Dealer:D32"
+        ],
+        [
+          "Vehicle:AUR0000183",
+          "owned_by",
+          "Customer:C1380"
+        ],
+        [
+          "Vehicle:AUR0000184",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000184",
+          "owned_by",
+          "Customer:C5898"
+        ],
+        [
+          "Vehicle:AUR0000185",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0000185",
+          "owned_by",
+          "Customer:C5360"
+        ],
+        [
+          "Vehicle:AUR0000186",
+          "at_dealer",
+          "Dealer:D27"
+        ],
+        [
+          "Vehicle:AUR0000187",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000188",
+          "at_dealer",
+          "Dealer:D06"
+        ],
+        [
+          "Vehicle:AUR0000189",
+          "at_dealer",
+          "Dealer:D44"
+        ],
+        [
+          "Vehicle:AUR0000189",
+          "owned_by",
+          "Customer:C3102"
+        ],
+        [
+          "Vehicle:AUR0000190",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000191",
+          "at_dealer",
+          "Dealer:D04"
+        ],
+        [
+          "Vehicle:AUR0000192",
+          "at_dealer",
+          "Dealer:D10"
+        ],
+        [
+          "Vehicle:AUR0000192",
+          "owned_by",
+          "Customer:C5125"
+        ],
+        [
+          "Vehicle:AUR0000193",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000193",
+          "owned_by",
+          "Customer:C6829"
+        ],
+        [
+          "Vehicle:AUR0000194",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000195",
+          "at_dealer",
+          "Dealer:D14"
+        ],
+        [
+          "Vehicle:AUR0000196",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000196",
+          "owned_by",
+          "Customer:C6091"
+        ],
+        [
+          "Vehicle:AUR0000197",
+          "at_dealer",
+          "Dealer:D46"
+        ],
+        [
+          "Vehicle:AUR0000198",
+          "at_dealer",
+          "Dealer:D13"
+        ],
+        [
+          "Vehicle:AUR0000199",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0000199",
+          "owned_by",
+          "Customer:C4449"
+        ],
+        [
+          "Vehicle:AUR0000200",
+          "at_dealer",
+          "Dealer:D22"
+        ],
+        [
+          "Vehicle:AUR0000201",
+          "at_dealer",
+          "Dealer:D32"
+        ],
+        [
+          "Vehicle:AUR0000202",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000202",
+          "owned_by",
+          "Customer:C5533"
+        ],
+        [
+          "Vehicle:AUR0000203",
+          "at_dealer",
+          "Dealer:D04"
+        ],
+        [
+          "Vehicle:AUR0000203",
+          "owned_by",
+          "Customer:C0643"
+        ],
+        [
+          "Vehicle:AUR0000204",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000205",
+          "at_dealer",
+          "Dealer:D04"
+        ],
+        [
+          "Vehicle:AUR0000205",
+          "owned_by",
+          "Customer:C6212"
+        ],
+        [
+          "Vehicle:AUR0000206",
+          "at_dealer",
+          "Dealer:D27"
+        ],
+        [
+          "Vehicle:AUR0000206",
+          "owned_by",
+          "Customer:C0871"
+        ],
+        [
+          "Vehicle:AUR0000207",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000208",
+          "at_dealer",
+          "Dealer:D36"
+        ],
+        [
+          "Vehicle:AUR0000208",
+          "owned_by",
+          "Customer:C3277"
+        ],
+        [
+          "Vehicle:AUR0000209",
+          "at_dealer",
+          "Dealer:D38"
+        ],
+        [
+          "Vehicle:AUR0000210",
+          "at_dealer",
+          "Dealer:D10"
+        ],
+        [
+          "Vehicle:AUR0000211",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0000211",
+          "owned_by",
+          "Customer:C6847"
+        ],
+        [
+          "Vehicle:AUR0000212",
+          "at_dealer",
+          "Dealer:D27"
+        ],
+        [
+          "Vehicle:AUR0000212",
+          "owned_by",
+          "Customer:C0226"
+        ],
+        [
+          "Vehicle:AUR0000213",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0000213",
+          "owned_by",
+          "Customer:C6490"
+        ],
+        [
+          "Vehicle:AUR0000214",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000214",
+          "owned_by",
+          "Customer:C1665"
+        ],
+        [
+          "Vehicle:AUR0000215",
+          "at_dealer",
+          "Dealer:D08"
+        ],
+        [
+          "Vehicle:AUR0000216",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000216",
+          "owned_by",
+          "Customer:C2919"
+        ],
+        [
+          "Vehicle:AUR0000217",
+          "at_dealer",
+          "Dealer:D43"
+        ],
+        [
+          "Vehicle:AUR0000218",
+          "at_dealer",
+          "Dealer:D25"
+        ],
+        [
+          "Vehicle:AUR0000218",
+          "owned_by",
+          "Customer:C3512"
+        ],
+        [
+          "Vehicle:AUR0000219",
+          "at_dealer",
+          "Dealer:D48"
+        ],
+        [
+          "Vehicle:AUR0000220",
+          "at_dealer",
+          "Dealer:D02"
+        ],
+        [
+          "Vehicle:AUR0000221",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000221",
+          "owned_by",
+          "Customer:C3788"
+        ],
+        [
+          "Vehicle:AUR0000222",
+          "at_dealer",
+          "Dealer:D21"
+        ],
+        [
+          "Vehicle:AUR0000223",
+          "at_dealer",
+          "Dealer:D19"
+        ],
+        [
+          "Vehicle:AUR0000223",
+          "owned_by",
+          "Customer:C2123"
+        ],
+        [
+          "Vehicle:AUR0000224",
+          "at_dealer",
+          "Dealer:D32"
+        ],
+        [
+          "Vehicle:AUR0000224",
+          "owned_by",
+          "Customer:C5077"
+        ],
+        [
+          "Vehicle:AUR0000225",
+          "at_dealer",
+          "Dealer:D22"
+        ],
+        [
+          "Vehicle:AUR0000226",
+          "at_dealer",
+          "Dealer:D03"
+        ],
+        [
+          "Vehicle:AUR0000227",
+          "at_dealer",
+          "Dealer:D22"
+        ],
+        [
+          "Vehicle:AUR0000227",
+          "owned_by",
+          "Customer:C0804"
+        ],
+        [
+          "Vehicle:AUR0000228",
+          "at_dealer",
+          "Dealer:D12"
+        ],
+        [
+          "Vehicle:AUR0000228",
+          "owned_by",
+          "Customer:C2945"
+        ],
+        [
+          "Vehicle:AUR0000229",
+          "at_dealer",
+          "Dealer:D10"
+        ],
+        [
+          "Vehicle:AUR0000230",
+          "at_dealer",
+          "Dealer:D23"
+        ],
+        [
+          "Vehicle:AUR0000231",
+          "at_dealer",
+          "Dealer:D45"
+        ],
+        [
+          "Vehicle:AUR0000232",
+          "at_dealer",
+          "Dealer:D24"
+        ],
+        [
+          "Vehicle:AUR0000232",
+          "owned_by",
+          "Customer:C1848"
+        ],
+        [
+          "Vehicle:AUR0000233",
+          "at_dealer",
+          "Dealer:D38"
+        ],
+        [
+          "Vehicle:AUR0000233",
+          "owned_by",
+          "Customer:C1629"
+        ],
+        [
+          "Vehicle:AUR0000234",
+          "at_dealer",
+          "Dealer:D20"
+        ],
+        [
+          "Vehicle:AUR0000234",
+          "owned_by",
+          "Customer:C1799"
+        ]
+      ]
+    }
+  },
+  "notes": [],
+  "calls": [
+    {
+      "tool": "quality.hold_lot",
+      "args": {
+        "lot_id": "LOT-0017"
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "LOT-0017: defective heavy-duty wiring harness used at P_TX 2027-02-22..2027-02-24",
+      "path": [
+        "Lot:LOT-0017"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D02",
+        "vins": [
+          "AUR0000083",
+          "AUR0000220"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000083",
+        "Dealer:D02"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D03",
+        "vins": [
+          "AUR0000008",
+          "AUR0000028",
+          "AUR0000090",
+          "AUR0000226"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "4 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000008",
+        "Dealer:D03"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D04",
+        "vins": [
+          "AUR0000085",
+          "AUR0000191"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000085",
+        "Dealer:D04"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D06",
+        "vins": [
+          "AUR0000024",
+          "AUR0000027",
+          "AUR0000052",
+          "AUR0000082",
+          "AUR0000188"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "5 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000024",
+        "Dealer:D06"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D07",
+        "vins": [
+          "AUR0000020",
+          "AUR0000097"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000020",
+        "Dealer:D07"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D08",
+        "vins": [
+          "AUR0000013",
+          "AUR0000117",
+          "AUR0000131",
+          "AUR0000171",
+          "AUR0000215"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "5 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000013",
+        "Dealer:D08"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D10",
+        "vins": [
+          "AUR0000210",
+          "AUR0000229"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000210",
+        "Dealer:D10"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D12",
+        "vins": [
+          "AUR0000046"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000046",
+        "Dealer:D12"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D13",
+        "vins": [
+          "AUR0000047",
+          "AUR0000198"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000047",
+        "Dealer:D13"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D14",
+        "vins": [
+          "AUR0000120",
+          "AUR0000195"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000120",
+        "Dealer:D14"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D16",
+        "vins": [
+          "AUR0000136"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000136",
+        "Dealer:D16"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D17",
+        "vins": [
+          "AUR0000107"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000107",
+        "Dealer:D17"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D19",
+        "vins": [
+          "AUR0000105"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000105",
+        "Dealer:D19"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D20",
+        "vins": [
+          "AUR0000042",
+          "AUR0000051"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000042",
+        "Dealer:D20"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D21",
+        "vins": [
+          "AUR0000088",
+          "AUR0000089",
+          "AUR0000222"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "3 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000088",
+        "Dealer:D21"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D22",
+        "vins": [
+          "AUR0000200",
+          "AUR0000225"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000200",
+        "Dealer:D22"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D23",
+        "vins": [
+          "AUR0000010",
+          "AUR0000173",
+          "AUR0000230"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "3 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000010",
+        "Dealer:D23"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D25",
+        "vins": [
+          "AUR0000011",
+          "AUR0000134",
+          "AUR0000178",
+          "AUR0000187",
+          "AUR0000204",
+          "AUR0000207"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "6 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000011",
+        "Dealer:D25"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D26",
+        "vins": [
+          "AUR0000017",
+          "AUR0000096"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000017",
+        "Dealer:D26"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D27",
+        "vins": [
+          "AUR0000003",
+          "AUR0000186"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000003",
+        "Dealer:D27"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D28",
+        "vins": [
+          "AUR0000022"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000022",
+        "Dealer:D28"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D29",
+        "vins": [
+          "AUR0000034"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000034",
+        "Dealer:D29"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D31",
+        "vins": [
+          "AUR0000031",
+          "AUR0000132"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000031",
+        "Dealer:D31"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D32",
+        "vins": [
+          "AUR0000100",
+          "AUR0000103",
+          "AUR0000169",
+          "AUR0000201"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "4 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000100",
+        "Dealer:D32"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D33",
+        "vins": [
+          "AUR0000111"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000111",
+        "Dealer:D33"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D34",
+        "vins": [
+          "AUR0000006",
+          "AUR0000019",
+          "AUR0000030"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "3 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000006",
+        "Dealer:D34"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D36",
+        "vins": [
+          "AUR0000053",
+          "AUR0000172"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000053",
+        "Dealer:D36"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D37",
+        "vins": [
+          "AUR0000015"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000015",
+        "Dealer:D37"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D38",
+        "vins": [
+          "AUR0000174",
+          "AUR0000209"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000174",
+        "Dealer:D38"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D39",
+        "vins": [
+          "AUR0000025",
+          "AUR0000123"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000025",
+        "Dealer:D39"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D43",
+        "vins": [
+          "AUR0000126",
+          "AUR0000137",
+          "AUR0000217"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "3 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000126",
+        "Dealer:D43"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D44",
+        "vins": [
+          "AUR0000109",
+          "AUR0000110"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "2 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000109",
+        "Dealer:D44"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D45",
+        "vins": [
+          "AUR0000002",
+          "AUR0000023",
+          "AUR0000035",
+          "AUR0000121",
+          "AUR0000190",
+          "AUR0000194",
+          "AUR0000231"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "7 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000002",
+        "Dealer:D45"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D46",
+        "vins": [
+          "AUR0000007",
+          "AUR0000093",
+          "AUR0000197"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "3 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000007",
+        "Dealer:D46"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D47",
+        "vins": [
+          "AUR0000044"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000044",
+        "Dealer:D47"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "dealer.stop_sale",
+      "args": {
+        "dealer_id": "D48",
+        "vins": [
+          "AUR0000219"
+        ]
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "1 unsold vehicle(s) built with LOT-0017",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000219",
+        "Dealer:D48"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0130",
+        "message": "Safety notice: your vehicle AUR0000032 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Hill Country Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000032",
+        "Dealer:D15",
+        "Customer:C0130"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0226",
+        "message": "Safety notice: your vehicle AUR0000212 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Blue Ridge Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000212",
+        "Dealer:D27",
+        "Customer:C0226"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0419",
+        "message": "Safety notice: your vehicle AUR0000114 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Heartland Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000114",
+        "Dealer:D30",
+        "Customer:C0419"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0459",
+        "message": "Safety notice: your vehicle AUR0000116 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Buckeye Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000116",
+        "Dealer:D33",
+        "Customer:C0459"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0630",
+        "message": "Safety notice: your vehicle AUR0000037 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Delta Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000037",
+        "Dealer:D12",
+        "Customer:C0630"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0641",
+        "message": "Safety notice: your vehicle AUR0000099 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Blue Ridge Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000099",
+        "Dealer:D27",
+        "Customer:C0641"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0643",
+        "message": "Safety notice: your vehicle AUR0000203 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Gulf Coast Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000203",
+        "Dealer:D04",
+        "Customer:C0643"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0664",
+        "message": "Safety notice: your vehicle AUR0000177 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Magnolia Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000177",
+        "Dealer:D08",
+        "Customer:C0664"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0665",
+        "message": "Safety notice: your vehicle AUR0000128 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Blue Ridge Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000128",
+        "Dealer:D27",
+        "Customer:C0665"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0789",
+        "message": "Safety notice: your vehicle AUR0000021 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Crescent Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000021",
+        "Dealer:D49",
+        "Customer:C0789"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0804",
+        "message": "Safety notice: your vehicle AUR0000227 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Gateway Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000227",
+        "Dealer:D22",
+        "Customer:C0804"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0832",
+        "message": "Safety notice: your vehicle AUR0000005 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000005",
+        "Dealer:D45",
+        "Customer:C0832"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C0871",
+        "message": "Safety notice: your vehicle AUR0000206 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Blue Ridge Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000206",
+        "Dealer:D27",
+        "Customer:C0871"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1006",
+        "message": "Safety notice: your vehicle AUR0000179 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Buckeye Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000179",
+        "Dealer:D33",
+        "Customer:C1006"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1218",
+        "message": "Safety notice: your vehicle AUR0000001 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Lakeshore Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000001",
+        "Dealer:D23",
+        "Customer:C1218"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1233",
+        "message": "Safety notice: your vehicle AUR0000095 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Sooner Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000095",
+        "Dealer:D20",
+        "Customer:C1233"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1244",
+        "message": "Safety notice: your vehicle AUR0000055 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Piney Woods Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000055",
+        "Dealer:D21",
+        "Customer:C1244"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1367",
+        "message": "Safety notice: your vehicle AUR0000130 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Coastal Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000130",
+        "Dealer:D26",
+        "Customer:C1367"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1373",
+        "message": "Safety notice: your vehicle AUR0000127 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Piney Woods Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000127",
+        "Dealer:D21",
+        "Customer:C1373"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1380",
+        "message": "Safety notice: your vehicle AUR0000183 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact River City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000183",
+        "Dealer:D32",
+        "Customer:C1380"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1508",
+        "message": "Safety notice: your vehicle AUR0000113 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000113",
+        "Dealer:D45",
+        "Customer:C1508"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1516",
+        "message": "Safety notice: your vehicle AUR0000102 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Music City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000102",
+        "Dealer:D07",
+        "Customer:C1516"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1610",
+        "message": "Safety notice: your vehicle AUR0000133 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Alamo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000133",
+        "Dealer:D03",
+        "Customer:C1610"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1629",
+        "message": "Safety notice: your vehicle AUR0000233 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Steel City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000233",
+        "Dealer:D38",
+        "Customer:C1629"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1660",
+        "message": "Safety notice: your vehicle AUR0000048 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Hoosier Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000048",
+        "Dealer:D31",
+        "Customer:C1660"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1665",
+        "message": "Safety notice: your vehicle AUR0000214 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000214",
+        "Dealer:D45",
+        "Customer:C1665"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1735",
+        "message": "Safety notice: your vehicle AUR0000036 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Lakeshore Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000036",
+        "Dealer:D23",
+        "Customer:C1735"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1751",
+        "message": "Safety notice: your vehicle AUR0000018 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Hill City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000018",
+        "Dealer:D44",
+        "Customer:C1751"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1799",
+        "message": "Safety notice: your vehicle AUR0000234 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Sooner Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000234",
+        "Dealer:D20",
+        "Customer:C1799"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1800",
+        "message": "Safety notice: your vehicle AUR0000086 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Hill Country Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000086",
+        "Dealer:D15",
+        "Customer:C1800"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1808",
+        "message": "Safety notice: your vehicle AUR0000138 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Hill Country Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000138",
+        "Dealer:D15",
+        "Customer:C1808"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1848",
+        "message": "Safety notice: your vehicle AUR0000232 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Rocket City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000232",
+        "Dealer:D24",
+        "Customer:C1848"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C1876",
+        "message": "Safety notice: your vehicle AUR0000108 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Tupelo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000108",
+        "Dealer:D25",
+        "Customer:C1876"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2123",
+        "message": "Safety notice: your vehicle AUR0000223 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Ozark Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000223",
+        "Dealer:D19",
+        "Customer:C2123"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2480",
+        "message": "Safety notice: your vehicle AUR0000135 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Ozark Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000135",
+        "Dealer:D19",
+        "Customer:C2480"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2499",
+        "message": "Safety notice: your vehicle AUR0000115 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Coastal Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000115",
+        "Dealer:D26",
+        "Customer:C2499"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2655",
+        "message": "Safety notice: your vehicle AUR0000119 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Sooner Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000119",
+        "Dealer:D20",
+        "Customer:C2655"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2789",
+        "message": "Safety notice: your vehicle AUR0000012 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000012",
+        "Dealer:D45",
+        "Customer:C2789"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2919",
+        "message": "Safety notice: your vehicle AUR0000216 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Tupelo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000216",
+        "Dealer:D25",
+        "Customer:C2919"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C2945",
+        "message": "Safety notice: your vehicle AUR0000228 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Delta Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000228",
+        "Dealer:D12",
+        "Customer:C2945"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3102",
+        "message": "Safety notice: your vehicle AUR0000189 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Hill City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000189",
+        "Dealer:D44",
+        "Customer:C3102"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3196",
+        "message": "Safety notice: your vehicle AUR0000098 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Piney Woods Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000098",
+        "Dealer:D21",
+        "Customer:C3196"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3197",
+        "message": "Safety notice: your vehicle AUR0000112 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Buckeye Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000112",
+        "Dealer:D33",
+        "Customer:C3197"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3200",
+        "message": "Safety notice: your vehicle AUR0000122 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Magnolia Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000122",
+        "Dealer:D08",
+        "Customer:C3200"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3277",
+        "message": "Safety notice: your vehicle AUR0000208 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Lowcountry Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000208",
+        "Dealer:D36",
+        "Customer:C3277"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3512",
+        "message": "Safety notice: your vehicle AUR0000218 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Tupelo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000218",
+        "Dealer:D25",
+        "Customer:C3512"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3527",
+        "message": "Safety notice: your vehicle AUR0000038 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Gateway Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000038",
+        "Dealer:D22",
+        "Customer:C3527"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3634",
+        "message": "Safety notice: your vehicle AUR0000175 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Steel City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000175",
+        "Dealer:D38",
+        "Customer:C3634"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3788",
+        "message": "Safety notice: your vehicle AUR0000221 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000221",
+        "Dealer:D45",
+        "Customer:C3788"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3821",
+        "message": "Safety notice: your vehicle AUR0000026 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Beale Street Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000026",
+        "Dealer:D48",
+        "Customer:C3821"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3896",
+        "message": "Safety notice: your vehicle AUR0000040 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Lakeshore Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000040",
+        "Dealer:D23",
+        "Customer:C3896"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3913",
+        "message": "Safety notice: your vehicle AUR0000094 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Tupelo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000094",
+        "Dealer:D25",
+        "Customer:C3913"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C3949",
+        "message": "Safety notice: your vehicle AUR0000016 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Hoosier Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000016",
+        "Dealer:D31",
+        "Customer:C3949"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4029",
+        "message": "Safety notice: your vehicle AUR0000050 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Gateway Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000050",
+        "Dealer:D22",
+        "Customer:C4029"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4064",
+        "message": "Safety notice: your vehicle AUR0000039 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Tar Heel Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000039",
+        "Dealer:D34",
+        "Customer:C4064"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4203",
+        "message": "Safety notice: your vehicle AUR0000106 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Blue Ridge Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000106",
+        "Dealer:D27",
+        "Customer:C4203"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4248",
+        "message": "Safety notice: your vehicle AUR0000125 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Music City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000125",
+        "Dealer:D07",
+        "Customer:C4248"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4261",
+        "message": "Safety notice: your vehicle AUR0000182 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Gulf Coast Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000182",
+        "Dealer:D04",
+        "Customer:C4261"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4439",
+        "message": "Safety notice: your vehicle AUR0000084 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Ridge Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000084",
+        "Dealer:D50",
+        "Customer:C4439"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4449",
+        "message": "Safety notice: your vehicle AUR0000199 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Sooner Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000199",
+        "Dealer:D20",
+        "Customer:C4449"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4598",
+        "message": "Safety notice: your vehicle AUR0000139 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Lakeshore Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000139",
+        "Dealer:D23",
+        "Customer:C4598"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4614",
+        "message": "Safety notice: your vehicle AUR0000043 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Hill City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000043",
+        "Dealer:D44",
+        "Customer:C4614"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4711",
+        "message": "Safety notice: your vehicle AUR0000056 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Coastal Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000056",
+        "Dealer:D26",
+        "Customer:C4711"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C4961",
+        "message": "Safety notice: your vehicle AUR0000101 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Tupelo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000101",
+        "Dealer:D25",
+        "Customer:C4961"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5019",
+        "message": "Safety notice: your vehicle AUR0000004 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Magnolia Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000004",
+        "Dealer:D08",
+        "Customer:C5019"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5077",
+        "message": "Safety notice: your vehicle AUR0000224 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact River City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000224",
+        "Dealer:D32",
+        "Customer:C5077"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5125",
+        "message": "Safety notice: your vehicle AUR0000192 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Prairie Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000192",
+        "Dealer:D10",
+        "Customer:C5125"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5353",
+        "message": "Safety notice: your vehicle AUR0000033 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Pelican Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000033",
+        "Dealer:D16",
+        "Customer:C5353"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5356",
+        "message": "Safety notice: your vehicle AUR0000129 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Smoky Mountain Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000129",
+        "Dealer:D06",
+        "Customer:C5356"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5360",
+        "message": "Safety notice: your vehicle AUR0000185 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Lakeshore Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000185",
+        "Dealer:D23",
+        "Customer:C5360"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5388",
+        "message": "Safety notice: your vehicle AUR0000014 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Magnolia Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000014",
+        "Dealer:D08",
+        "Customer:C5388"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5443",
+        "message": "Safety notice: your vehicle AUR0000104 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Piney Woods Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000104",
+        "Dealer:D21",
+        "Customer:C5443"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5533",
+        "message": "Safety notice: your vehicle AUR0000202 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Tupelo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000202",
+        "Dealer:D25",
+        "Customer:C5533"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5603",
+        "message": "Safety notice: your vehicle AUR0000045 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Steel City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000045",
+        "Dealer:D38",
+        "Customer:C5603"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5654",
+        "message": "Safety notice: your vehicle AUR0000087 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Lakeshore Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000087",
+        "Dealer:D23",
+        "Customer:C5654"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5677",
+        "message": "Safety notice: your vehicle AUR0000091 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact River City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000091",
+        "Dealer:D32",
+        "Customer:C5677"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5701",
+        "message": "Safety notice: your vehicle AUR0000118 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Steel City Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000118",
+        "Dealer:D38",
+        "Customer:C5701"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5751",
+        "message": "Safety notice: your vehicle AUR0000181 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Rio Grande Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000181",
+        "Dealer:D29",
+        "Customer:C5751"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C5898",
+        "message": "Safety notice: your vehicle AUR0000184 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000184",
+        "Dealer:D45",
+        "Customer:C5898"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6091",
+        "message": "Safety notice: your vehicle AUR0000196 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000196",
+        "Dealer:D45",
+        "Customer:C6091"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6168",
+        "message": "Safety notice: your vehicle AUR0000054 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000054",
+        "Dealer:D45",
+        "Customer:C6168"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6212",
+        "message": "Safety notice: your vehicle AUR0000205 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Gulf Coast Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000205",
+        "Dealer:D04",
+        "Customer:C6212"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6288",
+        "message": "Safety notice: your vehicle AUR0000092 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Border Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0004",
+        "Vehicle:AUR0000092",
+        "Dealer:D45",
+        "Customer:C6288"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6446",
+        "message": "Safety notice: your vehicle AUR0000124 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Alamo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0005",
+        "Vehicle:AUR0000124",
+        "Dealer:D03",
+        "Customer:C6446"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6447",
+        "message": "Safety notice: your vehicle AUR0000009 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Blue Ridge Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0001",
+        "Vehicle:AUR0000009",
+        "Dealer:D27",
+        "Customer:C6447"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6448",
+        "message": "Safety notice: your vehicle AUR0000176 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Magnolia Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000176",
+        "Dealer:D08",
+        "Customer:C6448"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6490",
+        "message": "Safety notice: your vehicle AUR0000213 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Sooner Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000213",
+        "Dealer:D20",
+        "Customer:C6490"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6561",
+        "message": "Safety notice: your vehicle AUR0000170 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Piney Woods Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000170",
+        "Dealer:D21",
+        "Customer:C6561"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6563",
+        "message": "Safety notice: your vehicle AUR0000029 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Magnolia Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000029",
+        "Dealer:D08",
+        "Customer:C6563"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6624",
+        "message": "Safety notice: your vehicle AUR0000049 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Lone Star Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000049",
+        "Dealer:D01",
+        "Customer:C6624"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6676",
+        "message": "Safety notice: your vehicle AUR0000041 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Volunteer Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0002",
+        "Vehicle:AUR0000041",
+        "Dealer:D37",
+        "Customer:C6676"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6796",
+        "message": "Safety notice: your vehicle AUR0000180 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Blue Ridge Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000180",
+        "Dealer:D27",
+        "Customer:C6796"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6829",
+        "message": "Safety notice: your vehicle AUR0000193 (Ranger) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Tupelo Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:RANGER",
+        "PO:PO-0007",
+        "Vehicle:AUR0000193",
+        "Dealer:D25",
+        "Customer:C6829"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "tool": "crm.notify_customer",
+      "args": {
+        "customer_id": "C6847",
+        "message": "Safety notice: your vehicle AUR0000211 (Summit) may contain a defective heavy-duty wiring harness (lot LOT-0017). Please contact Magnolia Wacky Wheels to book a free inspection."
+      },
+      "agent": "quality_inspector",
+      "incidents": [
+        1
+      ],
+      "why": "owner of 1 affected sold vehicle(s)",
+      "path": [
+        "Lot:LOT-0017",
+        "Part:HARN-B",
+        "Model:SUMMIT",
+        "PO:PO-0008",
+        "Vehicle:AUR0000211",
+        "Dealer:D08",
+        "Customer:C6847"
+      ],
+      "result": {
+        "ok": true,
+        "sent": true,
+        "response": {
+          "ok": true
+        }
+      }
+    }
+  ],
+  "dry_run_failures": [],
+  "live_failure": null,
+  "loaners": null,
+  "summary": {
+    "coordinator": "Lot LOT-0017 of heavy-duty wiring harness from Atlas Wire and Cable is defective; it went into vehicles built at San Antonio (P_TX) Feb 22\u201324.",
+    "planner": null,
+    "dispatcher": null,
+    "inspector": "Put LOT-0017 on hold, stopped sale of 86 unsold vehicles at 36 dealers and contacted 94 owners of sold vehicles.",
+    "summary": "Lot LOT-0017 of heavy-duty wiring harness from Atlas Wire and Cable is defective; it went into vehicles built at San Antonio (P_TX) Feb 22\u201324. Put LOT-0017 on hold, stopped sale of 86 unsold vehicles at 36 dealers and contacted 94 owners of sold vehicles.",
+    "by": "rules (no LLM)"
+  },
+  "log": [
+    {
+      "node": "coordinator_read_message",
+      "text": "incident 1: ACT quality_hold"
+    },
+    {
+      "node": "coordinator_find_affected",
+      "text": "incident 1: graph path Lot \u2500batch_of\u2192 Part \u2190needs\u2500 Model \u2190builds\u2500 PO \u2500produced\u2192 Vehicle \u2500at_dealer\u2192 Dealer / \u2500owned_by\u2192 Customer"
+    },
+    {
+      "node": "inspector_hold_and_recall",
+      "text": "1 lot hold(s), 36 stop-sale calls, 94 owners contacted"
+    },
+    {
+      "node": "safety_check_plan",
+      "text": "131 calls checked, 0 would fail"
+    },
+    {
+      "node": "send_to_server",
+      "text": "131 calls sent, 0 failed"
+    },
+    {
+      "node": "write_audit_summary",
+      "text": "Lot LOT-0017 of heavy-duty wiring harness from Atlas Wire and Cable is defective; it went into vehicles built at San Antonio (P_TX) Feb 22\u201324. Put LOT-0017 on hold, stopped sale of 86 unsold vehicles at 36 dealers and contacted 94 owners of sold vehicles."
+    }
+  ],
+  "seconds": 0.07
+}
