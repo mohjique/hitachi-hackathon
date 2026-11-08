@@ -1,0 +1,62 @@
+alias,entity_type,entity_id
+San Antonio,plant,P_TX
+the Texas plant,plant,P_TX
+Lexington,plant,P_KY
+the Kentucky plant,plant,P_KY
+Jackson,plant,P_MS
+the Mississippi plant,plant,P_MS
+Princeton,plant,P_IN
+the Indiana plant,plant,P_IN
+Huntsville,plant,P_AL
+the Alabama plant,plant,P_AL
+Greensboro,plant,P_NC
+the North Carolina plant,plant,P_NC
+17-inch tires,part,TIRE-17
+small all-season rubber,part,TIRE-17
+20-inch tires,part,TIRE-20
+big all-season rubber,part,TIRE-20
+17-inch rims,part,WHEEL-17
+20-inch rims,part,WHEEL-20
+cloth seats,part,SEAT-FAB
+leather seats,part,SEAT-LEA
+standard wiring harness,part,HARN-A
+harness A,part,HARN-A
+heavy-duty wiring harness,part,HARN-B
+harness B,part,HARN-B
+infotainment chip,part,CHIP-IVI
+60 kWh battery packs,part,BATT-60
+brake kits,part,BRAKE-KIT
+airbag modules,part,AIRBAG-MOD
+16-inch tires,part,TIRE-16
+compact-car rubber,part,TIRE-16
+16-inch rims,part,WHEEL-16
+minivan seats,part,SEAT-VAN
+third-row seating,part,SEAT-VAN
+sliding doors,part,DOOR-SLIDE
+van door modules,part,DOOR-SLIDE
+compact wiring harness,part,HARN-C
+harness C,part,HARN-C
+driver-assist chips,part,CHIP-ADAS
+ADAS chips,part,CHIP-ADAS
+12-inch displays,part,DISPLAY-12
+center screens,part,DISPLAY-12
+surround-view cameras,part,CAM-360
+360 cameras,part,CAM-360
+Brightline,supplier,SUP-01
+Northgate,supplier,SUP-02
+Cobalt,supplier,SUP-03
+Meridian,supplier,SUP-04
+Volt,supplier,SUP-05
+Kestrel,supplier,SUP-06
+Atlas,supplier,SUP-07
+Sterling,supplier,SUP-08
+Helix,supplier,SUP-09
+Redwood,supplier,SUP-10
+Orbit,supplier,SUP-11
+Quanta,supplier,SUP-12
+Granite,supplier,SUP-13
+Ironwood,supplier,SUP-14
+Harbor,supplier,SUP-15
+Ridgeline,supplier,SUP-16
+Sentinel,supplier,SUP-17
+Lumen,supplier,SUP-18

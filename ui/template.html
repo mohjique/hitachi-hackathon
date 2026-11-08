@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wacky Wheels Control Tower</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: header, the data model, then a two-pane console (event feed | event detail). Figures scroll sideways in their own frames. */
+:root {
+  color-scheme: light;
+  --bg: #f5f6f3; --surface: #ffffff; --sunk: #eef0ec; --ink: #1b1f1d; --muted: #5d655f;
+  --line: #d9ddd6; --edge: #9aa39c; --accent: #b4430f;
+  --ok: #2f7d32; --warn: #a15c07; --bad: #b42318;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --c-Supplier: #8a6a2f; --c-Shipment: #c2410c; --c-Lot: #b42318; --c-Part: #a15c07;
+  --c-Plant: #4d7c0f; --c-Model: #0f766e; --c-PO: #1d4ed8; --c-CO: #6d28d9;
+  --c-Vehicle: #be185d; --c-Dealer: #0369a1; --c-Customer: #4b5563;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #141716; --surface: #1c201e; --sunk: #181b1a; --ink: #e9ece8; --muted: #a2aaa4; --line: #2f3532; --edge: #5b645e; --accent: #f08a4b;
+    --ok: #6cc070; --warn: #f2b84b; --bad: #f47c72;
+    --c-Supplier: #d6b273; --c-Shipment: #fb8a4c; --c-Lot: #f47c72; --c-Part: #f2b84b;
+    --c-Plant: #a3d65c; --c-Model: #3cc9b4; --c-PO: #7aa7ff; --c-CO: #b39bff;
+    --c-Vehicle: #f07ab0; --c-Dealer: #4cc0f0; --c-Customer: #aab2bd;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #141716; --surface: #1c201e; --sunk: #181b1a; --ink: #e9ece8; --muted: #a2aaa4; --line: #2f3532; --edge: #5b645e; --accent: #f08a4b;
+  --ok: #6cc070; --warn: #f2b84b; --bad: #f47c72;
+  --c-Supplier: #d6b273; --c-Shipment: #fb8a4c; --c-Lot: #f47c72; --c-Part: #f2b84b;
+  --c-Plant: #a3d65c; --c-Model: #3cc9b4; --c-PO: #7aa7ff; --c-CO: #b39bff;
+  --c-Vehicle: #f07ab0; --c-Dealer: #4cc0f0; --c-Customer: #aab2bd;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--ink); font: 15px/1.55 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1320px; margin: 0 auto; padding-block: 32px 64px; display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 700; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(28px, 4vw, 38px); line-height: 1.1; }
+h2 { font-size: 21px; }
+h3 { font-size: 15px; }
+p { margin: 0; max-width: 72ch; }
+.eyebrow { font: 500 12px/1 var(--f-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+.muted { color: var(--muted); }
+.mono { font-family: var(--f-mono); }
+section { display: grid; gap: 14px; }
+.frame { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; }
+.caption { font-size: 13.5px; color: var(--muted); max-width: 82ch; }
+
+/* header */
+header { display: grid; gap: 10px; }
+.figs { display: flex; flex-wrap: wrap; gap: 6px 22px; font-family: var(--f-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.figs b { color: var(--ink); font-weight: 500; }
+.figs .good b { color: var(--ok); }
+.figs .bad b { color: var(--bad); }
+
+/* chips */
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 500 11.5px/1 var(--f-mono); text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 4px 8px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.chip.ACT { color: var(--accent); }
+.chip.ESCALATE { color: var(--warn); }
+.chip.NO_ACTION { color: var(--muted); }
+.chip.pass { color: var(--ok); }
+.chip.fail { color: var(--bad); }
+
+/* schema */
+#schema { display: block; width: 100%; min-width: 860px; height: auto; }
+#schema .box rect { fill: var(--surface); stroke: var(--line); stroke-width: 1.2; }
+#schema .box .name { font: 700 15px var(--f-display); fill: var(--ink); }
+#schema .box .count { font: 400 11.5px var(--f-mono); fill: var(--muted); }
+#schema .rel path { fill: none; stroke: var(--edge); stroke-width: 1.4; }
+#schema .rel text { font: 500 11.5px var(--f-mono); fill: var(--muted); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+#schema .rel.used path { stroke: var(--ink); stroke-width: 2; }
+#schema .rel.used text { fill: var(--ink); }
+.arrowhead { fill: var(--edge); }
+.arrowhead.on { fill: var(--ink); }
+
+/* console */
+.console { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 900px) { .console { grid-template-columns: 1fr; } }
+.feed { display: grid; gap: 6px; position: sticky; top: env(safe-area-inset-top, 0px); max-height: calc(100vh - 24px); overflow: auto; padding-right: 2px; }
+@media (max-width: 900px) { .feed { position: static; max-height: 360px; } }
+.feed button { all: unset; box-sizing: border-box; display: grid; gap: 4px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--surface); cursor: pointer; }
+.feed button:hover { border-color: var(--edge); }
+.feed button[aria-current="true"] { border-color: var(--ink); box-shadow: inset 3px 0 0 var(--ink); }
+.feed button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.feed .row1 { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.feed .id { font: 500 13px var(--f-mono); }
+.feed .src { font-size: 12px; color: var(--muted); }
+.feed .snip { font-size: 12.5px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+.detail { display: grid; gap: 26px; min-width: 0; }
+.panel { display: grid; gap: 10px; }
+.panel > h3 { display: flex; gap: 10px; align-items: baseline; }
+.panel > h3 .muted { font: 400 12.5px var(--f-body); }
+.headline { display: grid; gap: 8px; }
+.headline .meta { font-family: var(--f-mono); font-size: 12.5px; color: var(--muted); }
+blockquote { margin: 0; padding: 10px 14px; border-left: 3px solid var(--line); color: var(--muted); font-size: 14px; white-space: pre-line; background: var(--sunk); border-radius: 0 6px 6px 0; }
+.incidents { display: grid; gap: 8px; }
+.incident { display: grid; gap: 4px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.incident .facts { font-family: var(--f-mono); font-size: 12.5px; display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.incident .facts span { color: var(--muted); }
+.incident .facts b { font-weight: 500; color: var(--ink); }
+.incident details { font-size: 12.5px; color: var(--muted); }
+.incident summary { cursor: pointer; }
+.incident ol { margin: 6px 0 0; padding-left: 18px; font-family: var(--f-mono); font-size: 12px; }
+.summary-box { display: grid; gap: 6px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.summary-box .reason { color: var(--muted); font-size: 14px; }
+.summary-box .by { font: 400 11.5px var(--f-mono); color: var(--muted); }
+.checks { display: grid; gap: 3px; font-size: 13px; margin: 0; padding: 0; list-style: none; }
+.checks li::before { content: "✓"; color: var(--ok); margin-right: 8px; font-weight: 600; }
+.checks li.bad::before { content: "✗"; color: var(--bad); }
+
+/* agent flow */
+#flow { display: block; width: 100%; min-width: 760px; height: auto; }
+#flow .fn rect { fill: var(--surface); stroke: var(--line); stroke-width: 1.2; }
+#flow .fn text { font: 500 12.5px var(--f-mono); fill: var(--muted); }
+#flow .fn.on rect { fill: var(--ink); stroke: var(--ink); }
+#flow .fn.on text { fill: var(--bg); }
+#flow .fl path { fill: none; stroke: var(--line); stroke-width: 1.4; }
+#flow .fl.on path { stroke: var(--ink); stroke-width: 2.2; }
+
+/* graph explorer */
+.gpick { display: flex; flex-wrap: wrap; gap: 8px; }
+.gpick button { font: 500 13px var(--f-body); color: var(--ink); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+.gpick button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.gpick button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.gmeta { display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
+.gmeta .schemaLine { font-family: var(--f-mono); font-size: 12px; overflow-wrap: anywhere; }
+.gmeta ol { margin: 0; padding-left: 18px; }
+.graphFrame { max-height: 620px; overflow: auto; }
+#sub { display: block; }
+#sub .colhead { font: 700 13px var(--f-display); fill: var(--ink); }
+#sub .colcount { font: 400 11px var(--f-mono); fill: var(--muted); }
+#sub .e { fill: none; stroke: var(--edge); stroke-width: 0.8; opacity: 0.45; }
+#sub .n circle { stroke-width: 1.6; }
+#sub .n text { font: 400 10px var(--f-mono); fill: var(--muted); }
+#sub .n { cursor: pointer; }
+#sub.focus .e { opacity: 0.08; }
+#sub.focus .e.on { opacity: 1; stroke: var(--ink); stroke-width: 1.3; }
+#sub.focus .n { opacity: 0.2; }
+#sub.focus .n.on { opacity: 1; }
+#sub.focus .n.on text { fill: var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12.5px; color: var(--muted); align-items: center; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.legend .hollow { background: transparent !important; border: 1.6px solid var(--c-Vehicle); }
+.legend .ring { background: var(--c-Customer); box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.6px var(--accent); }
+.empty { padding: 14px 16px; border: 1px dashed var(--line); border-radius: 8px; color: var(--muted); font-size: 13.5px; }
+
+/* actions */
+.tools { display: flex; flex-wrap: wrap; gap: 6px; }
+.tools button { font: 500 12px var(--f-mono); color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; cursor: pointer; }
+.tools button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+.tools button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tablewrap { overflow: auto; max-height: 520px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { position: sticky; top: 0; background: var(--sunk); font: 600 12px var(--f-body); color: var(--muted); z-index: 1; }
+td.mono, td .mono { font-family: var(--f-mono); font-size: 12.5px; }
+tr.call { cursor: pointer; }
+tr.call:hover td { background: var(--sunk); }
+tr.more td { background: var(--sunk); font-size: 12.5px; color: var(--muted); }
+tr.more pre { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 12px var(--f-mono); color: var(--ink); }
+.okdot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
+.okdot.bad { background: var(--bad); }
+.agent { font: 500 11.5px var(--f-mono); color: var(--muted); }
+
+/* audit */
+.audit { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 13px; }
+.audit li { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+@media (max-width: 600px) { .audit li { grid-template-columns: 1fr; gap: 2px; } }
+.audit .node { font: 500 12px var(--f-mono); color: var(--accent); }
+
+#tip { position: fixed; z-index: 20; pointer-events: none; background: var(--ink); color: var(--bg);
+  padding: 8px 10px; border-radius: 6px; font-size: 12.5px; max-width: 320px; line-height: 1.4; }
+#tip .k { font-family: var(--f-mono); font-weight: 500; }
+#tip .t { opacity: 0.7; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; }
+@media (prefers-reduced-motion: no-preference) { #sub .e, #sub .n { transition: opacity 120ms; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Hack the Highway · operations control tower</div>
+    <h1>Wacky Wheels Control Tower</h1>
+    <p class="muted" id="runline"></p>
+    <div class="figs" id="figs"></div>
+  </header>
+
+  <section aria-labelledby="h-model">
+    <div class="eyebrow">Ontology</div>
+    <h2 id="h-model">The data model</h2>
+    <p class="caption">Every row in the company's tables is a node; every foreign key is a named relationship. Boxes show each node type and its record count. Relationships in dark ink are the ones the selected event walks through.</p>
+    <div class="frame"><svg id="schema" viewBox="0 0 1230 700" role="img" aria-label="Ontology: node types and relationships"></svg></div>
+  </section>
+
+  <section aria-labelledby="h-events">
+    <div class="eyebrow">Event feed</div>
+    <h2 id="h-events">Events and what the agents did</h2>
+    <div class="console">
+      <nav class="feed" id="feed" aria-label="Events"></nav>
+      <div class="detail" id="detail"></div>
+    </div>
+  </section>
+</div>
+<div id="tip" hidden></div>
+
+<script>
+const DATA = __DATA__;
+const NS = "http://www.w3.org/2000/svg";
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); if (parent) parent.appendChild(e); return e; };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const col = t => `var(--c-${t})`;
+const KIND = { plant_outage: "Plant outage", supplier_delay: "Supplier delay", quality_hold: "Quality hold", noise: "Noise", unconfirmed: "Unconfirmed report", unknown: "Unknown" };
+const VERDICT = { ACT: "Act", ESCALATE: "Escalate", NO_ACTION: "No action" };
+
+/* ---------------- header ---------------- */
+(() => {
+  const r = DATA.run;
+  document.getElementById("runline").textContent =
+    `Run ${r.dir} · ${String(r.mode || "").toUpperCase()} mode · model ${r.model || "n/a"} · built ${r.built}`;
+  const checks = r.checked ? `<span class="${r.passed === r.checked ? "good" : "bad"}"><b>${r.passed}/${r.checked}</b> events pass policy checks</span>` : "";
+  document.getElementById("figs").innerHTML =
+    `<span><b>${r.events}</b> events</span><span><b>${r.calls}</b> tool calls</span>` +
+    `<span class="${r.failed ? "bad" : "good"}"><b>${r.failed}</b> failed</span>` +
+    `<span><b>${r.escalated}</b> escalated to a human</span>${checks}` +
+    `<span><b>${DATA.ontology.graph_nodes.toLocaleString()}</b> graph nodes · <b>${DATA.ontology.graph_edges.toLocaleString()}</b> relationships</span>`;
+})();
+
+/* ---------------- data model (View 1) ---------------- */
+const schema = document.getElementById("schema");
+const BOX = { w: 132, h: 50 };
+const POS = { Supplier: [90, 230], Shipment: [300, 100], Lot: [300, 360], Part: [520, 230], Plant: [520, 540],
+  Model: [745, 230], PO: [745, 540], CO: [930, 400], Vehicle: [930, 640], Dealer: [1140, 480], Customer: [1140, 640] };
+const BEND = { delivered_to: -60 };
+// where along each arrow its label sits (0 = start, 1 = end); spreads out labels that would collide
+const LABEL_T = { delivered_to: 0.3, batch_of: 0.55, ordered_by: 0.3, at_dealer: 0.32, owned_by: 0.5 };
+(function drawSchema() {
+  const defs = el("defs", {}, schema);
+  for (const [id, cls] of [["arrow", "arrowhead"], ["arrowOn", "arrowhead on"]]) {
+    const m = el("marker", { id, viewBox: "0 0 10 10", refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: "auto-start-reverse" }, defs);
+    el("path", { d: "M0,0 L10,5 L0,10 z", class: cls }, m);
+  }
+  const clip = (cx, cy, tx, ty) => { const dx = tx - cx, dy = ty - cy;
+    const s = Math.min((BOX.w / 2 + 4) / Math.abs(dx || 1e-9), (BOX.h / 2 + 4) / Math.abs(dy || 1e-9)); return [cx + dx * s, cy + dy * s]; };
+  const relG = el("g", {}, schema);
+  for (const [a, rel, b] of DATA.ontology.edges) {
+    const [ax, ay] = POS[a], [bx, by] = POS[b], bend = BEND[rel] || 0;
+    const mx = (ax + bx) / 2, my = (ay + by) / 2, len = Math.hypot(bx - ax, by - ay);
+    const cx = mx + (-(by - ay) / len) * bend, cy = my + ((bx - ax) / len) * bend;
+    const [sx, sy] = clip(ax, ay, cx, cy), [ex, ey] = clip(bx, by, cx, cy);
+    const g = el("g", { class: "rel", "data-rel": rel }, relG);
+    el("path", { d: `M${sx},${sy} Q${cx},${cy} ${ex},${ey}`, "marker-end": "url(#arrow)" }, g);
+    const lt = LABEL_T[rel] ?? 0.5, a1 = (1 - lt) ** 2, a2 = 2 * lt * (1 - lt), a3 = lt ** 2;
+    const t = el("text", { x: a1 * sx + a2 * cx + a3 * ex, y: a1 * sy + a2 * cy + a3 * ey + 4, "text-anchor": "middle" }, g);
+    t.textContent = rel;
+  }
+  for (const [t, [x, y]] of Object.entries(POS)) {
+    const g = el("g", { class: "box" }, schema);
+    el("rect", { x: x - BOX.w / 2, y: y - BOX.h / 2, width: BOX.w, height: BOX.h, rx: 8 }, g);
+    el("circle", { cx: x - BOX.w / 2 + 16, cy: y - 6, r: 5, fill: col(t) }, g);
+    const n = el("text", { class: "name", x: x - BOX.w / 2 + 28, y: y - 1 }, g); n.textContent = t;
+    const c = el("text", { class: "count", x: x - BOX.w / 2 + 28, y: y + 15 }, g);
+    c.textContent = (DATA.ontology.nodes[t] || 0).toLocaleString() + " records";
+  }
+})();
+function markSchema(rels) {
+  for (const g of schema.querySelectorAll(".rel")) {
+    const on = rels.has(g.dataset.rel);
+    g.classList.toggle("used", on);
+    g.querySelector("path").setAttribute("marker-end", on ? "url(#arrowOn)" : "url(#arrow)");
+  }
+}
+
+/* ---------------- feed ---------------- */
+const feed = document.getElementById("feed"), detail = document.getElementById("detail"), tip = document.getElementById("tip");
+DATA.events.forEach((ev, i) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.id = "ev-" + ev.id;
+  const chips = ev.incidents.map(inc => `<span class="chip ${inc.verdict}">${VERDICT[inc.verdict] || inc.verdict}</span>`).join("");
+  const chk = ev.checks ? (ev.checks.problems.length ? `<span class="chip fail">checks fail</span>` : "") : "";
+  b.innerHTML = `<div class="row1"><span class="id">${esc(ev.id)}</span>${chips}${chk}<span class="src">${esc(ev.source || "")}</span></div>
+    <div class="snip">${esc(ev.incidents.map(i => KIND[i.category] || i.category).join(" + "))} · ${esc(ev.summary.summary)}</div>`;
+  b.addEventListener("click", () => select(i));
+  feed.appendChild(b);
+});
+
+/* ---------------- detail ---------------- */
+const FLOW_POS = { coordinator: [100, 110], supply_chain_planner: [305, 46], dealer_customer_care: [520, 46], quality: [520, 176],
+  dry_run: [725, 110], fail_safe: [830, 206], execute: [930, 110], summarise: [1110, 110] };
+const FLOW_EDGES = [["coordinator", "supply_chain_planner"], ["supply_chain_planner", "dealer_customer_care"], ["dealer_customer_care", "quality"],
+  ["dealer_customer_care", "dry_run"], ["coordinator", "quality"], ["quality", "dry_run"], ["coordinator", "dry_run"],
+  ["coordinator", "summarise", 120], ["dry_run", "execute"], ["dry_run", "fail_safe"], ["fail_safe", "execute"], ["execute", "summarise"]];
+
+function select(i) {
+  const ev = DATA.events[i];
+  for (const b of feed.children) b.setAttribute("aria-current", String(b.id === "ev-" + ev.id));
+  const rels = new Set(ev.graphs.flatMap(g => g.rels));
+  markSchema(rels);
+
+  const incHtml = ev.incidents.map((inc, k) => {
+    const facts = [["plant", inc.plant_id], ["part", inc.part_id], ["supplier", inc.supplier_id], ["shipment", inc.shipment_id],
+      ["lot", (inc.lots || []).join(", ")], ["dates", inc.start || inc.end ? `${inc.start || "?"} → ${inc.end || "?"}` : ""]]
+      .filter(([, v]) => v).map(([k2, v]) => `<span>${k2} <b>${esc(v)}</b></span>`).join("");
+    const why = inc.verdict_reason || inc.llm_reason;
+    const steps = (inc.trace || []).length ? `<details><summary>How the message was read (${inc.trace.length} steps)</summary><ol>${inc.trace.map(t => `<li>${esc(t)}</li>`).join("")}</ol></details>` : "";
+    return `<div class="incident"><div class="row1" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span class="chip ${inc.verdict}">${VERDICT[inc.verdict] || inc.verdict}</span><b>Incident ${k + 1}: ${esc(KIND[inc.category] || inc.category)}</b></div>
+      ${facts ? `<div class="facts">${facts}</div>` : ""}${why ? `<div class="muted" style="font-size:13px">${esc(why)}</div>` : ""}${steps}</div>`;
+  }).join("");
+
+  const chk = ev.checks;
+  const checksHtml = chk ? `<ul class="checks">${chk.problems.map(p => `<li class="bad">${esc(p)}</li>`).join("")}${chk.passed.map(p => `<li>${esc(p)}</li>`).join("")}</ul>`
+    : `<div class="empty">No policy check results. Run <span class="mono">python check.py</span>, then rebuild this page.</div>`;
+
+  const tools = [...new Set(ev.calls.map(c => c.tool))];
+  detail.innerHTML = `
+    <div class="headline">
+      <div class="meta">${esc(ev.id)} · received ${esc((ev.received_at || "").replace("T", " "))} · ${esc(ev.source || "")} · ${ev.seconds ?? "?"} s</div>
+      <blockquote>${esc(ev.text)}</blockquote>
+    </div>
+    <div class="panel"><h3>Summary and reason</h3>
+      <div class="summary-box"><div>${esc(ev.summary.summary)}</div><div class="reason">${esc(ev.summary.reason)}</div>
+      <div class="by">written by ${esc(ev.summary.by)}</div></div></div>
+    <div class="panel"><h3>What the message says <span class="muted">${ev.incidents.length} incident(s), read by the coordinator</span></h3><div class="incidents">${incHtml}</div></div>
+    <div class="panel"><h3>Agent flow <span class="muted">LangGraph path for this event</span></h3>
+      <div class="frame"><svg id="flow" viewBox="0 0 1200 240" role="img" aria-label="Agents that handled this event"></svg></div></div>
+    <div class="panel"><h3>Graph path <span class="muted">every record this event touches</span></h3><div id="gpanel"></div></div>
+    <div class="panel"><h3>Actions <span class="muted">${ev.calls.length} tool call(s), ${ev.calls.filter(c => !c.ok).length} failed · ${ev.kinds.length} kind(s) · click a row for details</span></h3>
+      ${ev.calls.length ? `<div class="tools" id="toolf"><button type="button" aria-pressed="true" data-t="">All</button>${tools.map(t => `<button type="button" aria-pressed="false" data-t="${esc(t)}">${esc(t)} ×${ev.calls.filter(c => c.tool === t).length}</button>`).join("")}</div>
+      <div class="tablewrap"><table><thead><tr><th></th><th>#</th><th>Agent</th><th>Tool</th><th>Target</th><th>Why</th></tr></thead><tbody id="calls"></tbody></table></div>`
+      : `<div class="empty">No tool calls. ${esc(ev.notes.join(" ") || ev.summary.reason)}</div>`}</div>
+    <div class="panel"><h3>Policy checks <span class="muted">independent replay against the handbook (check.py)</span></h3>${checksHtml}</div>
+    <div class="panel"><h3>Audit trail <span class="muted">step by step, as recorded by each agent</span></h3>
+      <ul class="audit">${ev.log.map(l => `<li><span class="node">${esc(l.node)}</span><span>${esc(l.text)}</span></li>`).join("")}
+      ${ev.loaners ? `<li><span class="node">loaner decisions</span><span>Assigned: ${esc(ev.loaners.loaned.join(", ") || "none")}<br>Eligible but pool empty: ${esc(ev.loaners.pool_empty.join(", ") || "none")}</span></li>` : ""}</ul></div>`;
+
+  drawFlow(ev.visited);
+  drawGraphPanel(ev);
+  if (ev.calls.length) fillCalls(ev, "");
+}
+
+function drawFlow(visited) {
+  const svg = document.getElementById("flow");
+  const W = 176, H = 40, on = new Set(visited), pairs = new Set();
+  for (let k = 1; k < visited.length; k++) pairs.add(visited[k - 1] + ">" + visited[k]);
+  const eg = el("g", {}, svg), ng = el("g", {}, svg);
+  for (const [a, b, dip] of FLOW_EDGES) {
+    const [ax, ay] = FLOW_POS[a], [bx, by] = FLOW_POS[b];
+    const g = el("g", { class: "fl" + (pairs.has(a + ">" + b) ? " on" : "") }, eg);
+    let d;
+    if (dip) {                                   // long loop underneath (noise goes straight to summarise)
+      d = `M${ax},${ay + H / 2} C${ax},${ay + dip} ${bx},${by + dip} ${bx},${by + H / 2}`;
+    } else if (Math.abs(bx - ax) < W) {          // boxes stacked: connect bottom to top
+      const down = by > ay, sy = ay + (down ? H / 2 : -H / 2), ey = by + (down ? -H / 2 : H / 2), my = (sy + ey) / 2;
+      d = `M${ax},${sy} C${ax},${my} ${bx},${my} ${bx},${ey}`;
+    } else {                                     // side by side: connect right edge to left edge
+      const sx = ax + W / 2, ex = bx - W / 2, mx = (sx + ex) / 2;
+      d = `M${sx},${ay} C${mx},${ay} ${mx},${by} ${ex},${by}`;
+    }
+    el("path", { d }, g);
+  }
+  for (const [name, [x, y]] of Object.entries(FLOW_POS)) {
+    const g = el("g", { class: "fn" + (on.has(name) ? " on" : "") }, ng);
+    el("rect", { x: x - W / 2, y: y - H / 2, width: W, height: H, rx: 7 }, g);
+    const t = el("text", { x, y: y + 4, "text-anchor": "middle" }, g); t.textContent = name.replaceAll("_", " ");
+  }
+}
+
+function fillCalls(ev, tool) {
+  const body = document.getElementById("calls");
+  const rows = [];
+  ev.calls.forEach((c, n) => {
+    if (tool && c.tool !== tool) return;
+    rows.push(`<tr class="call" data-n="${n}"><td><span class="okdot${c.ok ? "" : " bad"}" title="${c.ok ? "OK" : "failed"}"></span></td><td class="mono">${n + 1}</td>
+      <td><span class="agent">${esc(c.agent.replaceAll("_", " "))}</span></td><td class="mono">${esc(c.tool)}</td><td class="mono">${esc(c.short)}</td><td>${esc(c.why)}</td></tr>`);
+  });
+  body.innerHTML = rows.join("");
+  body.onclick = e => {
+    const tr = e.target.closest("tr.call"); if (!tr) return;
+    const next = tr.nextElementSibling;
+    if (next && next.classList.contains("more")) { next.remove(); return; }
+    const c = ev.calls[+tr.dataset.n];
+    const more = document.createElement("tr"); more.className = "more";
+    more.innerHTML = `<td></td><td colspan="5">Graph path: <span class="mono">${esc(c.path.join(" → ") || "n/a")}</span>
+      <pre>${esc(JSON.stringify({ args: c.args, response: c.response, sent_to_server: c.sent }, null, 2))}</pre></td>`;
+    tr.after(more);
+  };
+  for (const b of document.querySelectorAll("#toolf button")) {
+    b.setAttribute("aria-pressed", String(b.dataset.t === tool));
+    b.onclick = () => fillCalls(ev, b.dataset.t);
+  }
+}
+
+/* ---------------- graph explorer (View 2) ---------------- */
+const ORDER = ["Lot", "Shipment", "Plant", "Part", "Model", "PO", "CO", "Vehicle", "Dealer", "Customer"];
+function drawGraphPanel(ev) {
+  const panel = document.getElementById("gpanel");
+  if (!ev.graphs.length) {
+    const why = ev.incidents.map(i => i.verdict_reason || i.llm_reason).filter(Boolean).join(" ");
+    panel.innerHTML = `<div class="empty">No graph lookup: nothing here is a confirmed incident. ${esc(why)}</div>`;
+    return;
+  }
+  panel.innerHTML = `<div class="gpick" id="gpick">${ev.graphs.map((g, k) => `<button type="button" aria-pressed="${k === 0}" data-k="${k}">Incident ${g.idx}: ${esc(g.label)}</button>`).join("")}</div>
+    <div class="gmeta" id="gmeta"></div><div class="legend" id="legend"></div>
+    <div class="frame graphFrame" tabindex="0" aria-label="Affected records, scrollable"><svg id="sub" role="img" aria-label="Affected records"></svg></div>`;
+  const pick = k => {
+    for (const b of document.querySelectorAll("#gpick button")) b.setAttribute("aria-pressed", String(+b.dataset.k === k));
+    const g = ev.graphs[k];
+    markSchema(new Set(g.rels));
+    document.getElementById("gmeta").innerHTML = `<div class="schemaLine">${esc(g.schema)}</div><ol>${g.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ol>`;
+    drawSub(g);
+  };
+  document.getElementById("gpick").onclick = e => { const b = e.target.closest("button"); if (b) pick(+b.dataset.k); };
+  pick(0);
+}
+
+function drawSub(d) {
+  const sub = document.getElementById("sub"), legend = document.getElementById("legend");
+  sub.replaceChildren(); sub.classList.remove("focus");
+  let pinned = null;
+  const byId = new Map(d.nodes.map(n => [n.id, n]));
+  const types = ORDER.filter(t => d.nodes.some(n => n.t === t));
+  const colOf = t => types.indexOf(t);
+  const adj = new Map(d.nodes.map(n => [n.id, new Set()]));
+  for (const [u, , v] of d.edges) { adj.get(u).add(v); adj.get(v).add(u); }
+  const rank = new Map(), columns = [];
+  types.forEach((t, ci) => {
+    const nodes = d.nodes.filter(n => n.t === t);
+    const score = n => { const prev = [...adj.get(n.id)].filter(m => colOf(byId.get(m).t) < ci && rank.has(m)).map(m => rank.get(m));
+      return prev.length ? prev.reduce((a, b) => a + b, 0) / prev.length : Infinity; };
+    nodes.sort((a, b) => (score(a) - score(b)) || a.k.localeCompare(b.k));
+    nodes.forEach((n, j) => rank.set(n.id, (j + 0.5) / nodes.length));
+    columns.push(nodes);
+  });
+  const maxN = Math.max(...columns.map(c => c.length));
+  const gap = maxN > 120 ? 12 : 16, top = 56, H = Math.max(maxN * gap, 160), colW = 150, left = 30, W = left + types.length * colW;
+  sub.setAttribute("width", W); sub.setAttribute("height", top + H + 24); sub.setAttribute("viewBox", `0 0 ${W} ${top + H + 24}`);
+  const pos = new Map();
+  columns.forEach((nodes, ci) => {
+    const x = left + ci * colW + 12;
+    nodes.forEach((n, j) => pos.set(n.id, [x, top + (j + 0.5) * H / nodes.length]));
+    el("text", { class: "colhead", x: x - 6, y: 22 }, sub).textContent = types[ci];
+    el("text", { class: "colcount", x: x - 6, y: 38 }, sub).textContent = nodes.length + (nodes.length === 1 ? " record" : " records");
+  });
+  const eg = el("g", {}, sub), ng = el("g", {}, sub);
+  const edgeEls = d.edges.map(([u, , v]) => {
+    const [a, b] = colOf(byId.get(u).t) <= colOf(byId.get(v).t) ? [u, v] : [v, u];
+    const [x1, y1] = pos.get(a), [x2, y2] = pos.get(b), mx = (x1 + x2) / 2;
+    const p = el("path", { class: "e", d: `M${x1 + 5},${y1} C${mx},${y1} ${mx},${y2} ${x2 - 5},${y2}` }, eg);
+    p._a = a; p._b = b; return p;
+  });
+  const nodeEls = new Map();
+  for (const n of d.nodes) {
+    const [x, y] = pos.get(n.id);
+    const g = el("g", { class: "n", "data-id": n.id }, ng);
+    if (n.t === "Customer" && (n.tier === "Platinum" || n.tier === "Gold")) el("circle", { cx: x, cy: y, r: 7, fill: "none", stroke: "var(--accent)", "stroke-width": 1.4 }, g);
+    el("circle", { cx: x, cy: y, r: 4.2, fill: n.t === "Vehicle" && n.st === "in_stock" ? "var(--surface)" : col(n.t), stroke: col(n.t) }, g);
+    el("text", { x: x + 10, y: y + 3.5 }, g).textContent = n.k;
+    nodeEls.set(n.id, g);
+  }
+  function reach(id) {
+    const seen = new Set([id]);
+    for (const dir of [-1, 1]) {
+      const stack = [id], vis = new Set([id]);
+      while (stack.length) {
+        const cur = stack.pop(), cc = colOf(byId.get(cur).t);
+        for (const m of adj.get(cur)) {
+          if (vis.has(m)) continue;
+          const mc = colOf(byId.get(m).t);
+          if ((dir < 0 && mc < cc) || (dir > 0 && mc > cc)) { vis.add(m); seen.add(m); stack.push(m); }
+        }
+      }
+    }
+    return seen;
+  }
+  function focus(id) {
+    if (!id) { sub.classList.remove("focus"); return; }
+    const s = reach(id); sub.classList.add("focus");
+    for (const [nid, g] of nodeEls) g.classList.toggle("on", s.has(nid));
+    for (const p of edgeEls) p.classList.toggle("on", s.has(p._a) && s.has(p._b));
+  }
+  sub.onmouseover = e => { const g = e.target.closest(".n"); if (!g) return; const n = byId.get(g.dataset.id);
+    tip.innerHTML = `<div class="t">${esc(n.t)}</div><div class="k">${esc(n.k)}</div><div>${esc(n.i)}</div>`; tip.hidden = false; if (!pinned) focus(n.id); };
+  sub.onmousemove = e => { if (tip.hidden) return; const r = tip.getBoundingClientRect(); let x = e.clientX + 14, y = e.clientY + 14;
+    if (x + r.width > innerWidth - 8) x = e.clientX - r.width - 14; if (y + r.height > innerHeight - 8) y = e.clientY - r.height - 14;
+    tip.style.left = x + "px"; tip.style.top = y + "px"; };
+  sub.onmouseout = e => { if (!e.target.closest(".n")) return; tip.hidden = true; if (!pinned) focus(null); };
+  sub.onclick = e => { const g = e.target.closest(".n"); pinned = g ? (pinned === g.dataset.id ? null : g.dataset.id) : null; focus(pinned); };
+  legend.innerHTML = types.map(t => `<span><i style="background:${col(t)}"></i>${t}</span>`).join("")
+    + (types.includes("Vehicle") ? `<span><i class="hollow"></i>Vehicle in stock (stop sale)</span>` : "")
+    + (types.includes("Customer") ? `<span><i class="ring"></i>Platinum / Gold customer</span>` : "");
+}
+
+select(0);
+</script>
+</body>
+</html>

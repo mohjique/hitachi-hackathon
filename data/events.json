@@ -1,0 +1,92 @@
+[
+  {
+    "event_id": "E-01",
+    "received_at": "2027-03-08T07:17:00",
+    "source": "daily digest",
+    "text": "Morning digest, two items. (1) San Antonio update: a software outage on the line. We're dark from next Friday through Monday Mar 22; the line restarts the following working day. (2) Quick heads up from Quanta: the infotainment chip run for Princeton can't make it next Monday. Carrier says next Friday now (severe weather on the route)."
+  },
+  {
+    "event_id": "E-02",
+    "received_at": "2027-03-08T07:34:00",
+    "source": "ops chat",
+    "text": "Rumor from a supplier rep: something may be off with a seat material coming up. No dates, no details, nothing confirmed."
+  },
+  {
+    "event_id": "E-03",
+    "received_at": "2027-03-08T07:51:00",
+    "source": "quality bulletin",
+    "text": "Quality alert: Kestrel says the infotainment chip sent to Jackson had a faulty weld. Anything built Thursday Feb 25 through last Monday is suspect."
+  },
+  {
+    "event_id": "E-04",
+    "received_at": "2027-03-08T08:08:00",
+    "source": "ops chat",
+    "text": "The Kentucky plant update: a software outage on the line. We're dark from next Tuesday through next Thursday; the line restarts the following working day."
+  },
+  {
+    "event_id": "E-05",
+    "received_at": "2027-03-08T08:25:00",
+    "source": "news wire",
+    "text": "Dealer Amarillo, TX asks where to find the new brochure PDF."
+  },
+  {
+    "event_id": "E-06",
+    "received_at": "2027-03-08T08:42:00",
+    "source": "news wire",
+    "text": "Dealer Little Rock, AR asks where to find the new brochure PDF."
+  },
+  {
+    "event_id": "E-07",
+    "received_at": "2027-03-08T08:59:00",
+    "source": "news wire",
+    "text": "Dealer Pensacola, FL asks where to find the new brochure PDF."
+  },
+  {
+    "event_id": "E-08",
+    "received_at": "2027-03-08T09:16:00",
+    "source": "plant alert",
+    "text": "Plant operations alert: Wacky Wheels Lexington (P_KY) lost production to a power failure. Production is stopped from 2027-03-24 through 2027-03-25 inclusive."
+  },
+  {
+    "event_id": "E-09",
+    "received_at": "2027-03-08T09:33:00",
+    "source": "supplier email",
+    "text": "Quick heads up from Orbit: the surround-view cameras run for Huntsville can't make it Monday Mar 29. Carrier says Thursday Apr 1 now (a customs inspection)."
+  },
+  {
+    "event_id": "E-10",
+    "received_at": "2027-03-08T09:50:00",
+    "source": "ops chat",
+    "text": "Huntsville line is waiting on 60 kWh battery packs from Lumen. Original drop was Monday Mar 29, new ETA is Thursday Apr 1 because of a truck breakdown."
+  },
+  {
+    "event_id": "E-11",
+    "received_at": "2027-03-08T10:07:00",
+    "source": "ops chat",
+    "text": "Jackson update: a power failure. We're dark from Friday Mar 26 through Tuesday Mar 30; the line restarts the following working day."
+  },
+  {
+    "event_id": "E-12",
+    "received_at": "2027-03-08T10:24:00",
+    "source": "supplier email",
+    "text": "Subject: Shipment SH-0182 delayed\nFrom: dispatch@orbit.example\n\nOur shipment SH-0182 of CAM-360 (surround-view camera kit) for Wacky Wheels Princeton (P_IN) was due 2027-03-15 and will now arrive 2027-03-18. Reason: port congestion."
+  },
+  {
+    "event_id": "E-13",
+    "received_at": "2027-03-08T10:41:00",
+    "source": "ops chat",
+    "text": "Someone on the floor mentioned a possible shortage of something electronic sometime soon. Not confirmed by anyone."
+  },
+  {
+    "event_id": "E-14",
+    "received_at": "2027-03-08T10:58:00",
+    "source": "ops chat",
+    "text": "Quality alert: Atlas says the heavy-duty wiring harness sent to the Texas plant had a moisture contamination. Anything built Monday Feb 22 through Wednesday Feb 24 is suspect."
+  },
+  {
+    "event_id": "E-15",
+    "received_at": "2027-03-08T11:15:00",
+    "source": "quality bulletin",
+    "text": "QUALITY BULLETIN QB-368: Lot LOT-0191 (CHIP-IVI, supplier SUP-12) installed at P_IN on vehicles built 2027-03-02 to 2027-03-03 has a faulty weld. Place the lot on hold, stop sale of unsold vehicles and contact owners."
+  }
+]

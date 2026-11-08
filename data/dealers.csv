@@ -1,0 +1,51 @@
+dealer_id,name,city,region,transit_days
+D01,Lone Star Wacky Wheels,"Austin, TX",South,2
+D02,Bayou Wacky Wheels,"Baton Rouge, LA",South,3
+D03,Alamo Wacky Wheels,"San Antonio, TX",South,2
+D04,Gulf Coast Wacky Wheels,"Houston, TX",South,2
+D05,Bluegrass Wacky Wheels,"Louisville, KY",East,2
+D06,Smoky Mountain Wacky Wheels,"Knoxville, TN",East,3
+D07,Music City Wacky Wheels,"Nashville, TN",East,3
+D08,Magnolia Wacky Wheels,"Jackson, MS",South,2
+D09,Red River Wacky Wheels,"Shreveport, LA",South,3
+D10,Prairie Wacky Wheels,"Tulsa, OK",Central,4
+D11,Capitol Wacky Wheels,"Atlanta, GA",East,4
+D12,Delta Wacky Wheels,"Memphis, TN",Central,3
+D13,Panhandle Wacky Wheels,"Amarillo, TX",Central,4
+D14,Riverwalk Wacky Wheels,"Little Rock, AR",Central,4
+D15,Hill Country Wacky Wheels,"Kerrville, TX",South,2
+D16,Pelican Wacky Wheels,"New Orleans, LA",South,3
+D17,Cumberland Wacky Wheels,"Bowling Green, KY",East,2
+D18,Peach State Wacky Wheels,"Macon, GA",East,4
+D19,Ozark Wacky Wheels,"Fayetteville, AR",Central,4
+D20,Sooner Wacky Wheels,"Oklahoma City, OK",Central,4
+D21,Piney Woods Wacky Wheels,"Tyler, TX",South,3
+D22,Gateway Wacky Wheels,"St. Louis, MO",Central,4
+D23,Lakeshore Wacky Wheels,"Mobile, AL",South,3
+D24,Rocket City Wacky Wheels,"Huntsville, AL",East,3
+D25,Tupelo Wacky Wheels,"Tupelo, MS",South,2
+D26,Coastal Wacky Wheels,"Corpus Christi, TX",South,2
+D27,Blue Ridge Wacky Wheels,"Asheville, NC",East,4
+D28,Palmetto Wacky Wheels,"Columbia, SC",East,4
+D29,Rio Grande Wacky Wheels,"McAllen, TX",South,2
+D30,Heartland Wacky Wheels,"Springfield, MO",Central,4
+D31,Hoosier Wacky Wheels,"Evansville, IN",Central,3
+D32,River City Wacky Wheels,"Cincinnati, OH",East,4
+D33,Buckeye Wacky Wheels,"Columbus, OH",East,4
+D34,Tar Heel Wacky Wheels,"Raleigh, NC",East,3
+D35,Queen City Wacky Wheels,"Charlotte, NC",East,3
+D36,Lowcountry Wacky Wheels,"Charleston, SC",East,4
+D37,Volunteer Wacky Wheels,"Chattanooga, TN",East,3
+D38,Steel City Wacky Wheels,"Birmingham, AL",South,2
+D39,Capital City Wacky Wheels,"Montgomery, AL",South,3
+D40,Gulf Breeze Wacky Wheels,"Pensacola, FL",South,4
+D41,Sunshine Wacky Wheels,"Jacksonville, FL",East,4
+D42,Bluff City Wacky Wheels,"Jonesboro, AR",Central,4
+D43,Blue Grass Motors,"Lexington, KY",East,1
+D44,Hill City Wacky Wheels,"Lubbock, TX",Central,4
+D45,Border Wacky Wheels,"El Paso, TX",Central,4
+D46,Windy Wacky Wheels,"Fort Wayne, IN",Central,3
+D47,Cardinal Wacky Wheels,"Louisville, KY",East,2
+D48,Beale Street Wacky Wheels,"Memphis, TN",Central,3
+D49,Crescent Wacky Wheels,"Lafayette, LA",South,3
+D50,Ridge Wacky Wheels,"Roanoke, VA",East,4

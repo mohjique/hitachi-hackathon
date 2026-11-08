@@ -1,0 +1,21 @@
+part_id,name,category
+TIRE-17,17-inch all-season tire,tires
+TIRE-20,20-inch all-season tire,tires
+WHEEL-17,17-inch alloy wheel,wheels
+WHEEL-20,20-inch alloy wheel,wheels
+SEAT-FAB,cloth seat set,seating
+SEAT-LEA,leather seat set,seating
+HARN-A,standard wiring harness,electrical
+HARN-B,heavy-duty wiring harness,electrical
+CHIP-IVI,infotainment chip,electronics
+BATT-60,60 kWh battery pack,electrical
+BRAKE-KIT,brake kit,chassis
+AIRBAG-MOD,airbag module,safety
+TIRE-16,16-inch all-season tire,tires
+WHEEL-16,16-inch alloy wheel,wheels
+SEAT-VAN,minivan seat set,seating
+DOOR-SLIDE,sliding door module,body
+HARN-C,compact wiring harness,electrical
+CHIP-ADAS,driver-assist chip,electronics
+DISPLAY-12,12-inch display,electronics
+CAM-360,surround-view camera kit,electronics

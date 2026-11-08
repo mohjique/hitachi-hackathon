@@ -1,0 +1,14 @@
+# secrets
+.env
+.env.*
+
+# Python / OS / editor clutter
+__pycache__/
+*.pyc
+.DS_Store
+~$*
+.vscode/
+.claude/
+
+# generated outputs (rebuild with run.py / check.py / ui/build_report.py)
+runs/
