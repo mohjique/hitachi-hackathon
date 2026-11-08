@@ -292,7 +292,7 @@ def resolve_name(phrase, kind):
     Matching order (stops at the first that gives exactly ONE id):
       a) exact match of the normalised phrase            "texas" == "texas"
       b) a known name appears inside the phrase           "huntsville" in "huntsville"
-         (longest known name wins)                        "infotainment chip" in "infotainment chip run"
+         (longest known name wins)                        "brake kit" in "brake kit order"
       c) the phrase appears inside exactly one known name "camera kit" in "surround view camera kit"
     If several different ids match, the name is AMBIGUOUS and we refuse to guess.
     """
