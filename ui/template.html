@@ -514,7 +514,9 @@ const boxW = t => BOX_W[t] || BOX.w;
   for (const [t, [x, y]] of Object.entries(POS)) {
     const g = el("g", { class: "box" }, schema), w = boxW(t);
     el("rect", { x: x - w / 2, y: y - BOX.h / 2, width: w, height: BOX.h, rx: 8 }, g);
-    el("rect", { x: x - w / 2, y: y - BOX.h / 2, width: 6, height: BOX.h, rx: 3, fill: col(t), stroke: "none" }, g);
+    // Family colour stripe. Inline style, because the "#schema .box rect" CSS rule would
+    // override a fill attribute and paint the stripe the same colour as the box.
+    el("rect", { x: x - w / 2, y: y - BOX.h / 2, width: 8, height: BOX.h, rx: 3, style: `fill:${col(t)};stroke:none` }, g);
     el("text", { class: "name", x: x - w / 2 + 18, y: y - 3 }, g).textContent = TYPE_LABEL[t] || t;
     el("text", { class: "count", x: x - w / 2 + 18, y: y + 19 }, g).textContent = (DATA.ontology.nodes[t] || 0).toLocaleString() + " records";
   }

@@ -472,7 +472,30 @@ def write_ontology(g, out_dir=OUT_DIR):
         lines.append(f"    {a} -->|{r}| {b}")
     with open(os.path.join(out_dir, "ontology.mmd"), "w") as f:
         f.write("\n".join(lines) + "\n")
+    write_knowledge_graph(g, out_dir)
     return node_counts, edge_counts
+
+
+def write_knowledge_graph(g, out_dir=OUT_DIR):
+    """Writes the FULL knowledge graph (every record, not just the types) to
+    <out_dir>/knowledge_graph.graphml (opens in Gephi, Cytoscape, yEd) and
+    knowledge_graph.json (networkx node-link format). Each node keeps its type, id and
+    attributes; each edge keeps its relationship name in "rel". Dates become "YYYY-MM-DD"
+    strings and empty values are dropped, because GraphML only stores plain scalars.
+    Edge ids must be unique across the whole file (Gephi / graphology reject duplicates),
+    so each edge gets "e0", "e1", ... instead of the in-memory key, which is just the rel
+    name and only unique per node pair."""
+    def plain(d):
+        return {k: (v if isinstance(v, (str, int, float, bool)) else str(v)) for k, v in d.items() if v is not None}
+
+    h = nx.MultiDiGraph()
+    h.add_nodes_from((n, plain(a)) for n, a in g.nodes(data=True))
+    h.add_edges_from((u, v, f"e{i}", {**plain(a), "rel": k})
+                     for i, (u, v, k, a) in enumerate(g.edges(keys=True, data=True)))
+    os.makedirs(out_dir, exist_ok=True)
+    nx.write_graphml(h, os.path.join(out_dir, "knowledge_graph.graphml"))
+    with open(os.path.join(out_dir, "knowledge_graph.json"), "w") as f:
+        json.dump(nx.node_link_data(h, edges="edges"), f)
 
 
 # ======================================================================================
@@ -503,7 +526,8 @@ def main(argv):
 
     if "--ontology" in argv:
         nodes, edges = write_ontology(g)
-        print(f"Ontology: {len(nodes)} node types, {len(edges)} edge types -> {OUT_DIR}/ontology.mmd")
+        print(f"Ontology: {len(nodes)} node types, {len(edges)} edge types -> {OUT_DIR}/ontology.mmd"
+              f" (full graph -> {OUT_DIR}/knowledge_graph.graphml)")
 
     if not os.path.exists(TRIAGE_FILE):
         sys.exit(f"{TRIAGE_FILE} not found — run incident_triage.py first.")

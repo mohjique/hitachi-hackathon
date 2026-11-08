@@ -61,6 +61,7 @@ The server refuses to overwrite an existing log. Use a new `--out` folder, or pa
 - `traces/`, one trace per event
 - `agent_graph.mmd`, the agent workflow diagram generated from the code
 - `ontology.mmd` (and `ontology.json`), the ontology diagram
+- `knowledge_graph.graphml` (and `knowledge_graph.json`), the full graph: every record and relationship (opens in Gephi, Cytoscape or yEd)
 - `checks.json`
 - `control_tower.html`
 
