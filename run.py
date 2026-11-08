@@ -5,22 +5,33 @@ runs every event through it, calls the enterprise server, and writes a trace per
 
 The workflow (generated from this code into runs/<run>/agent_graph.mmd)
 -----------------------------------------------------------------------
-    coordinator ─┬─ outage/delay ─▶ supply_chain_planner ─▶ dealer_customer_care ─┬─▶ quality ─┐
-                 ├─ quality ──────────────────────────────────────────────────────┘           │
-                 ├─ escalate only ───────────────────────────────────────────────────────────▶ dry_run
-                 └─ noise only ──▶ summarise                                                    │
-                                                    dry_run ─ ok ─────▶ execute ─▶ summarise ─▶ END
-                                                            └ failed ─▶ fail_safe ─▶ execute
+Node names are "<agent>_<what it does>", so the diagram reads as a sentence and the four
+agents (coordinator + three specialists) stay visible.
 
-  coordinator           reads the message (incident_triage.py) and looks up what each real
-                        incident touches (graph.py); decides the route
-  supply_chain_planner  reschedules / transfers affected production orders  (agents.py)
-  dealer_customer_care  one notice per dealer, loaners by priority          (agents.py)
-  quality               hold lot, stop sale, contact owners                 (agents.py)
-  dry_run               plays the whole plan against a private copy of the enterprise rules
-  fail_safe             if ANY planned call would fail: drop the plan, escalate to a human
-  execute               sends the calls to the server (live) or skips (dry mode)
-  summarise             Gemini writes a short summary + reason from the facts in the trace
+  coordinator_read_message
+    ├─ noise only ──────▶ write_audit_summary ─▶ END
+    ├─ escalate only ───▶ safety_check_plan
+    └─ real incident ───▶ coordinator_find_affected
+                            ├─ outage / delay ─▶ planner_reschedule_builds ─▶ dispatcher_notify_and_loan
+                            │                      ─▶ inspector_hold_and_recall (only if there is also a quality hold)
+                            │                      ─▶ safety_check_plan
+                            └─ quality hold ───▶ inspector_hold_and_recall ─▶ safety_check_plan
+
+  safety_check_plan
+    ├─ every call OK ───▶ send_to_server ─▶ write_audit_summary ─▶ END
+    └─ any call fails ──▶ reject_plan_escalate ─▶ send_to_server ─▶ write_audit_summary ─▶ END
+
+  coordinator_read_message    Coordinator: the LLM reads the message (incident_triage.py) ->
+                              ACT / ESCALATE / NO ACTION per incident
+  coordinator_find_affected   Coordinator: walks the knowledge graph (graph.py) for every ACT
+                              incident and picks the specialists
+  planner_reschedule_builds   Supply Chain Planner: reschedule / transfer affected orders (agents.py)
+  dispatcher_notify_and_loan  Customer Care Dispatcher: one notice per dealer, loaners by priority
+  inspector_hold_and_recall   Quality Inspector: hold lot, stop sale, contact owners
+  safety_check_plan           plays the whole plan against a private copy of the enterprise rules
+  reject_plan_escalate        if ANY planned call would fail: drop the plan, escalate to a human
+  send_to_server              sends the calls to the server (live) or skips (dry mode)
+  write_audit_summary         what each agent did, built from the trace; no LLM
 
 Why LangGraph: the routing above is declared once as a graph (and drawn from the code),
 the agents share one typed state (slots + loaner pools for compound events), and every
@@ -36,11 +47,9 @@ How to run
   python run.py --live --out runs/final
 
   Options:  E-01 E-09 ...   only these events
-            --no-summary    skip the Gemini summary (template sentence instead)
             --url URL       server address (default http://127.0.0.1:8000)
 """
 
-import hashlib
 import json
 import operator
 import os
@@ -48,7 +57,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from collections import Counter
+from collections import Counter, defaultdict
 from typing import Annotated, Any, TypedDict
 
 from langgraph.graph import END, START, StateGraph
@@ -60,7 +69,6 @@ from enterprise import Enterprise
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(HERE, "data")
-SUMMARY_CACHE = os.path.join(HERE, "runs", "summary_cache")
 
 # Read-only tools: free, never penalised, and not "actions" for rule 9.
 READ_TOOLS = {"mes.get_schedule", "crm.loaner_availability"}
@@ -72,7 +80,7 @@ READ_TOOLS = {"mes.get_schedule", "crm.loaner_availability"}
 
 class EventState(TypedDict, total=False):
     event: dict                 # the raw event {event_id, received_at, source, text}
-    config: dict                # mode ("dry"/"live"), server url, summary on/off
+    config: dict                # mode ("dry"/"live"), server url, refresh
     triage: dict                # incident_triage.triage_event() output
     graph_results: dict         # incident index -> graph.py traversal result
     disruptions: list           # [(index, result)] outages + delays
@@ -85,7 +93,7 @@ class EventState(TypedDict, total=False):
     calls: Annotated[list, operator.add]     # planned calls; each agent ADDS its own
     failures: list              # dry-run failures
     results: list               # one result per executed call
-    summary: dict               # {"summary": ..., "reason": ..., "by": "gemini"/"template"}
+    summary: dict               # one line per agent + "summary" (all of them) + "by"
     visited: Annotated[list, operator.add]   # which nodes ran, in order (for the UI)
     log: Annotated[list, operator.add]       # human-readable trace lines, per node
 
@@ -94,87 +102,111 @@ def _log(node, text):
     return {"node": node, "text": text}
 
 
+# Node names: "<agent>_<what it does>" so the drawn graph reads at a glance.
+READ_MESSAGE = "coordinator_read_message"     # Coordinator, LLM step
+FIND_AFFECTED = "coordinator_find_affected"   # Coordinator, knowledge-graph step
+RESCHEDULE = "planner_reschedule_builds"      # Supply Chain Planner
+NOTIFY_LOAN = "dispatcher_notify_and_loan"          # Customer Care Dispatcher
+HOLD_RECALL = "inspector_hold_and_recall"       # Quality Inspector
+SAFETY_CHECK = "safety_check_plan"            # guardrail: dry run against enterprise.py
+REJECT = "reject_plan_escalate"               # guardrail: failing plan -> human
+SEND = "send_to_server"
+SUMMARY = "write_audit_summary"               # built from the trace, no LLM
+
+
 # ======================================================================================
 # Nodes
 # ======================================================================================
 
-def coordinator(state: EventState):
-    """Read the message, then look up every real incident in the knowledge graph."""
+def coordinator_read_message(state: EventState):
+    """Coordinator, step 1: the LLM reads the message; code checks every value it returns.
+    Each incident ends as ACT, ESCALATE or NO_ACTION (incident_triage.py)."""
     ev = state["event"]
-    tri = triage.triage_event(ev)                     # LLM + checks (cached per event)
-    graph_results, disruptions, quality_findings, escalations, notes, log = {}, [], [], [], [], []
-    g = GRAPH
-
+    tri = triage.triage_event(ev, refresh=state["config"].get("refresh", False))  # cached per event
+    escalations, notes, log = [], [], []
     for i, inc in enumerate(tri["incidents"], 1):
-        log.append(_log("coordinator", f"incident {i}: {inc['verdict']} {inc['category']}"
+        log.append(_log(READ_MESSAGE, f"incident {i}: {inc['verdict']} {inc['category']}"
                         + (f" — {inc['verdict_reason']}" if inc.get("verdict_reason") else "")))
         if inc["verdict"] == "NO_ACTION":
             notes.append(f"incident {i}: noise, no action ({inc.get('llm_reason') or 'not about operations'})")
         elif inc["verdict"] == "ESCALATE":
             escalations.append((i, inc.get("verdict_reason") or "unclear report"))
-        else:
-            try:
-                res = kg.affected(g, inc)
-            except (ValueError, KeyError) as e:
-                escalations.append((i, f"graph lookup failed: {e}"))
-                log.append(_log("coordinator", f"incident {i}: graph lookup failed, escalating ({e})"))
-                continue
-            graph_results[i] = res
-            (quality_findings if res["kind"] == "quality_hold" else disruptions).append((i, res))
-            log.append(_log("coordinator", f"incident {i}: graph path {res['path_schema']}"))
-
-    return {"triage": tri, "graph_results": graph_results, "disruptions": disruptions,
-            "quality_findings": quality_findings, "escalations": escalations, "notes": notes,
-            "shared": agents.SharedState(g), "visited": ["coordinator"], "log": log}
+    return {"triage": tri, "escalations": escalations, "notes": notes,
+            "graph_results": {}, "disruptions": [], "quality_findings": [],
+            "visited": [READ_MESSAGE], "log": log}
 
 
-def supply_chain_planner(state: EventState):
+def coordinator_find_affected(state: EventState):
+    """Coordinator, step 2: walk the knowledge graph for every ACT incident (graph.py)
+    and sort the results for the specialists."""
+    graph_results, disruptions, quality_findings, log = {}, [], [], []
+    escalations = list(state["escalations"])
+    for i, inc in enumerate(state["triage"]["incidents"], 1):
+        if inc["verdict"] != "ACT":
+            continue
+        try:
+            res = kg.affected(GRAPH, inc)
+        except (ValueError, KeyError) as e:
+            escalations.append((i, f"graph lookup failed: {e}"))
+            log.append(_log(FIND_AFFECTED, f"incident {i}: graph lookup failed, escalating ({e})"))
+            continue
+        graph_results[i] = res
+        (quality_findings if res["kind"] == "quality_hold" else disruptions).append((i, res))
+        log.append(_log(FIND_AFFECTED, f"incident {i}: graph path {res['path_schema']}"))
+    return {"graph_results": graph_results, "disruptions": disruptions, "quality_findings": quality_findings,
+            "escalations": escalations, "shared": agents.SharedState(GRAPH),
+            "visited": [FIND_AFFECTED], "log": log}
+
+
+def planner_reschedule_builds(state: EventState):
+    """Supply Chain Planner: move every affected production order to its earliest legal slot."""
     calls, moves, unplaced = agents.supply_chain_planner(state["shared"], state["disruptions"])
     transfers = sum(1 for c in calls if c["tool"] == "mes.transfer")
     escalations = state["escalations"] + [(None, f"no feasible slot for {po} in the planning window")
                                           for po in unplaced]
-    return {"calls": calls, "moves": moves, "escalations": escalations, "visited": ["supply_chain_planner"],
-            "log": [_log("supply_chain_planner", f"{len(calls)} orders placed ({transfers} transferred), "
-                                                 f"{len(unplaced)} could not be placed")]}
+    return {"calls": calls, "moves": moves, "escalations": escalations, "visited": [RESCHEDULE],
+            "log": [_log(RESCHEDULE, f"{len(calls)} orders placed ({transfers} transferred), "
+                                     f"{len(unplaced)} could not be placed")]}
 
 
-def dealer_customer_care(state: EventState):
-    calls, info = agents.dealer_customer_care(state["shared"], state["disruptions"], state.get("moves", {}))
+def dispatcher_notify_and_loan(state: EventState):
+    """Customer Care Dispatcher: one notice per dealer, loaners by priority."""
+    calls, info = agents.customer_care_dispatcher(state["shared"], state["disruptions"], state.get("moves", {}))
     n = Counter(c["tool"] for c in calls)
-    return {"calls": calls, "loaners": info, "visited": ["dealer_customer_care"],
-            "log": [_log("dealer_customer_care", f"{n['dealer.notify']} dealer notices, {len(info['loaned'])} loaners "
-                                                 f"assigned, {len(info['pool_empty'])} eligible without a loaner (pool empty)")]}
+    return {"calls": calls, "loaners": info, "visited": [NOTIFY_LOAN],
+            "log": [_log(NOTIFY_LOAN, f"{n['dealer.notify']} dealer notices, {len(info['loaned'])} loaners "
+                                      f"assigned, {len(info['pool_empty'])} eligible without a loaner (pool empty)")]}
 
 
-def quality(state: EventState):
-    calls = agents.quality(state["quality_findings"], GRAPH)
+def inspector_hold_and_recall(state: EventState):
+    """Quality Inspector: hold the lot, stop sale of unsold vehicles, contact owners of sold ones."""
+    calls = agents.quality_inspector(state["quality_findings"], GRAPH)
     n = Counter(c["tool"] for c in calls)
-    return {"calls": calls, "visited": ["quality"],
-            "log": [_log("quality", f"{n['quality.hold_lot']} lot hold(s), {n['dealer.stop_sale']} stop-sale calls, "
-                                    f"{n['crm.notify_customer']} owners contacted")]}
+    return {"calls": calls, "visited": [HOLD_RECALL],
+            "log": [_log(HOLD_RECALL, f"{n['quality.hold_lot']} lot hold(s), {n['dealer.stop_sale']} stop-sale calls, "
+                                      f"{n['crm.notify_customer']} owners contacted")]}
 
 
-def dry_run(state: EventState):
+def safety_check_plan(state: EventState):
     """Add escalations, then play the whole plan against a private copy of enterprise.py."""
     esc = [agents._call("escalate", {"reason": f"{state['event']['event_id']}: {r}"}, "coordinator",
                         [i] if i else [], r) for i, r in state["escalations"]]
     plan = {"event_id": state["event"]["event_id"], "calls": state["calls"] + esc}
     failures = agents.dry_run(ENTERPRISE, plan)
-    return {"calls": esc, "failures": failures, "visited": ["dry_run"],
-            "log": [_log("dry_run", f"{len(plan['calls'])} calls checked, {len(failures)} would fail")]}
+    return {"calls": esc, "failures": failures, "visited": [SAFETY_CHECK],
+            "log": [_log(SAFETY_CHECK, f"{len(plan['calls'])} calls checked, {len(failures)} would fail")]}
 
 
-def fail_safe(state: EventState):
+def reject_plan_escalate(state: EventState):
     """A plan with any failing call is not trusted. Replace it with one escalation."""
     first = state["failures"][0]
     reason = (f"{state['event']['event_id']}: automatic plan rejected — {len(state['failures'])} call(s) "
               f"would fail (first: {first['tool']} {first['error']}). Needs a human.")
-    return {"escalations": [(None, reason)], "visited": ["fail_safe"],
-            "log": [_log("fail_safe", reason)]}
+    return {"escalations": [(None, reason)], "visited": [REJECT], "log": [_log(REJECT, reason)]}
 
 
-def execute(state: EventState):
-    """Send the calls in order. Dry mode: nothing is sent (the dry run already checked them)."""
+def send_to_server(state: EventState):
+    """Send the calls in order. Dry mode: nothing is sent (the safety check already ran them)."""
     calls = _final_calls(state)
     cfg = state["config"]
     results = []
@@ -187,54 +219,59 @@ def execute(state: EventState):
             results.append(res)
         bad = [r for r in results if not r["ok"]]
         note = f"{len(calls)} calls sent, {len(bad)} failed"
-    return {"results": results, "visited": ["execute"], "log": [_log("execute", note)]}
+    return {"results": results, "visited": [SEND], "log": [_log(SEND, note)]}
 
 
-def summarise(state: EventState):
-    facts = _facts(state)
-    summary = _llm_summary(facts) if state["config"].get("summary", True) else None
-    if not summary:
-        summary = {"summary": _template_summary(facts), "reason": facts["reason_hint"], "by": "template"}
-    return {"summary": summary, "visited": ["summarise"], "log": [_log("summarise", summary["summary"])]}
+def write_audit_summary(state: EventState):
+    """Coordinator: one line per agent on what it did, assembled from the incident schema and
+    the plan (see _build_summary). No LLM call: every fact is already in the trace."""
+    summary = _build_summary(state)
+    return {"summary": summary, "visited": [SUMMARY], "log": [_log(SUMMARY, summary["summary"])]}
 
 
 # ---- routing ----------------------------------------------------------------------------
 
-def route_after_coordinator(state: EventState):
-    if state["disruptions"]:
-        return "supply_chain_planner"
-    if state["quality_findings"]:
-        return "quality"
+def route_after_read(state: EventState):
+    if any(i["verdict"] == "ACT" for i in state["triage"]["incidents"]):
+        return FIND_AFFECTED
     if state["escalations"]:
-        return "dry_run"
-    return "summarise"                    # noise only: nothing to do
+        return SAFETY_CHECK               # escalate only: no graph lookup needed
+    return SUMMARY                        # noise only: nothing to do
+
+
+def route_after_find(state: EventState):
+    if state["disruptions"]:
+        return RESCHEDULE
+    if state["quality_findings"]:
+        return HOLD_RECALL
+    return SAFETY_CHECK                   # every lookup failed -> escalations only
 
 
 def route_after_care(state: EventState):
-    return "quality" if state["quality_findings"] else "dry_run"
+    return HOLD_RECALL if state["quality_findings"] else SAFETY_CHECK
 
 
-def route_after_dry_run(state: EventState):
-    return "fail_safe" if state["failures"] else "execute"
+def route_after_check(state: EventState):
+    return REJECT if state["failures"] else SEND
 
 
 def build_app():
     g = StateGraph(EventState)
-    for name, fn in [("coordinator", coordinator), ("supply_chain_planner", supply_chain_planner),
-                     ("dealer_customer_care", dealer_customer_care), ("quality", quality),
-                     ("dry_run", dry_run), ("fail_safe", fail_safe), ("execute", execute),
-                     ("summarise", summarise)]:
+    for name, fn in [(READ_MESSAGE, coordinator_read_message), (FIND_AFFECTED, coordinator_find_affected),
+                     (RESCHEDULE, planner_reschedule_builds), (NOTIFY_LOAN, dispatcher_notify_and_loan),
+                     (HOLD_RECALL, inspector_hold_and_recall), (SAFETY_CHECK, safety_check_plan),
+                     (REJECT, reject_plan_escalate), (SEND, send_to_server), (SUMMARY, write_audit_summary)]:
         g.add_node(name, fn)
-    g.add_edge(START, "coordinator")
-    g.add_conditional_edges("coordinator", route_after_coordinator,
-                            ["supply_chain_planner", "quality", "dry_run", "summarise"])
-    g.add_edge("supply_chain_planner", "dealer_customer_care")
-    g.add_conditional_edges("dealer_customer_care", route_after_care, ["quality", "dry_run"])
-    g.add_edge("quality", "dry_run")
-    g.add_conditional_edges("dry_run", route_after_dry_run, ["execute", "fail_safe"])
-    g.add_edge("fail_safe", "execute")
-    g.add_edge("execute", "summarise")
-    g.add_edge("summarise", END)
+    g.add_edge(START, READ_MESSAGE)
+    g.add_conditional_edges(READ_MESSAGE, route_after_read, [FIND_AFFECTED, SAFETY_CHECK, SUMMARY])
+    g.add_conditional_edges(FIND_AFFECTED, route_after_find, [RESCHEDULE, HOLD_RECALL, SAFETY_CHECK])
+    g.add_edge(RESCHEDULE, NOTIFY_LOAN)
+    g.add_conditional_edges(NOTIFY_LOAN, route_after_care, [HOLD_RECALL, SAFETY_CHECK])
+    g.add_edge(HOLD_RECALL, SAFETY_CHECK)
+    g.add_conditional_edges(SAFETY_CHECK, route_after_check, [SEND, REJECT])
+    g.add_edge(REJECT, SEND)
+    g.add_edge(SEND, SUMMARY)
+    g.add_edge(SUMMARY, END)
     return g.compile()
 
 
@@ -243,8 +280,8 @@ def build_app():
 # ======================================================================================
 
 def _final_calls(state):
-    """The calls to execute. After fail_safe, only the escalation survives."""
-    if "fail_safe" in state.get("visited", []):
+    """The calls to execute. After reject_plan_escalate, only the escalation survives."""
+    if REJECT in state.get("visited", []):
         reason = state["escalations"][-1][1]
         return [agents._call("escalate", {"reason": reason}, "coordinator", [], reason)]
     return state.get("calls", [])
@@ -267,84 +304,122 @@ def _post(url, event_id, tool, args):
         return {"ok": False, "sent": False, "response": {"error": f"server unreachable: {e}"}}
 
 
-def _facts(state):
-    """Everything the summary may say — and nothing else."""
+# ---- the audit summary: built from the incident schema and the plan, no LLM ----------------
+# Every number, name and date comes from the trace, so the text can't contradict the actions,
+# is identical on every run, and costs no tokens.
+
+def _nice(d):
+    return agents._nice(str(d)) if d else "?"
+
+
+def _span(a, b):
+    """Mar 19 / Mar 19–22 / Mar 31–Apr 2"""
+    a, b = _nice(a), _nice(b)
+    if a == b:
+        return a
+    return f"{a}–{b.split()[1]}" if a.split()[0] == b.split()[0] else f"{a}–{b}"
+
+
+def _name(kind, key):
+    """Readable name from the knowledge graph, e.g. Plant P_KY -> 'Lexington (P_KY)'."""
+    node = GRAPH.nodes.get(kg.nid(kind, key)) if key else None
+    if not node or "name" not in node:
+        return key or "?"
+    name = node["name"].replace("Wacky Wheels ", "")
+    return f"{name} ({key})" if kind == "Plant" else name
+
+
+def _n(count, one, many=None):
+    return f"{count} {one if count == 1 else (many or one + 's')}"
+
+
+def _describe(inc, res):
+    """One sentence on what an incident is."""
+    cat, verdict = inc["category"], inc["verdict"]
+    if verdict == "NO_ACTION":
+        why = (inc.get("llm_reason") or "").rstrip(".")
+        return "The message is not about operations" + (f": {why[0].lower() + why[1:]}." if why else ".")
+    if verdict == "ESCALATE":
+        return f"Not actionable: {(inc.get('verdict_reason') or 'unclear report').rstrip('.')}."
+    if cat == "plant_outage":
+        return f"{_name('Plant', inc['plant_id'])} is down {_span(inc['start'], inc['end'])}."
+    if cat == "supplier_delay":
+        return (f"Shipment {inc['shipment_id']} of {_name('Part', inc['part_id'])} from {_name('Supplier', inc['supplier_id'])} "
+                f"to {_name('Plant', inc['plant_id'])} is late: due {_nice(inc['start'])}, now arriving {_nice(inc['end'])}.")
+    if cat == "quality_hold" and res:
+        return (f"Lot {res['lot_id']} of {_name('Part', res['part_id'])} from {_name('Supplier', inc.get('supplier_id'))} is defective; "
+                f"it went into vehicles built at {_name('Plant', res['plant_id'])} {_span(res['window']['first'], res['window']['last'])}.")
+    return f"{cat.replace('_', ' ').capitalize()}."
+
+
+def _build_summary(state):
+    """What each agent says about this event, assembled from the trace (no LLM).
+
+    coordinator: what the message reports (or why nothing / a human is needed)
+    planner:     where the affected production orders went
+    dispatcher:  dealer notices and loaners
+    inspector:   lot hold, stop sales, owners contacted
+    summary:     all of the above in one paragraph (pop-up header, terminal, trace)
+    An agent that did not take part gets None."""
     calls = _final_calls(state)
-    tools = Counter(c["tool"] for c in calls)
-    incidents = [{"verdict": i["verdict"], "category": i["category"], "plant": i.get("plant_id"),
-                  "part": i.get("part_id"), "shipment": i.get("shipment_id"), "lots": i.get("lots"),
-                  "dates": [i.get("start"), i.get("end")], "reason": i.get("verdict_reason") or i.get("llm_reason")}
-                 for i in state["triage"]["incidents"]]
-    moves = state.get("moves") or {}
-    transfers = {po: m["to"] for po, m in moves.items() if m["how"] == "transfer"}
-    if "fail_safe" in state.get("visited", []):
-        hint = "The automatic plan failed its safety check, so it was handed to a human."
-    elif all(i["verdict"] == "NO_ACTION" for i in incidents):
-        hint = "The message is not about operations, so no action was taken."
-    elif all(i["verdict"] == "ESCALATE" for i in incidents):
-        hint = "The report is unconfirmed or not specific enough to act on, so it was escalated."
+    incidents = state["triage"]["incidents"]
+    graph_results = state.get("graph_results") or {}
+    out = {"coordinator": None, "planner": None, "dispatcher": None, "inspector": None}
+
+    # Coordinator: what the message says
+    coord = [_describe(inc, graph_results.get(i)) for i, inc in enumerate(incidents, 1)]
+    if REJECT in state.get("visited", []):
+        coord.append("The plan failed its safety check, so nothing was changed and the event went to a human.")
     else:
-        hint = "Actions follow the policy handbook for each confirmed incident."
-    return {"event_id": state["event"]["event_id"], "message": state["event"]["text"],
-            "incidents": incidents, "tool_counts": dict(tools),
-            "orders_moved": len(moves), "transfers": transfers,
-            "loaners_assigned": len((state.get("loaners") or {}).get("loaned", [])),
-            "loaner_shortfall": len((state.get("loaners") or {}).get("pool_empty", [])),
-            "failed_calls": sum(1 for r in state.get("results", []) if not r["ok"]),
-            "reason_hint": hint}
+        if any(c["tool"] == "escalate" for c in calls):
+            coord.append("Escalated to a human.")
+        if not calls:
+            coord.append("No action taken.")
+    out["coordinator"] = " ".join(coord)
 
+    if REJECT not in state.get("visited", []):
+        # Supply Chain Planner: where the orders went
+        moves = state.get("moves") or {}
+        same = defaultdict(list)
+        for po, m in moves.items():
+            if m["how"] == "reschedule":
+                same[m["to"][0]].append(m["to"][1])
+        transfers = [(po, m["to"]) for po, m in sorted(moves.items()) if m["how"] == "transfer"]
+        parts = [f"{_n(len(days), 'production order') if k == 0 else len(days)} at {_name('Plant', plant)} for {_span(min(days), max(days))}"
+                 for k, (plant, days) in enumerate(sorted(same.items()))]
+        moved = ("Rescheduled " + "; ".join(parts)) if parts else ""
+        if transfers:
+            shown = ", ".join(f"{po} to {plant} on {_nice(day)}" for po, (plant, day) in transfers[:3])
+            t = f"transferred {_n(len(transfers), 'order')} to another plant ({shown}{', ...' if len(transfers) > 3 else ''})"
+            moved = f"{moved}; {t}" if moved else t[0].upper() + t[1:]
+        if moved:
+            out["planner"] = moved + "."
 
-def _template_summary(f):
-    parts = [f"{i['verdict'].replace('_', ' ').lower()} {i['category'].replace('_', ' ')}" for i in f["incidents"]]
-    t = f["tool_counts"]
-    acts = ", ".join(f"{n} {k}" for k, n in sorted(t.items())) or "no calls"
-    return f"{f['event_id']}: {'; '.join(parts)}. Calls: {acts}."
+        # Customer Care Dispatcher: dealer notices and loaners
+        notices = [c for c in calls if c["tool"] == "dealer.notify"]
+        if notices:
+            orders = sum(len(c["args"]["customer_order_ids"]) for c in notices)
+            text = f"Notified {_n(len(notices), 'dealer')} about their {_n(orders, 'affected customer order')}."
+            loaners = state.get("loaners") or {"loaned": [], "pool_empty": []}
+            got, short = len(loaners["loaned"]), len(loaners["pool_empty"])
+            if got + short:
+                text += (f" Assigned loaners to {got} of {_n(got + short, 'eligible Platinum/Gold customer')}"
+                         + (f"; {short} missed out because their dealer's pool was empty." if short else "."))
+            else:
+                text += " No affected customer is Platinum or Gold, so no loaners were due."
+            out["dispatcher"] = text
 
+        # Quality Inspector: lot hold, stop sales, owners
+        lots = [c["args"]["lot_id"] for c in calls if c["tool"] == "quality.hold_lot"]
+        if lots:
+            stops = [c for c in calls if c["tool"] == "dealer.stop_sale"]
+            vins = sum(len(c["args"]["vins"]) for c in stops)
+            owners = sum(1 for c in calls if c["tool"] == "crm.notify_customer")
+            out["inspector"] = (f"Put {', '.join(lots)} on hold, stopped sale of {_n(vins, 'unsold vehicle')} at "
+                                f"{_n(len(stops), 'dealer')} and contacted {_n(owners, 'owner')} of sold vehicles.")
 
-SUMMARY_PROMPT = """You write the audit summary for one event handled by an automotive operations
-control tower. Use ONLY the facts below. Do not invent numbers, names or dates.
-Return JSON with:
-  "summary": 2-3 plain sentences: what the message reported and what was done (with counts).
-  "reason": 1 sentence: why this was the right response under the policy handbook
-            (e.g. noise -> no action; unconfirmed -> escalate; real incident -> rule-based actions).
-
-FACTS:
-{facts}
-"""
-
-
-def _llm_summary(facts):
-    """Gemini writes the summary from the facts. Cached by the facts' fingerprint,
-    so re-runs are free and identical. Returns None on any failure (template is used)."""
-    os.makedirs(SUMMARY_CACHE, exist_ok=True)
-    blob = json.dumps(facts, sort_keys=True, default=str)
-    key = hashlib.sha256(blob.encode()).hexdigest()[:16]
-    path = os.path.join(SUMMARY_CACHE, f"{facts['event_id']}-{key}.json")
-    if os.path.exists(path):
-        with open(path) as f:
-            return json.load(f)
-    try:
-        from google import genai
-        from google.genai import types
-        api_key = os.environ.get("GEMINI_API_KEY")       # loaded from .env by incident_triage
-        if not api_key:
-            return None
-        client = genai.Client(api_key=api_key)
-        r = client.models.generate_content(
-            model=triage.GEMINI_MODEL,
-            contents=SUMMARY_PROMPT.format(facts=blob),
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json", temperature=0,
-                response_schema={"type": "OBJECT", "properties": {"summary": {"type": "STRING"},
-                                                                  "reason": {"type": "STRING"}},
-                                 "required": ["summary", "reason"]}))
-        out = json.loads(r.text)
-        out["by"] = triage.GEMINI_MODEL
-    except Exception as e:  # noqa: BLE001 — a summary must never break the run
-        print(f"  (summary fell back to template: {e})")
-        return None
-    with open(path, "w") as f:
-        json.dump(out, f, indent=2)
+    out["summary"] = " ".join(v for v in (out["coordinator"], out["planner"], out["dispatcher"], out["inspector"]) if v)
+    out["by"] = "rules (no LLM)"
     return out
 
 
@@ -356,8 +431,49 @@ GRAPH = None        # the knowledge graph (built once)
 ENTERPRISE = None   # local copy of the enterprise rules, for dry runs
 
 
-def main(argv):
+def setup():
+    """Build the knowledge graph, the dry-run copy of the enterprise systems, and the
+    LangGraph app. Call once; reuse the returned app for every event."""
     global GRAPH, ENTERPRISE
+    if GRAPH is None:
+        GRAPH = kg.build_graph()
+        ENTERPRISE = Enterprise(DATA_DIR)
+    return build_app()
+
+
+def process_event(app, ev, config, trace_dir):
+    """Run ONE event through the whole workflow and write its trace file.
+    Returns the trace dict (the same thing that is saved to <trace_dir>/<event_id>.json)."""
+    t0 = time.time()
+    final = app.invoke({"event": ev, "config": config, "calls": [], "visited": [], "log": []})
+    calls = _final_calls(final)
+    results = final.get("results", [])
+    trace = {
+        "event": ev,
+        "mode": config["mode"],
+        "model": final["triage"].get("model"),
+        "agents_visited": final["visited"],
+        "triage": final["triage"],
+        "graph": {str(i): {k: r[k] for k in ("kind", "path_schema", "notes", "example_path", "edges")}
+                  for i, r in final.get("graph_results", {}).items()},
+        "notes": final.get("notes", []),
+        "calls": [{**c, "result": r} for c, r in zip(calls, results)],
+        "dry_run_failures": final.get("failures", []),
+        "loaners": final.get("loaners"),
+        "summary": final["summary"],
+        "log": final["log"],
+        "seconds": round(time.time() - t0, 2),
+    }
+    # Normalise to plain JSON (dates -> "YYYY-MM-DD" strings) so callers get exactly what
+    # is saved on disk — the checker and the UI read traces in that form.
+    trace = json.loads(json.dumps(trace, default=str))
+    os.makedirs(trace_dir, exist_ok=True)
+    with open(os.path.join(trace_dir, f"{ev['event_id']}.json"), "w", encoding="utf-8") as f:
+        json.dump(trace, f, indent=2)
+    return trace
+
+
+def main(argv):
     live = "--live" in argv
     mode = "live" if live else "dry"
     url = argv[argv.index("--url") + 1] if "--url" in argv else "http://127.0.0.1:8000"
@@ -381,50 +497,28 @@ def main(argv):
     if wanted:
         events = [e for e in events if e["event_id"] in wanted]
 
-    GRAPH = kg.build_graph()
-    ENTERPRISE = Enterprise(DATA_DIR)
-    app = build_app()
+    app = setup()
     os.makedirs(trace_dir, exist_ok=True)
     with open(os.path.join(HERE, out_dir, "agent_graph.mmd"), "w") as f:
         f.write(app.get_graph().draw_mermaid())
 
-    config = {"mode": mode, "url": url, "summary": "--no-summary" not in argv}
+    config = {"mode": mode, "url": url, "refresh": "--refresh" in argv}
     print(f"Mode: {mode.upper()}  |  {len(events)} events  |  traces -> {trace_dir}")
     totals = Counter()
     for ev in events:
-        t0 = time.time()
-        final = app.invoke({"event": ev, "config": config, "calls": [], "visited": [], "log": []})
-        calls = _final_calls(final)
-        results = final.get("results", [])
-        failed = sum(1 for r in results if not r["ok"])
+        trace = process_event(app, ev, config, trace_dir)
+        calls = trace["calls"]
+        failed = sum(1 for c in calls if not c["result"]["ok"])
         kinds = {c["tool"] for c in calls if c["tool"] not in READ_TOOLS}
         totals.update(calls=len(calls), failed=failed)
 
-        trace = {
-            "event": ev,
-            "mode": mode,
-            "model": final["triage"].get("model"),
-            "agents_visited": final["visited"],
-            "triage": final["triage"],
-            "graph": {str(i): {k: r[k] for k in ("kind", "path_schema", "notes", "example_path", "edges")}
-                      for i, r in final.get("graph_results", {}).items()},
-            "notes": final.get("notes", []),
-            "calls": [{**c, "result": r} for c, r in zip(calls, results)],
-            "dry_run_failures": final.get("failures", []),
-            "loaners": final.get("loaners"),
-            "summary": final["summary"],
-            "log": final["log"],
-            "seconds": round(time.time() - t0, 2),
-        }
-        with open(os.path.join(trace_dir, f"{ev['event_id']}.json"), "w", encoding="utf-8") as f:
-            json.dump(trace, f, indent=2, default=str)
-
         print("=" * 88)
-        print(f"{ev['event_id']}  path: {' → '.join(final['visited'])}")
+        print(f"{ev['event_id']}  path: {' → '.join(trace['agents_visited'])}")
         print(f"  {len(calls)} calls ({len(kinds)} kinds of action), {failed} failed"
-              + ("  [FAIL-SAFE: escalated]" if "fail_safe" in final["visited"] else ""))
-        print(f"  {final['summary']['summary']}")
-        print(f"  why: {final['summary']['reason']}  [{final['summary']['by']}]")
+              + ("  [FAIL-SAFE: escalated]" if REJECT in trace["agents_visited"] else ""))
+        for agent in ("coordinator", "planner", "dispatcher", "inspector"):
+            if trace["summary"].get(agent):
+                print(f"  {agent:<11} {trace['summary'][agent]}")
 
     print("=" * 88)
     print(f"Done: {totals['calls']} calls, {totals['failed']} failed. Agent diagram: {out_dir}/agent_graph.mmd")

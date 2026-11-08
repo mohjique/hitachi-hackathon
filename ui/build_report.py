@@ -20,6 +20,7 @@ How to run
   python ui/build_report.py runs/dry     # a specific run
 """
 
+import base64
 import glob
 import json
 import os
@@ -86,7 +87,74 @@ def short_args(tool, a):
     return json.dumps(a)[:90]
 
 
-def build(run_dir):
+def event_payload(g, t, chk=None):
+    """Turn one trace (from run.py) into what the page shows for that event.
+    Shared by this static builder and by app.py (the live Play-button app)."""
+    ev = t["event"]
+    incidents = [{k: inc.get(k) for k in ("verdict", "category", "plant_id", "part_id", "supplier_id",
+                                          "shipment_id", "lots", "start", "end", "verdict_reason",
+                                          "llm_reason", "trace", "quote")}
+                 for inc in t["triage"]["incidents"]]
+    graphs = []
+    for idx, gr in sorted(t.get("graph", {}).items(), key=lambda kv: int(kv[0])):
+        edges = [tuple(e) for e in gr["edges"]]
+        nodes = sorted({u for u, _, v in edges} | {v for u, _, v in edges})
+        graphs.append({"idx": int(idx), "kind": gr["kind"], "label": KIND_LABEL[gr["kind"]],
+                       "schema": gr["path_schema"], "notes": gr["notes"],
+                       "counts": dict(Counter(g.nodes[n]["type"] for n in nodes)),
+                       "rels": sorted({r for _, r, _ in edges}),
+                       "nodes": [node_info(g, n) for n in nodes],
+                       "edges": [[u, r, v] for u, r, v in edges]})
+    calls = []
+    for c in t["calls"]:
+        res = c.get("result", {})
+        calls.append({"tool": c["tool"], "agent": c["agent"], "short": short_args(c["tool"], c["args"]),
+                      "args": c["args"], "why": c.get("why", ""), "path": c.get("path", []),
+                      "incidents": c.get("incidents", []), "ok": res.get("ok", True),
+                      "sent": res.get("sent", False), "response": res.get("response")})
+    return {
+        "id": ev["event_id"], "received_at": ev.get("received_at"), "source": ev.get("source"),
+        "text": ev["text"], "visited": t["agents_visited"], "incidents": incidents,
+        "summary": t["summary"], "checks": chk, "graphs": graphs, "calls": calls,
+        "log": t.get("log", []), "loaners": t.get("loaners"), "notes": t.get("notes", []),
+        "kinds": sorted({c["tool"] for c in calls if c["tool"] not in READ_TOOLS}),
+        "seconds": t.get("seconds"),
+    }
+
+
+def ontology_payload(g):
+    node_counts, edge_counts = kg.ontology(g)
+    return {"nodes": dict(node_counts), "edges": [[a, r, b] for (a, r, b) in sorted(edge_counts)],
+            "graph_nodes": g.number_of_nodes(), "graph_edges": g.number_of_edges()}
+
+
+AGENTS = ("coordinator", "planner", "dispatcher", "inspector")
+SPRITE_STATES = ("idle", "working")   # the poses the page uses (see ui/make_sprites.py)
+
+
+def sprites():
+    """The agent sprites (cut by ui/make_sprites.py) as data URIs, so the page stays one
+    self-contained file that works offline."""
+    out = {}
+    for agent in AGENTS:
+        for state in SPRITE_STATES:
+            path = os.path.join(HERE, "sprites", f"{agent}_{state}.png")
+            if os.path.exists(path):
+                with open(path, "rb") as f:
+                    out[f"{agent}_{state}"] = "data:image/png;base64," + base64.b64encode(f.read()).decode()
+    return out
+
+
+def render(data):
+    """Fill ui/template.html with a data payload and return the HTML text."""
+    with open(os.path.join(HERE, "template.html"), encoding="utf-8") as f:
+        html = f.read()
+    data = {**data, "sprites": sprites()}
+    blob = json.dumps(data, separators=(",", ":"), default=str).replace("</", "<\\/")
+    return html.replace("__DATA__", blob)
+
+
+def build(run_dir, g=None):
     files = sorted(glob.glob(os.path.join(run_dir, "traces", "E-*.json")))
     if not files:
         sys.exit(f"No traces in {run_dir}/traces — run run.py first.")
@@ -95,66 +163,25 @@ def build(run_dir):
     if os.path.exists(cpath):
         checks = {c["event_id"]: c for c in json.load(open(cpath))}
 
-    g = kg.build_graph()
-    node_counts, edge_counts = kg.ontology(g)
+    g = g or kg.build_graph()
     events, totals = [], Counter()
     mode = model = None
-
     for path in files:
         t = json.load(open(path, encoding="utf-8"))
         mode, model = t.get("mode"), t.get("model") or model
-        ev = t["event"]
-        incidents = []
-        for inc in t["triage"]["incidents"]:
-            incidents.append({k: inc.get(k) for k in ("verdict", "category", "plant_id", "part_id", "supplier_id",
-                                                      "shipment_id", "lots", "start", "end", "verdict_reason",
-                                                      "llm_reason", "trace", "quote")})
-        graphs = []
-        for idx, gr in sorted(t.get("graph", {}).items(), key=lambda kv: int(kv[0])):
-            nodes = sorted({u for u, _, v in gr["edges"]} | {v for u, _, v in gr["edges"]})
-            types = Counter(g.nodes[n]["type"] for n in nodes)
-            graphs.append({"idx": int(idx), "kind": gr["kind"], "label": KIND_LABEL[gr["kind"]],
-                           "schema": gr["path_schema"], "notes": gr["notes"],
-                           "counts": dict(types), "rels": sorted({r for _, r, _ in gr["edges"]}),
-                           "nodes": [node_info(g, n) for n in nodes],
-                           "edges": [[u, r, v] for u, r, v in gr["edges"]]})
-        calls = []
-        for c in t["calls"]:
-            res = c.get("result", {})
-            calls.append({"tool": c["tool"], "agent": c["agent"], "short": short_args(c["tool"], c["args"]),
-                          "args": c["args"], "why": c.get("why", ""), "path": c.get("path", []),
-                          "incidents": c.get("incidents", []), "ok": res.get("ok", True),
-                          "sent": res.get("sent", False), "response": res.get("response")})
-        n_calls = len(calls)
-        failed = sum(1 for c in calls if not c["ok"])
-        totals.update(events=1, calls=n_calls, failed=failed,
-                      escalated=int(any(c["tool"] == "escalate" for c in calls)))
-        chk = checks.get(ev["event_id"])
-        if chk:
-            totals.update(checked=1, passed=int(not chk["problems"]))
-        events.append({
-            "id": ev["event_id"], "received_at": ev.get("received_at"), "source": ev.get("source"),
-            "text": ev["text"], "visited": t["agents_visited"], "incidents": incidents,
-            "summary": t["summary"], "checks": chk, "graphs": graphs, "calls": calls,
-            "log": t.get("log", []), "loaners": t.get("loaners"), "notes": t.get("notes", []),
-            "kinds": sorted({c["tool"] for c in calls if c["tool"] not in READ_TOOLS}),
-            "seconds": t.get("seconds"),
-        })
+        e = event_payload(g, t, checks.get(t["event"]["event_id"]))
+        events.append(e)
+        totals.update(events=1, calls=len(e["calls"]), failed=sum(1 for c in e["calls"] if not c["ok"]))
+        if e["checks"]:
+            totals.update(checked=1, passed=int(not e["checks"]["problems"]))
 
-    data = {
-        "run": {"dir": os.path.relpath(run_dir, ROOT), "mode": mode, "model": model,
-                "built": datetime.now().strftime("%Y-%m-%d %H:%M"), **totals},
-        "ontology": {"nodes": dict(node_counts),
-                     "edges": [[a, r, b] for (a, r, b) in sorted(edge_counts)],
-                     "graph_nodes": g.number_of_nodes(), "graph_edges": g.number_of_edges()},
-        "events": events,
-    }
-    with open(os.path.join(HERE, "template.html"), encoding="utf-8") as f:
-        html = f.read()
-    blob = json.dumps(data, separators=(",", ":"), default=str).replace("</", "<\\/")
+    data = {"live": False,
+            "run": {"dir": os.path.relpath(run_dir, ROOT), "mode": mode, "model": model,
+                    "built": datetime.now().strftime("%Y-%m-%d %H:%M")},
+            "ontology": ontology_payload(g), "events": events}
     out = os.path.join(run_dir, "control_tower.html")
     with open(out, "w", encoding="utf-8") as f:
-        f.write(html.replace("__DATA__", blob))
+        f.write(render(data))
     return out, totals
 
 

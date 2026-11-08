@@ -16,9 +16,9 @@ Each agent is a plain, deterministic function. In step 3 these same functions be
 LangGraph nodes, unchanged. None of them talks to the server; they only PLAN calls.
 
   Supply Chain Planner     affected production orders -> mes.reschedule / mes.transfer
-  Dealer & Customer Care   affected customer orders   -> dealer.notify, crm.loaner_availability,
+  Customer Care Dispatcher affected customer orders   -> dealer.notify, crm.loaner_availability,
                                                          crm.assign_loaner
-  Quality                  affected vehicles          -> quality.hold_lot, dealer.stop_sale,
+  Quality Inspector        affected vehicles          -> quality.hold_lot, dealer.stop_sale,
                                                          crm.notify_customer
   (Coordinator)            plan_event() below: routes incidents to agents, merges their
                            plans, adds `escalate` for escalated incidents, runs the dry run.
@@ -219,10 +219,10 @@ def supply_chain_planner(state, findings):
 
 
 # ======================================================================================
-# Agent 2 — Dealer & Customer Care
+# Agent 2 — Customer Care Dispatcher
 # ======================================================================================
 
-def dealer_customer_care(state, findings, moves):
+def customer_care_dispatcher(state, findings, moves):
     """Rule 4: one dealer.notify per dealer, listing exactly its affected customer orders.
     Rule 5: loaners for Platinum/Gold customers, ranked across ALL incidents together."""
     # Gather affected customer orders once (a CO is listed once even if two incidents hit it).
@@ -253,7 +253,7 @@ def dealer_customer_care(state, findings, moves):
         calls.append(_call("dealer.notify",
                            {"dealer_id": dealer, "customer_order_ids": [c["customer_order_id"] for c in items],
                             "message": msg},
-                           "dealer_customer_care", [i for c in items for i in c["incidents"]],
+                           "customer_care_dispatcher", [i for c in items for i in c["incidents"]],
                            f"{len(items)} affected customer order(s) at {dealer}",
                            items[0]["path"]))
 
@@ -265,14 +265,14 @@ def dealer_customer_care(state, findings, moves):
         dealer = c["dealer_id"]
         if dealer not in checked:   # free read call; shows the pool size in the trace
             checked.add(dealer)
-            calls.append(_call("crm.loaner_availability", {"dealer_id": dealer}, "dealer_customer_care",
+            calls.append(_call("crm.loaner_availability", {"dealer_id": dealer}, "customer_care_dispatcher",
                                c["incidents"], f"check pool before assigning (planner expects {state.loaners[dealer]})",
                                [kg.nid("Dealer", dealer)]))
         if state.loaners[dealer] > 0:
             state.loaners[dealer] -= 1
             loaned.append(c["customer_order_id"])
             calls.append(_call("crm.assign_loaner", {"customer_order_id": c["customer_order_id"]},
-                               "dealer_customer_care", c["incidents"],
+                               "customer_care_dispatcher", c["incidents"],
                                f"{c['tier']} customer {c['customer_id']}, promised {c['promised_date']}; "
                                f"{dealer} pool now {state.loaners[dealer]}",
                                c["path"]))
@@ -282,23 +282,23 @@ def dealer_customer_care(state, findings, moves):
 
 
 # ======================================================================================
-# Agent 3 — Quality
+# Agent 3 — Quality Inspector
 # ======================================================================================
 
-def quality(findings, g):
+def quality_inspector(findings, g):
     """Rule 6: hold the lot; stop sale of unsold affected vehicles at their dealer;
     contact the owner of each sold affected vehicle (one call per owner)."""
     calls = []
     for i, res in findings:
         part_name = g.nodes[kg.nid("Part", res["part_id"])]["name"]
         lot = res["lot_id"]
-        calls.append(_call("quality.hold_lot", {"lot_id": lot}, "quality", [i],
+        calls.append(_call("quality.hold_lot", {"lot_id": lot}, "quality_inspector", [i],
                            f"{lot}: defective {part_name} used at {res['plant_id']} "
                            f"{res['window']['first']}..{res['window']['last']}",
                            [kg.nid("Lot", lot)]))
         by_vin = {v["vin"]: v for v in res["vehicles"]}
         for dealer, vins in sorted(res["stop_sale"].items()):
-            calls.append(_call("dealer.stop_sale", {"dealer_id": dealer, "vins": vins}, "quality", [i],
+            calls.append(_call("dealer.stop_sale", {"dealer_id": dealer, "vins": vins}, "quality_inspector", [i],
                                f"{len(vins)} unsold vehicle(s) built with {lot}",
                                by_vin[vins[0]]["path"]))
         owners = defaultdict(list)
@@ -310,7 +310,7 @@ def quality(findings, g):
             dealer_name = g.nodes[kg.nid("Dealer", vs[0]["dealer_id"])]["name"]
             msg = (f"Safety notice: your vehicle {vins} may contain a defective {part_name} "
                    f"(lot {lot}). Please contact {dealer_name} to book a free inspection.")
-            calls.append(_call("crm.notify_customer", {"customer_id": cust, "message": msg}, "quality", [i],
+            calls.append(_call("crm.notify_customer", {"customer_id": cust, "message": msg}, "quality_inspector", [i],
                                f"owner of {len(vs)} affected sold vehicle(s)", vs[0]["path"]))
     return calls
 
@@ -344,14 +344,14 @@ def plan_event(g, event):
     summary = {}
     if disruptions:
         sc_calls, moves, unplaced = supply_chain_planner(state, disruptions)
-        dc_calls, loaner_info = dealer_customer_care(state, disruptions, moves)
+        dc_calls, loaner_info = customer_care_dispatcher(state, disruptions, moves)
         calls += sc_calls + dc_calls     # moves first, then notices, then loaners
         summary.update({"moves": {k: {**v, "from": list(v["from"]), "to": list(v["to"])} for k, v in moves.items()},
                         "unplaced": unplaced, **loaner_info})
         for po in unplaced:
             escalations.append((None, f"no feasible slot anywhere for {po} in the planning window"))
     if quality_findings:
-        calls += quality(quality_findings, g)
+        calls += quality_inspector(quality_findings, g)
 
     for i, reason in escalations:
         calls.append(_call("escalate", {"reason": f"{event['event_id']}: {reason}"}, "coordinator",
