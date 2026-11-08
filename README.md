@@ -1,9 +1,37 @@
-# Wacky Wheels Control Tower
+<div align="center">
 
-A multi-agent operations control tower for the **Hack the Highway** challenge. It reads the 15 operational events in `data/events.json`, works out what each one means, finds every affected record in a knowledge graph of the company data, and takes the corrective actions the policy handbook requires through the provided enterprise server.
+# 🏭 Wacky Wheels Control Tower
 
-- **LLM:** Gemini (`gemini-3.5-flash-lite` by default; see [Configuration](#configuration)). It is used only to read each message: one call per event, cached.
-- **Everything else is deterministic Python:** name and date resolution, graph traversal, scheduling, loaners and quality holds. Anything that is graded exactly gives the same answer every run.
+**A multi-agent operations control tower for a just-in-time carmaker**
+*Built for the Hack the Highway datathon*
+
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-agents-1C3C3C)
+![NetworkX](https://img.shields.io/badge/NetworkX-knowledge%20graph-2C7BB6)
+![Gemini](https://img.shields.io/badge/Gemini-3.5%20Flash--Lite-8E75B2?logo=googlegemini&logoColor=white)
+
+</div>
+
+Wacky Wheels keeps no parts inventory, so a late shipment, a plant outage or a defective part lot ripples through production schedules, dealers, loaner cars and owners within days. This control tower reads free-text operational messages, works out what each one means, finds **every affected record** in a knowledge graph of the company, and carries out the corrective actions the policy handbook requires. Messages that are unclear go to a human.
+
+![The control tower: run highlights, the agent briefing for a compound event, the ontology with the traversed path in red, and the event feed](docs/images/control_tower.png)
+
+## Results on the 15 challenge events
+
+| | |
+|---|---|
+| **Events handled** | 15 / 15: 3 supplier delays, 3 plant outages, 3 quality holds, 3 noise, 1 compound, 2 unconfirmed |
+| **Tool calls** | 850 (768 write, 82 free reads), **0 failed** |
+| **Independent policy checker** | **15 / 15 events pass** (`check.py` re-derives the expected outcome from the raw CSVs) |
+| **Escalated to a human** | 2 rumours, with no operational change |
+| **Noise** | 3 messages, **0 tool calls**, with the reason recorded |
+| **LLM usage** | 15 calls in total (one per message, cached) on `gemini-3.5-flash-lite` |
+
+## The idea in one line
+
+> **Use the LLM where language is messy, and code where the policy is exact.**
+
+The LLM only *reads* each message: it splits it into incidents and copies out the exact phrases for names and dates. Everything after that is deterministic Python: quote checks, name and date resolution, graph traversal, scheduling, loaners and quality holds. Every action traces back to a handbook rule and gives the same answer on every run.
 
 ---
 
@@ -116,6 +144,26 @@ The agents share one typed state, so incidents in a compound event use the same 
 | **ESCALATE** | A rumour, a vague report, or any name, date or record that doesn't check out | `escalate` only |
 | **NO ACTION** | Noise: not about operations | none |
 
+### The knowledge graph
+
+Every record in the company data is a node and every link is a named relationship: **16,979 nodes** of 11 types, joined by **26,741 edges** of 16 relationship types (`graph.py`, NetworkX). The colour stripes mark the families: gold for supply, red for production, blue for demand and green for built vehicles.
+
+![Ontology: 11 node types (Supplier, Shipment, Lot, Part, Model, Plant, Production Order, Customer Order, Vehicle, Dealer, Customer) and the 16 relationships between them](docs/images/ontology.png)
+
+Each incident type has its own traversal, and every trace cites the path it walked:
+
+| Incident | Graph path |
+|---|---|
+| Supplier delay | Shipment ─carries→ Part ←needs─ Model ←builds─ Production Order ─fulfils→ Customer Order → Dealer / Customer |
+| Plant outage | Plant ─runs→ Production Order ─fulfils→ Customer Order → Dealer / Customer |
+| Quality hold | Lot ─batch_of→ Part ←needs─ Model ←builds─ Production Order ─produced→ Vehicle → Dealer / Customer |
+
+For example, the supplier delay in the compound event E-01: one late chip shipment to Princeton reaches 5 models, 8 production orders, 67 customer orders, 29 dealers and 67 customers. Customers circled in red are Platinum or Gold, and so eligible for a loaner.
+
+![E-01 incident 2, supplier delay: the full graph path from shipment SH-0190 to every affected customer](docs/images/graph_path_supplier_delay.png)
+
+The full graph is exported with every run as `knowledge_graph.graphml` (opens in Gephi, Cytoscape or yEd) and `knowledge_graph.json`.
+
 ### Policy decisions the handbook leaves open
 
 - **"next Friday"** means the Friday of next week (2027-03-19), so "next Monday" is 2027-03-15. This matches the shipment data.
@@ -137,6 +185,7 @@ The agents share one typed state, so incidents in a compound event use the same 
 | `check.py` | Independent policy checker: replays each event's calls and re-derives the correct outcome from the raw CSVs |
 | `ui/build_report.py`, `ui/template.html` | Control-tower dashboard (light by default, dark-mode toggle): run highlights with Play and Download, the agent briefing (each agent presents its part), ontology plus reasoning trace, event feed and action feed. Each action opens a pop-up with the actions and audit trail |
 | `ui/make_sprites.py`, `ui/sprites/`, `ui/assets/` | Cuts the agent sprite sheet into transparent PNGs, using sheet column 5 for "working" (took part) and column 2 for "idle" (not needed), except the Customer Care Dispatcher, whose idle pose is column 1; the dashboard embeds them. `ui/assets/` holds the source sprite sheet and the colour palette |
+| `docs/images/` | The README's screenshots: control tower, ontology and an example graph path |
 | `enterprise.py`, `enterprise_server.py` | Provided by the organisers (unchanged) |
 | `data/` | Provided company data, events and policy handbook |
 
