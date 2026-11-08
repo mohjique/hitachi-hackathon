@@ -455,12 +455,13 @@ def ontology(g):
     return node_counts, edge_counts
 
 
-def write_ontology(g):
-    """Writes runs/graph/ontology.json and ontology.mmd (a Mermaid diagram — paste it into
-    any Mermaid viewer, GitHub, or a Markdown preview to see the picture)."""
+def write_ontology(g, out_dir=OUT_DIR):
+    """Writes <out_dir>/ontology.json and ontology.mmd (a Mermaid diagram — paste it into
+    any Mermaid viewer, GitHub, or a Markdown preview to see the picture).
+    run.py and app.py also call this, so every run folder contains the ontology diagram."""
     node_counts, edge_counts = ontology(g)
-    os.makedirs(OUT_DIR, exist_ok=True)
-    with open(os.path.join(OUT_DIR, "ontology.json"), "w") as f:
+    os.makedirs(out_dir, exist_ok=True)
+    with open(os.path.join(out_dir, "ontology.json"), "w") as f:
         json.dump({"node_types": dict(node_counts),
                    "edge_types": [{"from": a, "rel": r, "to": b, "count": c}
                                   for (a, r, b), c in sorted(edge_counts.items())]}, f, indent=2)
@@ -469,7 +470,7 @@ def write_ontology(g):
         lines.append(f'    {t}["{t}<br/>{c:,}"]')
     for (a, r, b), c in sorted(edge_counts.items()):
         lines.append(f"    {a} -->|{r}| {b}")
-    with open(os.path.join(OUT_DIR, "ontology.mmd"), "w") as f:
+    with open(os.path.join(out_dir, "ontology.mmd"), "w") as f:
         f.write("\n".join(lines) + "\n")
     return node_counts, edge_counts
 

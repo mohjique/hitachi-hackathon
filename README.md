@@ -60,10 +60,11 @@ The server refuses to overwrite an existing log. Use a new `--out` folder, or pa
 - `action_log.jsonl`, the graded log written by the server
 - `traces/`, one trace per event
 - `agent_graph.mmd`, the agent workflow diagram generated from the code
+- `ontology.mmd` (and `ontology.json`), the ontology diagram
 - `checks.json`
 - `control_tower.html`
 
-Also include `runs/graph/ontology.mmd` (from `python graph.py --ontology`), the ontology diagram.
+Every run writes both diagrams into its own folder (`run.py` and the app's Play button alike), so the run folder holds everything the portal asks for.
 
 ### Rehearsing without the server
 
@@ -103,7 +104,7 @@ safety_check_plan
 | `inspector_hold_and_recall` | Quality Inspector | Holds the lot, stops sale of unsold vehicles, contacts owners of sold ones | No |
 | `safety_check_plan` | Guardrail | Replays the whole plan on a private copy of `enterprise.py` | No |
 | `reject_plan_escalate` | Guardrail | If any call would fail: drops the plan and escalates to a human | No |
-| `send_to_server` | Coordinator | Sends the calls to the enterprise server (skipped in `--dry`) | No |
+| `send_to_server` | Coordinator | Sends the calls to the enterprise server (skipped in `--dry`). If the server refuses a call, it stops there and escalates to a human, saying what went through and what was not sent | No |
 | `write_audit_summary` | Coordinator | Builds each agent's line of the summary from the trace (names, dates, counts); the agents present these on the dashboard | No |
 
 The agents share one typed state, so incidents in a compound event use the same slots and loaner pools.

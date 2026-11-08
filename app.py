@@ -51,6 +51,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 OUT_DIR = os.path.join(HERE, "runs", "live")
 LOG_PATH = os.path.join(OUT_DIR, "action_log.jsonl")
+# Tab icon: the coordinator's column-5 ("working") pose, cut by ui/make_sprites.py
+FAVICON_PATH = os.path.join(HERE, "ui", "sprites", "coordinator_working.png")
 SECONDS_PER_EVENT = 5
 
 # ---- everything the page polls for; guarded by LOCK ------------------------------------
@@ -148,6 +150,7 @@ def run_all(options):
         with open(os.path.join(OUT_DIR, "checks.json"), "w") as f:
             json.dump(results, f, indent=2)
         build(OUT_DIR, g=pipeline.GRAPH)                # static copy of the page for this run
+        pipeline.write_diagrams(APP, OUT_DIR)           # agent_graph.mmd + ontology.mmd for the submission
         with LOCK:
             STATE.update(status="done", next_id=None, next_at=None)
     except Exception as e:  # noqa: BLE001 — show any failure on the page instead of dying silently
@@ -192,6 +195,11 @@ class Handler(BaseHTTPRequestHandler):
                            "run": {"dir": "runs/live", "mode": "live", "model": None, "built": None},
                            "ontology": ONTOLOGY})
             return self._send(200, page, "text/html; charset=utf-8")
+        if u.path == "/favicon.ico":
+            if not os.path.exists(FAVICON_PATH):
+                return self._send(404, json.dumps({"error": "run ui/make_sprites.py first"}))
+            with open(FAVICON_PATH, "rb") as f:
+                return self._send(200, f.read(), "image/png")
         if u.path == "/api/state":
             since = int(parse_qs(u.query).get("since", ["0"])[0])
             return self._send(200, json.dumps(snapshot(since), default=str))

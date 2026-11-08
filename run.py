@@ -30,7 +30,8 @@ agents (coordinator + three specialists) stay visible.
   inspector_hold_and_recall   Quality Inspector: hold lot, stop sale, contact owners
   safety_check_plan           plays the whole plan against a private copy of the enterprise rules
   reject_plan_escalate        if ANY planned call would fail: drop the plan, escalate to a human
-  send_to_server              sends the calls to the server (live) or skips (dry mode)
+  send_to_server              sends the calls to the server (live) or skips (dry mode); if the
+                              server refuses a call, stops there and escalates to a human
   write_audit_summary         what each agent did, built from the trace; no LLM
 
 Why LangGraph: the routing above is declared once as a graph (and drawn from the code),
@@ -93,6 +94,8 @@ class EventState(TypedDict, total=False):
     calls: Annotated[list, operator.add]     # planned calls; each agent ADDS its own
     failures: list              # dry-run failures
     results: list               # one result per executed call
+    sent: list                  # the calls actually executed, in order (results line up with these)
+    live_failure: Any           # None, or {"call", "error", "not_sent"} if the server refused a call
     summary: dict               # one line per agent + "summary" (all of them) + "by"
     visited: Annotated[list, operator.add]   # which nodes ran, in order (for the UI)
     log: Annotated[list, operator.add]       # human-readable trace lines, per node
@@ -206,20 +209,46 @@ def reject_plan_escalate(state: EventState):
 
 
 def send_to_server(state: EventState):
-    """Send the calls in order. Dry mode: nothing is sent (the safety check already ran them)."""
+    """Send the calls in order. Dry mode: nothing is sent (the safety check already ran them).
+
+    Live guardrail: the dry run passed, so a refusal here means the server disagrees with our
+    copy of the rules (or is unreachable). Later calls may depend on the failed one (a dealer
+    notice quoting a new build date that never happened), so we stop at the first failure and
+    escalate to a human with what was done and what was not."""
     calls = _final_calls(state)
     cfg = state["config"]
-    results = []
     if cfg["mode"] == "dry":
-        results = [{"ok": True, "sent": False} for _ in calls]
-        note = f"dry mode: {len(calls)} calls not sent"
+        return {"results": [{"ok": True, "sent": False} for _ in calls], "sent": calls, "live_failure": None,
+                "visited": [SEND], "log": [_log(SEND, f"dry mode: {len(calls)} calls not sent")]}
+
+    event_id = state["event"]["event_id"]
+    sent, results, failure = [], [], None
+    for k, c in enumerate(calls):
+        res = _post(cfg["url"], event_id, c["tool"], c["args"])
+        sent.append(c)
+        results.append(res)
+        if not res["ok"]:
+            failure = {"call": {"tool": c["tool"], "args": c["args"]},
+                       "error": res["response"].get("error", res["response"]), "not_sent": len(calls) - k - 1}
+            break
+
+    log = []
+    if failure is None:
+        log.append(_log(SEND, f"{len(sent)} calls sent, 0 failed"))
     else:
-        for c in calls:
-            res = _post(cfg["url"], state["event"]["event_id"], c["tool"], c["args"])
+        log.append(_log(SEND, f"call {len(sent)} of {len(calls)} failed ({failure['call']['tool']}: {failure['error']}); "
+                              f"stopped, {failure['not_sent']} not sent"))
+        if failure["call"]["tool"] != "escalate":     # don't escalate a failed escalation in a loop
+            reason = (f"{event_id}: live call failed after the plan passed its safety check — "
+                      f"{failure['call']['tool']} {json.dumps(failure['call']['args'], default=str)}: {failure['error']}. "
+                      f"{len(sent) - 1} earlier call(s) went through; {failure['not_sent']} later call(s) were not sent. "
+                      "Needs a human to finish or undo the plan.")
+            esc = agents._call("escalate", {"reason": reason}, "coordinator", [], reason)
+            res = _post(cfg["url"], event_id, "escalate", esc["args"])
+            sent.append(esc)
             results.append(res)
-        bad = [r for r in results if not r["ok"]]
-        note = f"{len(calls)} calls sent, {len(bad)} failed"
-    return {"results": results, "visited": [SEND], "log": [_log(SEND, note)]}
+            log.append(_log(SEND, "escalated to a human" + ("" if res["ok"] else " — the escalation failed too")))
+    return {"results": results, "sent": sent, "live_failure": failure, "visited": [SEND], "log": log}
 
 
 def write_audit_summary(state: EventState):
@@ -280,7 +309,10 @@ def build_app():
 # ======================================================================================
 
 def _final_calls(state):
-    """The calls to execute. After reject_plan_escalate, only the escalation survives."""
+    """The calls to execute. After reject_plan_escalate, only the escalation survives.
+    Once send_to_server has run, the calls actually sent (a live failure stops early)."""
+    if "sent" in state:
+        return state["sent"]
     if REJECT in state.get("visited", []):
         reason = state["escalations"][-1][1]
         return [agents._call("escalate", {"reason": reason}, "coordinator", [], reason)]
@@ -362,6 +394,9 @@ def _build_summary(state):
     summary:     all of the above in one paragraph (pop-up header, terminal, trace)
     An agent that did not take part gets None."""
     calls = _final_calls(state)
+    failure = state.get("live_failure")
+    if failure:   # only describe what actually went through
+        calls = [c for c, r in zip(calls, state.get("results", [])) if r["ok"]]
     incidents = state["triage"]["incidents"]
     graph_results = state.get("graph_results") or {}
     out = {"coordinator": None, "planner": None, "dispatcher": None, "inspector": None}
@@ -370,6 +405,9 @@ def _build_summary(state):
     coord = [_describe(inc, graph_results.get(i)) for i, inc in enumerate(incidents, 1)]
     if REJECT in state.get("visited", []):
         coord.append("The plan failed its safety check, so nothing was changed and the event went to a human.")
+    elif failure:
+        coord.append(f"The server refused {failure['call']['tool']} ({failure['error']}), so the remaining "
+                     f"{_n(failure['not_sent'], 'call')} were not sent and the event went to a human.")
     else:
         if any(c["tool"] == "escalate" for c in calls):
             coord.append("Escalated to a human.")
@@ -380,6 +418,9 @@ def _build_summary(state):
     if REJECT not in state.get("visited", []):
         # Supply Chain Planner: where the orders went
         moves = state.get("moves") or {}
+        if failure:
+            done = {c["args"]["production_order_id"] for c in calls if c["tool"] in ("mes.reschedule", "mes.transfer")}
+            moves = {po: m for po, m in moves.items() if po in done}
         same = defaultdict(list)
         for po, m in moves.items():
             if m["how"] == "reschedule":
@@ -402,6 +443,8 @@ def _build_summary(state):
             text = f"Notified {_n(len(notices), 'dealer')} about their {_n(orders, 'affected customer order')}."
             loaners = state.get("loaners") or {"loaned": [], "pool_empty": []}
             got, short = len(loaners["loaned"]), len(loaners["pool_empty"])
+            if failure:
+                got = sum(1 for c in calls if c["tool"] == "crm.assign_loaner")
             if got + short:
                 text += (f" Assigned loaners to {got} of {_n(got + short, 'eligible Platinum/Gold customer')}"
                          + (f"; {short} missed out because their dealer's pool was empty." if short else "."))
@@ -441,6 +484,16 @@ def setup():
     return build_app()
 
 
+def write_diagrams(app, folder):
+    """The two diagrams the submission asks for, written into the run folder:
+    agent_graph.mmd (the LangGraph workflow, drawn from this code) and
+    ontology.mmd / ontology.json (node and relationship types of the knowledge graph)."""
+    os.makedirs(folder, exist_ok=True)
+    with open(os.path.join(folder, "agent_graph.mmd"), "w") as f:
+        f.write(app.get_graph().draw_mermaid())
+    kg.write_ontology(GRAPH, folder)
+
+
 def process_event(app, ev, config, trace_dir):
     """Run ONE event through the whole workflow and write its trace file.
     Returns the trace dict (the same thing that is saved to <trace_dir>/<event_id>.json)."""
@@ -459,6 +512,7 @@ def process_event(app, ev, config, trace_dir):
         "notes": final.get("notes", []),
         "calls": [{**c, "result": r} for c, r in zip(calls, results)],
         "dry_run_failures": final.get("failures", []),
+        "live_failure": final.get("live_failure"),
         "loaners": final.get("loaners"),
         "summary": final["summary"],
         "log": final["log"],
@@ -499,8 +553,7 @@ def main(argv):
 
     app = setup()
     os.makedirs(trace_dir, exist_ok=True)
-    with open(os.path.join(HERE, out_dir, "agent_graph.mmd"), "w") as f:
-        f.write(app.get_graph().draw_mermaid())
+    write_diagrams(app, os.path.join(HERE, out_dir))
 
     config = {"mode": mode, "url": url, "refresh": "--refresh" in argv}
     print(f"Mode: {mode.upper()}  |  {len(events)} events  |  traces -> {trace_dir}")
@@ -515,15 +568,16 @@ def main(argv):
         print("=" * 88)
         print(f"{ev['event_id']}  path: {' → '.join(trace['agents_visited'])}")
         print(f"  {len(calls)} calls ({len(kinds)} kinds of action), {failed} failed"
-              + ("  [FAIL-SAFE: escalated]" if REJECT in trace["agents_visited"] else ""))
+              + ("  [FAIL-SAFE: escalated]" if REJECT in trace["agents_visited"] else "")
+              + ("  [LIVE FAILURE: stopped and escalated]" if trace.get("live_failure") else ""))
         for agent in ("coordinator", "planner", "dispatcher", "inspector"):
             if trace["summary"].get(agent):
                 print(f"  {agent:<11} {trace['summary'][agent]}")
 
     print("=" * 88)
-    print(f"Done: {totals['calls']} calls, {totals['failed']} failed. Agent diagram: {out_dir}/agent_graph.mmd")
+    print(f"Done: {totals['calls']} calls, {totals['failed']} failed. Diagrams: {out_dir}/agent_graph.mmd, {out_dir}/ontology.mmd")
     if live:
-        print(f"Submit: {out_dir}/action_log.jsonl (written by the server) + {out_dir}/traces/")
+        print(f"Submit: {out_dir}/action_log.jsonl (written by the server), traces/, agent_graph.mmd, ontology.mmd")
 
 
 if __name__ == "__main__":
